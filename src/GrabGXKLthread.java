@@ -70,16 +70,16 @@ class GrabGXKLthread extends Thread{
 						GXKLTime= DsnProxyGrab.getGXKLtime();
 						GXKLremainTime = Long.parseLong(GXKLTime[0]);
 						if(GXKLremainTime > 0) {
-							System.out.println("[代理]距离重庆时时彩封盘:" + GXKLremainTime/1000);
+							System.out.println("[代理]距离广西快乐十分封盘:" + GXKLremainTime/1000);
 							//gwGXKL.setRemainTime(GXKLremainTime);
 						}
 						else {
-							System.out.println("[代理]距离重庆时时彩开盘:" + Long.parseLong(GXKLTime[2])/1000);
+							System.out.println("[代理]距离广西快乐十分开盘:" + Long.parseLong(GXKLTime[2])/1000);
 							//gwGXKL.setRemainTime(Long.parseLong(GXKLTime[2]));
 						}
 						
 					}
-					while(GXKLremainTime > 10*60*1000) {//获取时间失败
+					while(GXKLremainTime > 20*60*1000) {//获取时间失败
 						if(!DsnProxyGrab.isInGXKLgrabTime()) {
 							GXKLremainTime = -1;
 							isGXKLclose = true;
@@ -122,7 +122,7 @@ class GrabGXKLthread extends Thread{
 							isGXKLclose = false;
 						}
 						if(!requestTime) {
-							System.out.println("[代理][距离重庆时时彩封盘时间为]:" + GXKLremainTime/1000);
+							System.out.println("[代理][距离广西快乐十分盘时间为]:" + GXKLremainTime/1000);
 						}
 						if(GXKLremainTime < almostTime) {
 							sleepTime = 2*1000;
@@ -161,7 +161,7 @@ class GrabGXKLthread extends Thread{
 					}
 					String [] datas = {data};
 					//gwGXKL.setData(datas);
-					System.out.println("GXKL data:" + data);
+					//System.out.println("GXKL data:" + data);
 				}
 			    	
 				Thread.currentThread().sleep(sleepTime);

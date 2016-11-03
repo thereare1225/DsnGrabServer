@@ -46,12 +46,18 @@ public class DsnProxyGrab {
     static String cookiedae = "";
     static String [] dataCQSSC = {"", "", ""};
     static String [] dataGXKL = {"", "", ""};
+    static String [] dataTJSSC = {"", "", ""};
+    static String [] dataXJSSC = {"", "", ""};
     static String [] dataBJSC = {"", "", "", "", ""};
     static String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
+    static String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
     static boolean isCQSSCdataOk = false;
     static boolean isBJSCdataOk = false;
     static boolean isXYNCdataOk = false;
     static boolean isGXKLdataOk = false;
+    static boolean isGDKLdataOk = false;
+    static boolean isTJSSCdataOk = false;
+    static boolean isXJSSCdataOk = false;
     static boolean isInReLogin = false;
     
     private static String ADDRESS = "";
@@ -59,10 +65,16 @@ public class DsnProxyGrab {
     private static String PASSWORD = "";
     private static long timeDValue = 0;  //网站时间和电脑时间的差值  网页时间 - 当前时间
     private static long closeTimeGXKL = 0;
+    private static long closeTimeGDKL = 0;
+    private static long closeTimeTJSSC = 0;
+    private static long closeTimeXJSSC = 0;
     private static ReadWriteLock lockCQSSC = new ReentrantReadWriteLock();
     private static ReadWriteLock lockBJSC = new ReentrantReadWriteLock();
     private static ReadWriteLock lockXYNC = new ReentrantReadWriteLock();
     private static ReadWriteLock lockGXKL = new ReentrantReadWriteLock();
+    private static ReadWriteLock lockGDKL = new ReentrantReadWriteLock();
+    private static ReadWriteLock lockTJSSC = new ReentrantReadWriteLock();
+    private static ReadWriteLock lockXJSSC = new ReentrantReadWriteLock();
     
     static {
          requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build();
@@ -807,6 +819,28 @@ public class DsnProxyGrab {
     	return null;
       }
       
+      public static String grabTJSSCdata() {
+    	  long time =  System.currentTimeMillis();
+  		String strTime = Long.toString(time);
+  		String data = doGet(ADDRESS + "/agent/control/risk?lottery=TJSSC&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
+  				+ "2CDS4%2CDX5%2CDS5%2CZDX%2CZDS%2CLH&all=XZ&range=&multiple=false&_=" + strTime, cookieuid + cookiedae);
+  		if(data != "") {
+  			return data;
+  		}
+  		return null;
+      }
+      
+      public static String grabXJSSCdata() {
+    	  long time =  System.currentTimeMillis();
+  		String strTime = Long.toString(time);
+  		String data = doGet(ADDRESS + "/agent/control/risk?lottery=XJSSC&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
+  				+ "2CDS4%2CDX5%2CDS5%2CZDX%2CZDS%2CLH&all=XZ&range=&multiple=false&_" + strTime, cookieuid + cookiedae);
+  		if(data != "") {
+  			return data;
+  		}
+  		return null;
+      }
+      
       public static boolean grabXYNCdata() {
     	  String data1 = "";
     	  String data2 = "";
@@ -967,6 +1001,146 @@ public class DsnProxyGrab {
     	  return true;
       }
       
+      public static String[] grabGDKLdata() {
+    	  String [] data = {"", "", "", "", "", "", "", "", ""};
+    	  
+    	  long time =  System.currentTimeMillis();
+    	  long timeStart = time;
+    	  String strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[0] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B1%2CDX1%2CDS1%2CWDX1%2CHDS1%2CFW1%2CZFB1%2CLH1"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[0] != "" && data[0] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[0] == "" || data[0] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[1] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B2%2CDX2%2CDS2%2CWDX2%2CHDS2%2CFW2%2CZFB2%2CLH2"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[1] != "" && data[1] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[1] == "" || data[1] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[2] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B3%2CDX3%2CDS3%2CWDX3%2CHDS3%2CFW3%2CZFB3%2CLH3"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[2] != "" && data[2] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[2] == "" || data[2] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[3] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B4%2CDX4%2CDS4%2CWDX4%2CHDS4%2CFW4%2CZFB4%2CLH4"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[3] != "" && data[3] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[3] == "" || data[3] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[4] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B5%2CDX5%2CDS5%2CWDX5%2CHDS5%2CFW5%2CZFB5%2CLH5"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[4] != "" && data[4] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[4] == "" || data[4] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[5] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B6%2CDX6%2CDS6%2CWDX6%2CHDS6%2CFW6%2CZFB6%2CLH6"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[5] != "" && data[5] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[5] == "" || data[5] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[6] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B7%2CDX7%2CDS7%2CWDX7%2CHDS7%2CFW7%2CZFB7%2CLH7"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[6] != "" && data[6] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[6] == "" || data[6] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[7] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=B8%2CDX8%2CDS8%2CWDX8%2CHDS8%2CFW8%2CZFB8%2CLH8"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[7] != "" && data[7] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[7] == "" || data[7] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  strTime = Long.toString(time);
+    	  for(int i = 0; i < 3; i++) {
+    		  data[8] = doGet(ADDRESS + "/agent/control/risk?lottery=GDKLSF&games=ZM%2CZDX%2CZDS%2CZWDX"
+    	    	  		+ "&all=XZ&range=&multiple=false&_"  + strTime, cookieuid + cookiedae);
+    		  if(data[8] != "" && data[8] != "timeout") {
+    			  break;
+    		  }  
+    	  }
+    	  
+    	  if(data[8] == "" || data[8] == "timeout") {
+    		  return null;
+    	  }
+    	  
+    	  time =  System.currentTimeMillis();
+    	  System.out.println("广东快乐十分抓取用时 :"  + (time - timeStart));
+    	  
+//    	  for(int i = 1; i < 10; i++) {
+//    		  System.out.println("农场数据:"  + dataGDKL[i]);
+//    	  }  
+    	  
+    	  return data;
+      }
+      
       public static void setCQSSCdata(String drawNumber, String data, String remainTime) {
     	      lockCQSSC.writeLock().lock();
 	    	  dataCQSSC[0] = drawNumber;
@@ -1006,7 +1180,45 @@ public class DsnProxyGrab {
     	  isGXKLdataOk = true;
     	  lockGXKL.writeLock().unlock();
     	  System.out.println("set  GXKLdata   ok");
-  }
+      }
+      
+      public static void setTJSSCdata(String drawNumber, String data, String remainTime) {
+    	  lockTJSSC.writeLock().lock();
+    	  dataTJSSC[0] = drawNumber;
+    	  dataTJSSC[1] = data;
+    	  dataTJSSC[2] = remainTime;
+    	  isTJSSCdataOk = true;
+    	  lockTJSSC.writeLock().unlock();
+    	  System.out.println("set  TJSSCdata   ok");
+      }
+      
+      public static void setXJSSCdata(String drawNumber, String data, String remainTime) {
+    	  lockXJSSC.writeLock().lock();
+    	  dataXJSSC[0] = drawNumber;
+    	  dataXJSSC[1] = data;
+    	  dataXJSSC[2] = remainTime;
+    	  isXJSSCdataOk = true;
+    	  lockXJSSC.writeLock().unlock();
+    	  System.out.println("set  XJSSCdata   ok");
+      }
+      
+      public static void setGDKLdata(String drawNumber, String [] data, String remainTime) {
+	  	  lockGDKL.writeLock().lock();
+    	  dataGDKL[0] = drawNumber;
+    	  dataGDKL[1] = data[0];
+    	  dataGDKL[2] = data[1];
+    	  dataGDKL[3] = data[2];
+    	  dataGDKL[4] = data[3];
+    	  dataGDKL[5] = data[4];
+    	  dataGDKL[6] = data[5];
+    	  dataGDKL[7] = data[6];
+    	  dataGDKL[8] = data[7];
+    	  dataGDKL[9] = data[8];
+    	  dataGDKL[10] = remainTime;
+    	  isGDKLdataOk = true;
+    	  lockGDKL.writeLock().unlock();
+    	  System.out.println("set  GDKLdata   ok");
+      }
       
       
       //! @brief    读取cqssc下单数据
@@ -1042,6 +1254,39 @@ public class DsnProxyGrab {
     		  data = (String [])dataGXKL.clone();
     	  }
     	  lockGXKL.readLock().unlock();
+    	  
+    	  return data;
+      }
+      
+      public static String[] getGDKLdata() {
+    	  String [] data = null;
+    	  lockGDKL.readLock().lock();
+    	  if(isGDKLdataOk) {
+    		  data = (String [])dataGDKL.clone();
+    	  }
+    	  lockGDKL.readLock().unlock();
+    	  
+    	  return data;
+      }
+      
+      public static String[] getTJSSCdata() {
+    	  String [] data = null;
+    	  lockTJSSC.readLock().lock();
+    	  if(isTJSSCdataOk) {
+    		  data = (String [])dataTJSSC.clone();
+    	  }
+    	  lockTJSSC.readLock().unlock();
+    	  
+    	  return data;
+      }
+      
+      public static String[] getXJSSCdata() {
+    	  String [] data = null;
+    	  lockXJSSC.readLock().lock();
+    	  if(isXJSSCdataOk) {
+    		  data = (String [])dataXJSSC.clone();
+    	  }
+    	  lockXJSSC.readLock().unlock();
     	  
     	  return data;
       }
@@ -1087,6 +1332,24 @@ public class DsnProxyGrab {
     	  lockGXKL.writeLock().lock();
     	  isGXKLdataOk = false;
     	  lockGXKL.writeLock().unlock();
+      }
+      
+      public static void disableGDKLData() {
+    	  lockGDKL.writeLock().lock();
+    	  isGDKLdataOk = false;
+    	  lockGDKL.writeLock().unlock();
+      }
+      
+      public static void disableTJSSCData() {
+    	  lockTJSSC.writeLock().lock();
+    	  isTJSSCdataOk = false;
+    	  lockTJSSC.writeLock().unlock();
+      }
+      
+      public static void disableXJSSCData() {
+    	  lockXJSSC.writeLock().lock();
+    	  isXJSSCdataOk = false;
+    	  lockXJSSC.writeLock().unlock();
       }
       
       public static boolean setDsnTime() {
@@ -1305,8 +1568,164 @@ public class DsnProxyGrab {
     	  return time;
       }
       
+      public static String [] getGDKLtime() {
+    	  String [] time = {"0", "0", "0"};
+    	  String response = "";
+    	  String host = ADDRESS;	 
+    	  
+    	  String getPeriodUrl = host + "/agent/period?lottery=GDKLSF&_=";
+    	  getPeriodUrl += Long.toString(System.currentTimeMillis());
+
+          
+    	  response = doGet(getPeriodUrl, "");
+		          
+    	  if(response == "") {	
+    		  System.out.println("get period failed");
+    		  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+	      }
+    	  
+    	  if(response == "timeout") {
+        	  response = doGet(getPeriodUrl, "");
+          }
+          
+          if(response == "" || response == "timeout") {
+            	System.out.println("get period failed");
+            	time[0] = Long.toString(System.currentTimeMillis());
+      		  	return time;
+           }
+	          
+    	  System.out.println("preiod:");
+    	  System.out.println(response);
+				          
+    	  long drawTime = 0;
+    	  try{
+              JSONObject periodJson = new JSONObject(response);
+              closeTimeGDKL = periodJson.getLong("closeTime");
+              time[1] = periodJson.getString("drawNumber");
+              drawTime = periodJson.getLong("drawTime");
+          }
+          catch(Exception e){
+        	  System.out.println("获取时间异常");
+        	  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+          }
+				          
+    	  time[0] = Long.toString(closeTimeGDKL - (timeDValue + System.currentTimeMillis()));
+    	  time[2] = Long.toString(drawTime - (timeDValue + System.currentTimeMillis()));
+    	  return time;
+      }
+      
+      public static String [] getTJSSCtime() {
+    	  String [] time = {"0", "0", "0"};
+    	  String response = "";
+    	  String host = ADDRESS;	 
+    	  
+    	  String getPeriodUrl = host + "/agent/period?lottery=TJSSC&_=";
+    	  getPeriodUrl += Long.toString(System.currentTimeMillis());
+
+          
+    	  response = doGet(getPeriodUrl, "");
+		          
+    	  if(response == "") {	
+    		  System.out.println("get period failed");
+    		  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+	      }
+    	  
+    	  if(response == "timeout") {
+        	  response = doGet(getPeriodUrl, "");
+          }
+          
+          if(response == "" || response == "timeout") {
+            	System.out.println("get period failed");
+            	time[0] = Long.toString(System.currentTimeMillis());
+      		  	return time;
+           }
+	          
+    	  System.out.println("preiod:");
+    	  System.out.println(response);
+				          
+    	  long drawTime = 0;
+    	  try{
+              JSONObject periodJson = new JSONObject(response);
+              closeTimeTJSSC = periodJson.getLong("closeTime");
+              time[1] = periodJson.getString("drawNumber");
+              drawTime = periodJson.getLong("drawTime");
+          }
+          catch(Exception e){
+        	  System.out.println("获取时间异常");
+        	  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+          }
+				          
+    	  time[0] = Long.toString(closeTimeTJSSC - (timeDValue + System.currentTimeMillis()));
+    	  time[2] = Long.toString(drawTime - (timeDValue + System.currentTimeMillis()));
+    	  return time;
+      }
+      
+      public static String [] getXJSSCtime() {
+    	  String [] time = {"0", "0", "0"};
+    	  String response = "";
+    	  String host = ADDRESS;	 
+    	  
+    	  String getPeriodUrl = host + "/agent/period?lottery=XJSSC&_=";
+    	  getPeriodUrl += Long.toString(System.currentTimeMillis());
+
+          
+    	  response = doGet(getPeriodUrl, "");
+		          
+    	  if(response == "") {	
+    		  System.out.println("get period failed");
+    		  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+	      }
+    	  
+    	  if(response == "timeout") {
+        	  response = doGet(getPeriodUrl, "");
+          }
+          
+          if(response == "" || response == "timeout") {
+            	System.out.println("get period failed");
+            	time[0] = Long.toString(System.currentTimeMillis());
+      		  	return time;
+           }
+	          
+    	  System.out.println("preiod:");
+    	  System.out.println(response);
+				          
+    	  long drawTime = 0;
+    	  try{
+              JSONObject periodJson = new JSONObject(response);
+              closeTimeXJSSC = periodJson.getLong("closeTime");
+              time[1] = periodJson.getString("drawNumber");
+              drawTime = periodJson.getLong("drawTime");
+          }
+          catch(Exception e){
+        	  System.out.println("获取时间异常");
+        	  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+          }
+				          
+    	  time[0] = Long.toString(closeTimeXJSSC - (timeDValue + System.currentTimeMillis()));
+    	  time[2] = Long.toString(drawTime - (timeDValue + System.currentTimeMillis()));
+    	  return time;
+      }
+      
       public static long getGXKLlocalRemainTime() {
     	  return closeTimeGXKL - (timeDValue + System.currentTimeMillis());
+      }
+      
+      public static long getGDKLlocalRemainTime() {
+    	  return closeTimeGDKL - (timeDValue + System.currentTimeMillis());
+      }
+      
+      public static long getTJSSClocalRemainTime() {
+    	  return closeTimeTJSSC - (timeDValue + System.currentTimeMillis());
+      }
+      
+      public static long getXJSSClocalRemainTime() {
+    	  return closeTimeXJSSC - (timeDValue + System.currentTimeMillis());
       }
       
       public static String grabCQSSCdataByCookie(String game, String all, String range, String uid, String dae){
@@ -1375,6 +1794,33 @@ public class DsnProxyGrab {
            return true;
       }
       
+      public static boolean isInTJSSCgrabTime() {
+    	  long time = System.currentTimeMillis() + timeDValue;
+    	  Date date = new Date(time);
+          int currentHour = date.getHours();
+          int currentMinutes = date.getMinutes();
+          int currentSeconds = date.getSeconds();
+          
+          if((currentHour *60 + currentMinutes > 9*60 + 1) && (currentHour * 60 + currentMinutes < 23 * 60)){
+          		return true;
+          }
+           
+          return false;
+      }
+      
+      public static boolean isInXJSSCgrabTime() {
+    	  long time = System.currentTimeMillis() + timeDValue;
+    	  Date date = new Date(time);
+          int currentHour = date.getHours();
+          int currentMinutes = date.getMinutes();
+          int currentSeconds = date.getSeconds();
+          
+          if((currentHour*60 + currentMinutes < 10*60 + 1) && (currentHour * 60 + currentMinutes >= 2 * 60))
+              return false;
+           
+           return true;
+      }
+      
       public static boolean isInGXKLgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
@@ -1388,5 +1834,21 @@ public class DsnProxyGrab {
            
           return false;
       }
+      
+      public static boolean isInGDKLgrabTime() {
+    	  long time = System.currentTimeMillis() + timeDValue;
+    	  Date date = new Date(time);
+          int currentHour = date.getHours();
+          int currentMinutes = date.getMinutes();
+          int currentSeconds = date.getSeconds();
+          
+          if((currentHour *60 + currentMinutes > 9*60 + 3) && (currentHour * 60 + currentMinutes <= 23 * 60 + 1)){
+          		return true;
+          }
+           
+          return false;
+      }
+      
+      
     
 }
