@@ -48,6 +48,7 @@ public class DsnProxyGrab {
     static String [] dataGXKL = {"", "", ""};
     static String [] dataTJSSC = {"", "", ""};
     static String [] dataXJSSC = {"", "", ""};
+    static String [] dataGD115 = {"", "", ""};
     static String [] dataBJSC = {"", "", "", "", ""};
     static String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
     static String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
@@ -58,7 +59,9 @@ public class DsnProxyGrab {
     static boolean isGDKLdataOk = false;
     static boolean isTJSSCdataOk = false;
     static boolean isXJSSCdataOk = false;
+    static boolean isGD115dataOk = false;
     static boolean isInReLogin = false;
+    
     
     private static String ADDRESS = "";
     private static String ACCOUNT = "";
@@ -68,6 +71,7 @@ public class DsnProxyGrab {
     private static long closeTimeGDKL = 0;
     private static long closeTimeTJSSC = 0;
     private static long closeTimeXJSSC = 0;
+    private static long closeTimeGD115 = 0;
     private static ReadWriteLock lockCQSSC = new ReentrantReadWriteLock();
     private static ReadWriteLock lockBJSC = new ReentrantReadWriteLock();
     private static ReadWriteLock lockXYNC = new ReentrantReadWriteLock();
@@ -75,6 +79,7 @@ public class DsnProxyGrab {
     private static ReadWriteLock lockGDKL = new ReentrantReadWriteLock();
     private static ReadWriteLock lockTJSSC = new ReentrantReadWriteLock();
     private static ReadWriteLock lockXJSSC = new ReentrantReadWriteLock();
+    private static ReadWriteLock lockGD115 = new ReentrantReadWriteLock();
     
     static {
          requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build();
@@ -327,11 +332,10 @@ public class DsnProxyGrab {
             		totalReqeustTime += lastTenRequestTime.elementAt(i);
             	}
             	avgRequestTime = totalReqeustTime/lastTenRequestTime.size();
-            	
-            	
-            	System.out.printf("[代理]平均请求时间:%d\n", avgRequestTime);
+            	//System.out.printf("[代理]平均请求时间:%d\n", avgRequestTime);
             	
             	if(avgRequestTime >= 400){
+            		
             		setisNeedChangeLine(true);
             	}
 
@@ -832,13 +836,24 @@ public class DsnProxyGrab {
       
       public static String grabXJSSCdata() {
     	  long time =  System.currentTimeMillis();
-  		String strTime = Long.toString(time);
-  		String data = doGet(ADDRESS + "/agent/control/risk?lottery=XJSSC&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
+    	  String strTime = Long.toString(time);
+    	  String data = doGet(ADDRESS + "/agent/control/risk?lottery=XJSSC&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
   				+ "2CDS4%2CDX5%2CDS5%2CZDX%2CZDS%2CLH&all=XZ&range=&multiple=false&_" + strTime, cookieuid + cookiedae);
-  		if(data != "") {
-  			return data;
-  		}
-  		return null;
+    	  if(data != "") {
+    		  return data;
+    	  }
+    	  return null;
+      }
+      
+      public static String grabGD115data() {
+    	  long time =  System.currentTimeMillis();
+    	  String strTime = Long.toString(time);
+    	  String data = doGet(ADDRESS + "/agent/control/risk?lottery=GD11X5&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
+    	  		+ "2CDS4%2CDX5%2CDS5%2CZDX%2CZDS%2CZWDX%2CLH&all=XZ&range=&multiple=false&_=" + strTime, cookieuid + cookiedae);
+    	  if(data != "") {
+    		  return data;
+    	  }
+    	  return null;
       }
       
       public static boolean grabXYNCdata() {
@@ -1182,6 +1197,16 @@ public class DsnProxyGrab {
     	  System.out.println("set  GXKLdata   ok");
       }
       
+      public static void setGD115data(String drawNumber, String data, String remainTime) {
+	  	  lockGD115.writeLock().lock();
+    	  dataGD115[0] = drawNumber;
+    	  dataGD115[1] = data;
+    	  dataGD115[2] = remainTime;
+    	  isGD115dataOk = true;
+    	  lockGD115.writeLock().unlock();
+    	  System.out.println("set  GD115data   ok");
+      }
+      
       public static void setTJSSCdata(String drawNumber, String data, String remainTime) {
     	  lockTJSSC.writeLock().lock();
     	  dataTJSSC[0] = drawNumber;
@@ -1269,6 +1294,17 @@ public class DsnProxyGrab {
     	  return data;
       }
       
+      public static String[] getGD115data() {
+    	  String [] data = null;
+    	  lockGD115.readLock().lock();
+    	  if(isGD115dataOk) {
+    		  data = (String [])dataGD115.clone();
+    	  }
+    	  lockGD115.readLock().unlock();
+    	  
+    	  return data;
+      }
+      
       public static String[] getTJSSCdata() {
     	  String [] data = null;
     	  lockTJSSC.readLock().lock();
@@ -1338,6 +1374,12 @@ public class DsnProxyGrab {
     	  lockGDKL.writeLock().lock();
     	  isGDKLdataOk = false;
     	  lockGDKL.writeLock().unlock();
+      }
+      
+      public static void disableGD115Data() {
+    	  lockGD115.writeLock().lock();
+    	  isGD115dataOk = false;
+    	  lockGD115.writeLock().unlock();
       }
       
       public static void disableTJSSCData() {
@@ -1568,6 +1610,54 @@ public class DsnProxyGrab {
     	  return time;
       }
       
+      public static String [] getGD115time() {
+    	  String [] time = {"0", "0", "0"};
+    	  String response = "";
+    	  String host = ADDRESS;	 
+    	  
+    	  String getPeriodUrl = host + "/agent/period?lottery=GD11X5&_=";
+    	  getPeriodUrl += Long.toString(System.currentTimeMillis());
+
+          
+    	  response = doGet(getPeriodUrl, "");
+		          
+    	  if(response == "") {	
+    		  System.out.println("get period failed");
+    		  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+	      }
+    	  
+    	  if(response == "timeout") {
+        	  response = doGet(getPeriodUrl, "");
+          }
+          
+          if(response == "" || response == "timeout") {
+            	System.out.println("get period failed");
+            	time[0] = Long.toString(System.currentTimeMillis());
+      		  	return time;
+           }
+	          
+    	  System.out.println("preiod:");
+    	  System.out.println(response);
+				          
+    	  long drawTime = 0;
+    	  try{
+              JSONObject periodJson = new JSONObject(response);
+              closeTimeGD115 = periodJson.getLong("closeTime");
+              time[1] = periodJson.getString("drawNumber");
+              drawTime = periodJson.getLong("drawTime");
+          }
+          catch(Exception e){
+        	  System.out.println("获取时间异常");
+        	  time[0] = Long.toString(System.currentTimeMillis());
+    		  return time;
+          }
+				          
+    	  time[0] = Long.toString(closeTimeGD115 - (timeDValue + System.currentTimeMillis()));
+    	  time[2] = Long.toString(drawTime - (timeDValue + System.currentTimeMillis()));
+    	  return time;
+      }
+      
       public static String [] getGDKLtime() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
@@ -1728,6 +1818,10 @@ public class DsnProxyGrab {
     	  return closeTimeXJSSC - (timeDValue + System.currentTimeMillis());
       }
       
+      public static long getGD115localRemainTime() {
+    	  return closeTimeGD115 - (timeDValue + System.currentTimeMillis());
+      }
+      
       public static String grabCQSSCdataByCookie(String game, String all, String range, String uid, String dae){
       	if((game == "LM" || game == "DH" || game == "QZHS") && (range == "" || range == "A" ||
       			range == "B" || range == "C" || range == "D") && (all == "XZ" || all == "SZ" || all == "BH")) {
@@ -1819,6 +1913,20 @@ public class DsnProxyGrab {
               return false;
            
            return true;
+      }
+      
+      public static boolean isInGD115grabTime() {
+    	  long time = System.currentTimeMillis() + timeDValue;
+    	  Date date = new Date(time);
+          int currentHour = date.getHours();
+          int currentMinutes = date.getMinutes();
+          int currentSeconds = date.getSeconds();
+          
+          if((currentHour *60 + currentMinutes > 9*60 + 1) && (currentHour * 60 + currentMinutes < 23 * 60)){
+          		return true;
+          }
+           
+          return false;
       }
       
       public static boolean isInGXKLgrabTime() {

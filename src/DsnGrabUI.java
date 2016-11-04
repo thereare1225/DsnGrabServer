@@ -39,7 +39,7 @@ public class DsnGrabUI extends JFrame {
   	public JPasswordField textFieldProxyPassword;
   	
   	public JButton btnStartGrabCQSSC;
-  	public JButton btnStopGrabCQSSC;	
+  	public JButton btnStopGrabCQSSC;
   	public JButton btnStartGrabBJSC;
   	public JButton btnStopGrabBJSC;
   	public JButton btnStartGrabXYNC;
@@ -47,11 +47,13 @@ public class DsnGrabUI extends JFrame {
   	public JButton btnStartGrabGXKL;
   	public JButton btnStopGrabGXKL;
   	public JButton btnStartGrabGDKL;
-  	public JButton btnStopGrabGDKL; 
+  	public JButton btnStopGrabGDKL;
   	public JButton btnStartGrabXJSSC;
-  	public JButton btnStopGrabXJSSC; 
+  	public JButton btnStopGrabXJSSC;
   	public JButton btnStartGrabTJSSC;
   	public JButton btnStopGrabTJSSC; 
+  	public JButton btnStartGrabGD115;
+  	public JButton btnStopGrabGD115; 
   	
   	GrabBJSCthread grabBJSCthread;
   	GrabCQSSCthread grabCQSSCthread;
@@ -60,6 +62,7 @@ public class DsnGrabUI extends JFrame {
   	GrabGDKLthread grabGDKLthread;
   	GrabXJSSCthread grabXJSSCthread;
   	GrabTJSSCthread grabTJSSCthread;
+  	GrabGD115thread grabGD115thread;
   	
   	public JTable tableConns;
   	boolean loginToProxySuccess = false;
@@ -134,6 +137,8 @@ public class DsnGrabUI extends JFrame {
 				btnStopGrabXJSSC.setEnabled(true);			
 				btnStartGrabTJSSC.setEnabled(true);
 				btnStopGrabTJSSC.setEnabled(true);
+				btnStartGrabGD115.setEnabled(true);
+				btnStopGrabGD115.setEnabled(true);
 				
 				
 				grabBJSCthread = new GrabBJSCthread(new GrabBJSCwindow());
@@ -157,6 +162,9 @@ public class DsnGrabUI extends JFrame {
 				grabTJSSCthread = new GrabTJSSCthread();
 				grabTJSSCthread.start();
 				
+				grabGD115thread = new GrabGD115thread();
+				grabGD115thread.start();
+				
 				loginToProxySuccess = true;
 				ConfigWriter.updateProxyAddress(address);
 				ConfigWriter.updateProxyAccount(account);
@@ -175,7 +183,7 @@ public class DsnGrabUI extends JFrame {
 				grabCQSSCthread.startGrabCQSSC();
 			}
       	});
-		btnStartGrabCQSSC.setSize(100, 25);
+		btnStartGrabCQSSC.setSize(120, 25);
 		btnStartGrabCQSSC.setLocation(10, 130);
 		btnStopGrabCQSSC = new JButton("停抓重庆时彩");
 		btnStopGrabCQSSC.addActionListener(new ActionListener(){
@@ -183,8 +191,8 @@ public class DsnGrabUI extends JFrame {
 				grabCQSSCthread.stopGrabCQSSC();
 			}
       	});
-		btnStopGrabCQSSC.setSize(100, 25);
-		btnStopGrabCQSSC.setLocation(110, 130);
+		btnStopGrabCQSSC.setSize(120, 25);
+		btnStopGrabCQSSC.setLocation(130, 130);
 		
 		btnStartGrabBJSC = new JButton("开抓北京赛车");
 		btnStartGrabBJSC.addActionListener(new ActionListener(){
@@ -192,7 +200,7 @@ public class DsnGrabUI extends JFrame {
 				grabBJSCthread.startGrabBJSC();
 			}
       	});
-		btnStartGrabBJSC.setSize(100, 25);
+		btnStartGrabBJSC.setSize(120, 25);
 		btnStartGrabBJSC.setLocation(10, 160);
 		btnStopGrabBJSC = new JButton("停抓北京赛车");
 		btnStopGrabBJSC.addActionListener(new ActionListener(){
@@ -200,8 +208,8 @@ public class DsnGrabUI extends JFrame {
 				grabBJSCthread.stopGrabBJSC();
 			}
       	});
-		btnStopGrabBJSC.setSize(100, 25);
-		btnStopGrabBJSC.setLocation(110, 160);
+		btnStopGrabBJSC.setSize(120, 25);
+		btnStopGrabBJSC.setLocation(130, 160);
 		
 		btnStartGrabXYNC = new JButton("开抓幸运农场");
       	btnStartGrabXYNC.addActionListener(new ActionListener(){
@@ -209,7 +217,7 @@ public class DsnGrabUI extends JFrame {
 				grabXYNCthread.startGrabXYNC();
 			}
       	});
-		btnStartGrabXYNC.setSize(100, 25);
+		btnStartGrabXYNC.setSize(120, 25);
 		btnStartGrabXYNC.setLocation(10, 190);
 		
 		btnStopGrabXYNC = new JButton("停抓幸运农场");
@@ -218,8 +226,8 @@ public class DsnGrabUI extends JFrame {
 				grabXYNCthread.stopGrabXYNC();
 			}
       	});
-		btnStopGrabXYNC.setSize(100, 25);
-		btnStopGrabXYNC.setLocation(110, 190);
+		btnStopGrabXYNC.setSize(120, 25);
+		btnStopGrabXYNC.setLocation(130, 190);
 		
 		btnStartGrabGXKL = new JButton("开抓广西快乐");
       	btnStartGrabGXKL.addActionListener(new ActionListener(){
@@ -227,7 +235,7 @@ public class DsnGrabUI extends JFrame {
 				grabGXKLthread.startGrabGXKL();
 			}
       	});
-		btnStartGrabGXKL.setSize(100, 25);
+		btnStartGrabGXKL.setSize(120, 25);
 		btnStartGrabGXKL.setLocation(10, 220);
 		
 		btnStopGrabGXKL = new JButton("停抓广西快乐");
@@ -236,8 +244,8 @@ public class DsnGrabUI extends JFrame {
 				grabGXKLthread.stopGrabGXKL();
 			}
       	});
-		btnStopGrabGXKL.setSize(100, 25);
-		btnStopGrabGXKL.setLocation(110, 220);
+		btnStopGrabGXKL.setSize(120, 25);
+		btnStopGrabGXKL.setLocation(130, 220);
 		
 		btnStartGrabGDKL = new JButton("开抓广东快乐");
       	btnStartGrabGDKL.addActionListener(new ActionListener(){
@@ -245,7 +253,7 @@ public class DsnGrabUI extends JFrame {
 				grabGDKLthread.startGrabGDKL();
 			}
       	});
-		btnStartGrabGDKL.setSize(100, 25);
+		btnStartGrabGDKL.setSize(120, 25);
 		btnStartGrabGDKL.setLocation(10, 250);
 		
 		btnStopGrabGDKL = new JButton("停抓广东快乐");
@@ -254,44 +262,62 @@ public class DsnGrabUI extends JFrame {
 				grabGDKLthread.stopGrabGDKL();
 			}
       	});
-		btnStopGrabGDKL.setSize(100, 25);
-		btnStopGrabGDKL.setLocation(110, 250);
+		btnStopGrabGDKL.setSize(120, 25);
+		btnStopGrabGDKL.setLocation(130, 250);
 		
-		btnStartGrabXJSSC = new JButton("开抓新疆时时彩");
+		btnStartGrabXJSSC = new JButton("开抓新疆时彩");
       	btnStartGrabXJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabXJSSCthread.startGrabXJSSC();
 			}
       	});
-		btnStartGrabXJSSC.setSize(100, 25);
+		btnStartGrabXJSSC.setSize(120, 25);
 		btnStartGrabXJSSC.setLocation(10, 280);
 		
-		btnStopGrabXJSSC = new JButton("停抓新疆时时彩");
+		btnStopGrabXJSSC = new JButton("停抓新疆时彩");
 		btnStopGrabXJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabXJSSCthread.stopGrabXJSSC();
 			}
       	});
-		btnStopGrabXJSSC.setSize(100, 25);
-		btnStopGrabXJSSC.setLocation(110, 280);
+		btnStopGrabXJSSC.setSize(120, 25);
+		btnStopGrabXJSSC.setLocation(130, 280);
 		
-		btnStartGrabTJSSC = new JButton("开抓天津时时彩");
+		btnStartGrabTJSSC = new JButton("开抓天津时彩");
       	btnStartGrabTJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabTJSSCthread.startGrabTJSSC();
 			}
       	});
-		btnStartGrabTJSSC.setSize(100, 25);
+		btnStartGrabTJSSC.setSize(120, 25);
 		btnStartGrabTJSSC.setLocation(10, 310);
 		
-		btnStopGrabTJSSC = new JButton("停抓天津时时彩");
+		btnStopGrabTJSSC = new JButton("停抓天津时彩");
 		btnStopGrabTJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabTJSSCthread.stopGrabTJSSC();
 			}
       	});
-		btnStopGrabTJSSC.setSize(100, 25);
-		btnStopGrabTJSSC.setLocation(110, 310);
+		btnStopGrabTJSSC.setSize(120, 25);
+		btnStopGrabTJSSC.setLocation(130, 310);
+		
+		btnStartGrabGD115 = new JButton("开抓广东11选5");
+      	btnStartGrabGD115.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				grabGD115thread.startGrabGD115();
+			}
+      	});
+		btnStartGrabGD115.setSize(120, 25);
+		btnStartGrabGD115.setLocation(10, 340);
+		
+		btnStopGrabGD115 = new JButton("停抓广东11选5");
+		btnStopGrabGD115.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				grabGD115thread.stopGrabGD115();
+			}
+      	});
+		btnStopGrabGD115.setSize(120, 25);
+		btnStopGrabGD115.setLocation(130, 340);
 		
 		
 		btnStartGrabCQSSC.setEnabled(false);
@@ -308,6 +334,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabTJSSC.setEnabled(false);
 		btnStartGrabXJSSC.setEnabled(false);
 		btnStopGrabXJSSC.setEnabled(false);
+		btnStartGrabGD115.setEnabled(false);
+		btnStopGrabGD115.setEnabled(false);
 
 //      	container.add(textFieldProxyAddress);  
 //      	container.add(textFieldProxyAccount);  
@@ -328,6 +356,8 @@ public class DsnGrabUI extends JFrame {
       	container.add(btnStopGrabXJSSC);
       	container.add(btnStartGrabTJSSC);
       	container.add(btnStopGrabTJSSC);
+      	container.add(btnStartGrabGD115);
+      	container.add(btnStopGrabGD115);
       	
       	container.add(btnLogin);
       	
@@ -365,7 +395,10 @@ public class DsnGrabUI extends JFrame {
                     	int n = JOptionPane.showConfirmDialog(null, "确认退出吗?", "退出程序", JOptionPane.YES_NO_OPTION);  
                         if (n == JOptionPane.YES_OPTION) {
                         	System.exit(0);  
-                        }  
+                        }
+                        else {
+                        	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                        }
                     }
                 }
         );

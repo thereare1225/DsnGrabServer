@@ -431,6 +431,48 @@ public class DsnGrabServer {
 						}
 					}
 					break;
+					case "GD11X5": {
+						String [] datas = DsnProxyGrab.getGD115data();
+						if(datas != null) {
+							Map<String, String> map = new HashMap<String, String>();  
+			                map.put("result", "true");
+			                map.put("drawNumber", datas[0]);
+			                map.put("remainTime", datas[2]);
+			                map.put("data", datas[1]);
+			                
+			                //将json转化为String类型    
+			                JSONObject jsonReturn = new JSONObject(map);  
+			                String strReturn = jsonReturn.toString();
+						
+							ByteBuffer buff = charse.encode(strReturn);
+							try {
+								System.out.println("包大小" + buff.limit());
+								while(buff.position() < buff.limit()) {
+									sc.write(buff);		
+									System.out.println("位置" + buff.position());
+									}
+							} catch (IOException e) {
+								return false;
+							}
+						} else {
+							try {
+								Map<String, String> map = new HashMap<String, String>();
+								map.put("result", "false");
+								JSONObject jsonReturn = new JSONObject(map);  
+				                String strReturn = jsonReturn.toString();
+							
+								ByteBuffer buff = charse.encode(strReturn);
+								System.out.println("包大小" + buff.limit());
+								while(buff.position() < buff.limit()) {
+									sc.write(buff);		
+									System.out.println("位置" + buff.position());
+								}
+							} catch (IOException e) {
+								return false;
+							}
+						}
+					}
+					break;
 				}
 			} else if(request.equals("register")) {
 				connManager.registerConn(sc, json.getString("account"), json.getString("website"));
@@ -471,23 +513,23 @@ public class DsnGrabServer {
      
     public static void main(String [] args) throws IOException{
     	//重定向输出
-    	try {  
-	    	//生成路径  
-	    	File dir = new File("log");  
-	        if (dir.exists()) {   
-	        } 
-	        else {
-	        	dir.mkdirs();
-	        }
-	         
-	        //把输出重定向到文件
-	    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");//设置日期格式
-	    	PrintStream ps=new PrintStream("log/" + df.format(new Date()) + ".txt");  
-	    	System.setOut(ps);
-	    	System.setErr(ps);
-	    } catch (FileNotFoundException e) {  
-	    	e.printStackTrace();
-		} 
+//    	try {  
+//	    	//生成路径  
+//	    	File dir = new File("log");  
+//	        if (dir.exists()) {   
+//	        } 
+//	        else {
+//	        	dir.mkdirs();
+//	        }
+//	         
+//	        //把输出重定向到文件
+//	    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");//设置日期格式
+//	    	PrintStream ps=new PrintStream("log/" + df.format(new Date()) + ".txt");  
+//	    	System.setOut(ps);
+//	    	System.setErr(ps);
+//	    } catch (FileNotFoundException e) {  
+//	    	e.printStackTrace();
+//		} 
     	new DsnGrabServer().init();
     }
  
