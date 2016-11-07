@@ -16,9 +16,6 @@ class GrabXJSSCthread extends Thread{
     	try {
     		String[] XJSSCTime = {"0", "0", "0"};
 			while(true){
-				if(!DsnProxyGrab.setDsnTime()) {
-					isNeedLogin = true;
-				}
 				
 				if(isNeedLogin) {
 					

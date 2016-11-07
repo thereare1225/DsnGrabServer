@@ -16,9 +16,6 @@ class GrabGXKLthread extends Thread{
     	try {
     		String[] GXKLTime = {"0", "0", "0"};
 			while(true){
-				if(!DsnProxyGrab.setDsnTime()) {
-					isNeedLogin = true;
-				}
 				
 				if(isNeedLogin) {
 					

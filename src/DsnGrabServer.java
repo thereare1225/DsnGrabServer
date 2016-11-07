@@ -473,6 +473,48 @@ public class DsnGrabServer {
 						}
 					}
 					break;
+					case "BJKL8": {
+						String [] datas = DsnProxyGrab.getBJKL8data();
+						if(datas != null) {
+							Map<String, String> map = new HashMap<String, String>();  
+			                map.put("result", "true");
+			                map.put("drawNumber", datas[0]);
+			                map.put("remainTime", datas[2]);
+			                map.put("data", datas[1]);
+			                
+			                //将json转化为String类型    
+			                JSONObject jsonReturn = new JSONObject(map);  
+			                String strReturn = jsonReturn.toString();
+						
+							ByteBuffer buff = charse.encode(strReturn);
+							try {
+								System.out.println("包大小" + buff.limit());
+								while(buff.position() < buff.limit()) {
+									sc.write(buff);		
+									System.out.println("位置" + buff.position());
+									}
+							} catch (IOException e) {
+								return false;
+							}
+						} else {
+							try {
+								Map<String, String> map = new HashMap<String, String>();
+								map.put("result", "false");
+								JSONObject jsonReturn = new JSONObject(map);  
+				                String strReturn = jsonReturn.toString();
+							
+								ByteBuffer buff = charse.encode(strReturn);
+								System.out.println("包大小" + buff.limit());
+								while(buff.position() < buff.limit()) {
+									sc.write(buff);		
+									System.out.println("位置" + buff.position());
+								}
+							} catch (IOException e) {
+								return false;
+							}
+						}
+					}
+					break;
 				}
 			} else if(request.equals("register")) {
 				connManager.registerConn(sc, json.getString("account"), json.getString("website"));

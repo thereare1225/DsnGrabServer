@@ -15,11 +15,7 @@ class GrabGD115thread extends Thread{
     public void run() {
     	try {
     		String[] GD115Time = {"0", "0", "0"};
-			while(true){
-				if(!DsnProxyGrab.setDsnTime()) {
-					isNeedLogin = true;
-				}
-				
+			while(true){			
 				if(isNeedLogin) {
 					
 					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
