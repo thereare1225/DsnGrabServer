@@ -76,7 +76,7 @@ public class DsnGrabServer {
 	                        while(true) {
 	                        	int n = sc.read(buff);
 	                        	if(n > 0) {
-	                        		System.out.println("读取buff：");
+	                        		//System.out.println("读取buff：");
 		                            buff.flip();
 		                            content += charse.decode(buff);
 		                            buff.flip();
@@ -533,6 +533,8 @@ public class DsnGrabServer {
 				} catch (IOException e) {
 					return false;
 				}
+			} else if(request.equals("heartbeat")) {
+				System.out.println("heartbeat!");
 			}
 			else{
 				System.out.println("数据包内容错误");
@@ -555,23 +557,23 @@ public class DsnGrabServer {
      
     public static void main(String [] args) throws IOException{
     	//重定向输出
-    	try {  
-	    	//生成路径  
-	    	File dir = new File("log");  
-	        if (dir.exists()) {   
-	        } 
-	        else {
-	        	dir.mkdirs();
-	        }
-	         
-	        //把输出重定向到文件
-	    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");//设置日期格式
-	    	PrintStream ps=new PrintStream("log/" + df.format(new Date()) + ".txt");  
-	    	System.setOut(ps);
-	    	System.setErr(ps);
-	    } catch (FileNotFoundException e) {  
-	    	e.printStackTrace();
-		} 
+//    	try {  
+//	    	//生成路径  
+//	    	File dir = new File("log");  
+//	        if (dir.exists()) {   
+//	        } 
+//	        else {
+//	        	dir.mkdirs();
+//	        }
+//	         
+//	        //把输出重定向到文件
+//	    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");//设置日期格式
+//	    	PrintStream ps=new PrintStream("log/" + df.format(new Date()) + ".txt");  
+//	    	System.setOut(ps);
+//	    	System.setErr(ps);
+//	    } catch (FileNotFoundException e) {  
+//	    	e.printStackTrace();
+//		} 
     	new DsnGrabServer().init();
     }
  

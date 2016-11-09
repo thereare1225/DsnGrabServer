@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;  
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Color;
 
 import javax.swing.JFrame;  
 import javax.swing.JLabel;  
@@ -173,6 +174,16 @@ public class DsnGrabUI extends JFrame {
 				grabBJKL8thread = new GrabBJKL8thread();
 				grabBJKL8thread.start();
 				
+			  	btnStopGrabCQSSC.setBackground(Color.red);
+			  	btnStopGrabBJSC.setBackground(Color.red);
+			  	btnStopGrabXYNC.setBackground(Color.red);
+			  	btnStopGrabGXKL.setBackground(Color.red);
+			  	btnStopGrabGDKL.setBackground(Color.red);
+			  	btnStopGrabXJSSC.setBackground(Color.red);
+			  	btnStopGrabTJSSC.setBackground(Color.red); 
+			  	btnStopGrabGD115.setBackground(Color.red); 
+			  	btnStopGrabBJKL8.setBackground(Color.red);
+				
 				loginToProxySuccess = true;
 				ConfigWriter.updateProxyAddress(address);
 				ConfigWriter.updateProxyAccount(account);
@@ -189,6 +200,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabCQSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabCQSSCthread.startGrabCQSSC();
+				btnStartGrabCQSSC.setBackground(Color.green);
+				btnStopGrabCQSSC.setBackground(null);
 			}
       	});
 		btnStartGrabCQSSC.setSize(120, 25);
@@ -197,6 +210,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabCQSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabCQSSCthread.stopGrabCQSSC();
+				btnStartGrabCQSSC.setBackground(null);
+				btnStopGrabCQSSC.setBackground(Color.red);
 			}
       	});
 		btnStopGrabCQSSC.setSize(120, 25);
@@ -206,6 +221,8 @@ public class DsnGrabUI extends JFrame {
 		btnStartGrabBJSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabBJSCthread.startGrabBJSC();
+				btnStartGrabBJSC.setBackground(Color.green);
+				btnStopGrabBJSC.setBackground(null);
 			}
       	});
 		btnStartGrabBJSC.setSize(120, 25);
@@ -214,6 +231,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabBJSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabBJSCthread.stopGrabBJSC();
+				btnStartGrabBJSC.setBackground(null);
+				btnStopGrabBJSC.setBackground(Color.red);
 			}
       	});
 		btnStopGrabBJSC.setSize(120, 25);
@@ -223,6 +242,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabXYNC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabXYNCthread.startGrabXYNC();
+				btnStartGrabXYNC.setBackground(Color.green);
+				btnStopGrabXYNC.setBackground(null);
 			}
       	});
 		btnStartGrabXYNC.setSize(120, 25);
@@ -232,6 +253,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabXYNC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabXYNCthread.stopGrabXYNC();
+				btnStartGrabXYNC.setBackground(null);
+				btnStopGrabXYNC.setBackground(Color.red);
 			}
       	});
 		btnStopGrabXYNC.setSize(120, 25);
@@ -241,6 +264,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabGXKL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabGXKLthread.startGrabGXKL();
+				btnStartGrabGXKL.setBackground(Color.green);
+				btnStopGrabGXKL.setBackground(null);
 			}
       	});
 		btnStartGrabGXKL.setSize(120, 25);
@@ -250,6 +275,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabGXKL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabGXKLthread.stopGrabGXKL();
+				btnStartGrabGXKL.setBackground(null);
+				btnStopGrabGXKL.setBackground(Color.red);
 			}
       	});
 		btnStopGrabGXKL.setSize(120, 25);
@@ -259,6 +286,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabGDKL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabGDKLthread.startGrabGDKL();
+				btnStartGrabGDKL.setBackground(Color.green);
+				btnStopGrabGDKL.setBackground(null);
 			}
       	});
 		btnStartGrabGDKL.setSize(120, 25);
@@ -268,6 +297,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabGDKL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabGDKLthread.stopGrabGDKL();
+				btnStartGrabGDKL.setBackground(null);
+				btnStopGrabGDKL.setBackground(Color.red);
 			}
       	});
 		btnStopGrabGDKL.setSize(120, 25);
@@ -277,6 +308,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabXJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabXJSSCthread.startGrabXJSSC();
+				btnStartGrabXJSSC.setBackground(Color.green);
+				btnStopGrabXJSSC.setBackground(null);
 			}
       	});
 		btnStartGrabXJSSC.setSize(120, 25);
@@ -286,6 +319,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabXJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabXJSSCthread.stopGrabXJSSC();
+				btnStartGrabXJSSC.setBackground(null);
+				btnStopGrabXJSSC.setBackground(Color.red);
 			}
       	});
 		btnStopGrabXJSSC.setSize(120, 25);
@@ -295,6 +330,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabTJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabTJSSCthread.startGrabTJSSC();
+				btnStartGrabTJSSC.setBackground(Color.green);
+				btnStopGrabTJSSC.setBackground(null);
 			}
       	});
 		btnStartGrabTJSSC.setSize(120, 25);
@@ -304,6 +341,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabTJSSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabTJSSCthread.stopGrabTJSSC();
+				btnStartGrabTJSSC.setBackground(null);
+				btnStopGrabTJSSC.setBackground(Color.red);
 			}
       	});
 		btnStopGrabTJSSC.setSize(120, 25);
@@ -313,6 +352,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabGD115.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabGD115thread.startGrabGD115();
+				btnStartGrabGD115.setBackground(Color.green);
+				btnStopGrabGD115.setBackground(null);
 			}
       	});
 		btnStartGrabGD115.setSize(120, 25);
@@ -322,6 +363,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabGD115.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabGD115thread.stopGrabGD115();
+				btnStartGrabGD115.setBackground(null);
+				btnStopGrabGD115.setBackground(Color.red);
 			}
       	});
 		btnStopGrabGD115.setSize(120, 25);
@@ -331,6 +374,8 @@ public class DsnGrabUI extends JFrame {
       	btnStartGrabBJKL8.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabBJKL8thread.startGrabBJKL8();
+				btnStartGrabBJKL8.setBackground(Color.green);
+				btnStopGrabBJKL8.setBackground(null);
 			}
       	});
 		btnStartGrabBJKL8.setSize(120, 25);
@@ -340,6 +385,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabBJKL8.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabBJKL8thread.stopGrabBJKL8();
+				btnStartGrabBJKL8.setBackground(null);
+				btnStopGrabBJKL8.setBackground(Color.red);
 			}
       	});
 		btnStopGrabBJKL8.setSize(120, 25);

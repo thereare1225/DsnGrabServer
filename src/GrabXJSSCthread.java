@@ -7,8 +7,9 @@ class GrabXJSSCthread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inXJSSCgrabTime = true;
-   // GrabXJSSCwindow gwXJSSC;
+    GrabXJSSCwindow gwXJSSC;
     public GrabXJSSCthread() {
+    	gwXJSSC = new GrabXJSSCwindow();
 	}
     
     @Override
@@ -28,13 +29,13 @@ class GrabXJSSCthread extends Thread{
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
-						//gwXJSSC.setOnlineStatus(false);
+						gwXJSSC.setOnlineStatus(false);
 						DsnProxyGrab.disableXJSSCData();
 						DsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
 						DsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
-						//gwXJSSC.setOnlineStatus(true);
+						gwXJSSC.setOnlineStatus(true);
 					}
 					
 					DsnProxyGrab.setisNeedChangeLine(false);
@@ -50,8 +51,8 @@ class GrabXJSSCthread extends Thread{
 					if(inXJSSCgrabTime) {
 						XJSSCremainTime = -1;
 						isXJSSCclose = true;
-						//gwXJSSC.resetData();
-						//gwXJSSC.setRemainTime(0);
+						gwXJSSC.resetData();
+						gwXJSSC.setRemainTime(0);
 						DsnProxyGrab.disableXJSSCData();
 						inXJSSCgrabTime = false;
 					}
@@ -68,11 +69,11 @@ class GrabXJSSCthread extends Thread{
 						XJSSCremainTime = Long.parseLong(XJSSCTime[0]);
 						if(XJSSCremainTime > 0) {
 							System.out.println("[代理]距离新疆时时彩封盘:" + XJSSCremainTime/1000);
-							//gwXJSSC.setRemainTime(XJSSCremainTime);
+							gwXJSSC.setRemainTime(XJSSCremainTime);
 						}
 						else {
 							System.out.println("[代理]距离新疆时时彩开盘:" + Long.parseLong(XJSSCTime[2])/1000);
-							//gwXJSSC.setRemainTime(Long.parseLong(XJSSCTime[2]));
+							gwXJSSC.setRemainTime(Long.parseLong(XJSSCTime[2]));
 						}
 						
 					}
@@ -80,8 +81,8 @@ class GrabXJSSCthread extends Thread{
 						if(!DsnProxyGrab.isInXJSSCgrabTime()) {
 							XJSSCremainTime = -1;
 							isXJSSCclose = true;
-							//gwXJSSC.resetData();
-							//gwXJSSC.setRemainTime(0);
+							gwXJSSC.resetData();
+							gwXJSSC.setRemainTime(0);
 							DsnProxyGrab.disableXJSSCData();
 							inXJSSCgrabTime = false;
 							break;
@@ -96,13 +97,13 @@ class GrabXJSSCthread extends Thread{
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
-							//gwXJSSC.setOnlineStatus(false);
+							gwXJSSC.setOnlineStatus(false);
 							DsnProxyGrab.disableXJSSCData();
 							DsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
 							DsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
-							//gwXJSSC.setOnlineStatus(true);
+							gwXJSSC.setOnlineStatus(true);
 						}
 						
 						DsnProxyGrab.setisNeedChangeLine(false);
@@ -114,8 +115,8 @@ class GrabXJSSCthread extends Thread{
 					
 					if(XJSSCremainTime > 0) {
 						if(isXJSSCclose) {
-							//gwXJSSC.setCloseText(false);
-							//gwXJSSC.resetData();
+							gwXJSSC.setCloseText(false);
+							gwXJSSC.resetData();
 							isXJSSCclose = false;
 						}
 						if(!requestTime) {
@@ -128,7 +129,7 @@ class GrabXJSSCthread extends Thread{
 						
 					} else if(XJSSCremainTime <= 0){
 						if(!isXJSSCclose) {
-							//gwXJSSC.setCloseText(true);
+							gwXJSSC.setCloseText(true);
 							isXJSSCclose = true;
 							requestTime = true;
 							sleepTime = 8*1000;
@@ -137,7 +138,7 @@ class GrabXJSSCthread extends Thread{
 						}
 					}
 					
-					//gwXJSSC.setDrawNumber(XJSSCTime[1]);
+					gwXJSSC.setDrawNumber(XJSSCTime[1]);
 				}
 				
 				
@@ -157,7 +158,7 @@ class GrabXJSSCthread extends Thread{
 						DsnProxyGrab.setXJSSCdata(XJSSCTime[1], data, Long.toString(XJSSCremainTime/1000));
 					}
 					String [] datas = {data};
-					//gwXJSSC.setData(datas);
+					gwXJSSC.setData(datas);
 					//System.out.println("XJSSC data:" + data);
 				}
 			    	
@@ -172,13 +173,13 @@ class GrabXJSSCthread extends Thread{
     
     public  void startGrabXJSSC() {
     	grabXJSSC = true;
-    	//gwXJSSC.setVisible(true);
+    	gwXJSSC.setVisible(true);
     }
     
     public  void stopGrabXJSSC() {
     	grabXJSSC = false;
-    	//gwXJSSC.resetData();
-    	//gwXJSSC.setVisible(false);
+    	gwXJSSC.resetData();
+    	gwXJSSC.setVisible(false);
     }
     
 }

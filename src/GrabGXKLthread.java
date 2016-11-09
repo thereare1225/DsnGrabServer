@@ -7,8 +7,9 @@ class GrabGXKLthread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inGXKLgrabTime = true;
-   // GrabGXKLwindow gwGXKL;
+    //GrabGXKLwindow gwGXKL;
     public GrabGXKLthread() {
+    	//gwGXKL = new GrabGXKLwindow();
 	}
     
     @Override
