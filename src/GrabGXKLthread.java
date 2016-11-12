@@ -7,9 +7,9 @@ class GrabGXKLthread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inGXKLgrabTime = true;
-    //GrabGXKLwindow gwGXKL;
+    GrabGXKLwindow gwGXKL;
     public GrabGXKLthread() {
-    	//gwGXKL = new GrabGXKLwindow();
+    	gwGXKL = new GrabGXKLwindow();
 	}
     
     @Override
@@ -29,13 +29,13 @@ class GrabGXKLthread extends Thread{
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
-						//gwGXKL.setOnlineStatus(false);
+						gwGXKL.setOnlineStatus(false);
 						DsnProxyGrab.disableGXKLData();
 						DsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
 						DsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
-						//gwGXKL.setOnlineStatus(true);
+						gwGXKL.setOnlineStatus(true);
 					}
 					
 					DsnProxyGrab.setisNeedChangeLine(false);
@@ -51,8 +51,8 @@ class GrabGXKLthread extends Thread{
 					if(inGXKLgrabTime) {
 						GXKLremainTime = -1;
 						isGXKLclose = true;
-						//gwGXKL.resetData();
-						//gwGXKL.setRemainTime(0);
+						gwGXKL.resetData();
+						gwGXKL.setRemainTime(0);
 						DsnProxyGrab.disableGXKLData();
 						inGXKLgrabTime = false;
 					}
@@ -69,11 +69,11 @@ class GrabGXKLthread extends Thread{
 						GXKLremainTime = Long.parseLong(GXKLTime[0]);
 						if(GXKLremainTime > 0) {
 							System.out.println("[代理]距离广西快乐十分封盘:" + GXKLremainTime/1000);
-							//gwGXKL.setRemainTime(GXKLremainTime);
+							gwGXKL.setRemainTime(GXKLremainTime);
 						}
 						else {
 							System.out.println("[代理]距离广西快乐十分开盘:" + Long.parseLong(GXKLTime[2])/1000);
-							//gwGXKL.setRemainTime(Long.parseLong(GXKLTime[2]));
+							gwGXKL.setRemainTime(Long.parseLong(GXKLTime[2]));
 						}
 						
 					}
@@ -81,8 +81,8 @@ class GrabGXKLthread extends Thread{
 						if(!DsnProxyGrab.isInGXKLgrabTime()) {
 							GXKLremainTime = -1;
 							isGXKLclose = true;
-							//gwGXKL.resetData();
-							//gwGXKL.setRemainTime(0);
+							gwGXKL.resetData();
+							gwGXKL.setRemainTime(0);
 							DsnProxyGrab.disableGXKLData();
 							inGXKLgrabTime = false;
 							break;
@@ -97,13 +97,13 @@ class GrabGXKLthread extends Thread{
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
-							//gwGXKL.setOnlineStatus(false);
+							gwGXKL.setOnlineStatus(false);
 							DsnProxyGrab.disableGXKLData();
 							DsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
 							DsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
-							//gwGXKL.setOnlineStatus(true);
+							gwGXKL.setOnlineStatus(true);
 						}
 						
 						DsnProxyGrab.setisNeedChangeLine(false);
@@ -115,8 +115,8 @@ class GrabGXKLthread extends Thread{
 					
 					if(GXKLremainTime > 0) {
 						if(isGXKLclose) {
-							//gwGXKL.setCloseText(false);
-							//gwGXKL.resetData();
+							gwGXKL.setCloseText(false);
+							gwGXKL.resetData();
 							isGXKLclose = false;
 						}
 						if(!requestTime) {
@@ -129,7 +129,7 @@ class GrabGXKLthread extends Thread{
 						
 					} else if(GXKLremainTime <= 0){
 						if(!isGXKLclose) {
-							//gwGXKL.setCloseText(true);
+							gwGXKL.setCloseText(true);
 							isGXKLclose = true;
 							requestTime = true;
 							sleepTime = 8*1000;
@@ -138,7 +138,7 @@ class GrabGXKLthread extends Thread{
 						}
 					}
 					
-					//gwGXKL.setDrawNumber(GXKLTime[1]);
+					gwGXKL.setDrawNumber(GXKLTime[1]);
 				}
 				
 				
@@ -158,7 +158,7 @@ class GrabGXKLthread extends Thread{
 						DsnProxyGrab.setGXKLdata(GXKLTime[1], data, Long.toString(GXKLremainTime/1000));
 					}
 					String [] datas = {data};
-					//gwGXKL.setData(datas);
+					gwGXKL.setData(datas);
 					//System.out.println("GXKL data:" + data);
 				}
 			    	
@@ -173,13 +173,13 @@ class GrabGXKLthread extends Thread{
     
     public  void startGrabGXKL() {
     	grabGXKL = true;
-    	//gwGXKL.setVisible(true);
+    	gwGXKL.setVisible(true);
     }
     
     public  void stopGrabGXKL() {
     	grabGXKL = false;
-    	//gwGXKL.resetData();
-    	//gwGXKL.setVisible(false);
+    	gwGXKL.resetData();
+    	gwGXKL.setVisible(false);
     }
     
 }
