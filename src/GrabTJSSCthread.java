@@ -7,8 +7,9 @@ class GrabTJSSCthread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inTJSSCgrabTime = true;
-   // GrabTJSSCwindow gwTJSSC;
+    GrabTJSSCwindow gwTJSSC;
     public GrabTJSSCthread() {
+    	gwTJSSC = new GrabTJSSCwindow();
 	}
     
     @Override
@@ -28,13 +29,13 @@ class GrabTJSSCthread extends Thread{
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
-						//gwTJSSC.setOnlineStatus(false);
+						gwTJSSC.setOnlineStatus(false);
 						DsnProxyGrab.disableTJSSCData();
 						DsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
 						DsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
-						//gwTJSSC.setOnlineStatus(true);
+						gwTJSSC.setOnlineStatus(true);
 					}
 					
 					DsnProxyGrab.setisNeedChangeLine(false);
@@ -50,8 +51,8 @@ class GrabTJSSCthread extends Thread{
 					if(inTJSSCgrabTime) {
 						TJSSCremainTime = -1;
 						isTJSSCclose = true;
-						//gwTJSSC.resetData();
-						//gwTJSSC.setRemainTime(0);
+						gwTJSSC.resetData();
+						gwTJSSC.setRemainTime(0);
 						DsnProxyGrab.disableTJSSCData();
 						inTJSSCgrabTime = false;
 					}
@@ -68,11 +69,11 @@ class GrabTJSSCthread extends Thread{
 						TJSSCremainTime = Long.parseLong(TJSSCTime[0]);
 						if(TJSSCremainTime > 0) {
 							System.out.println("[代理]距离天津时时彩封盘:" + TJSSCremainTime/1000);
-							//gwTJSSC.setRemainTime(TJSSCremainTime);
+							gwTJSSC.setRemainTime(TJSSCremainTime);
 						}
 						else {
 							System.out.println("[代理]距离天津时时彩开盘:" + Long.parseLong(TJSSCTime[2])/1000);
-							//gwTJSSC.setRemainTime(Long.parseLong(TJSSCTime[2]));
+							gwTJSSC.setRemainTime(Long.parseLong(TJSSCTime[2]));
 						}
 						
 					}
@@ -80,8 +81,8 @@ class GrabTJSSCthread extends Thread{
 						if(!DsnProxyGrab.isInTJSSCgrabTime()) {
 							TJSSCremainTime = -1;
 							isTJSSCclose = true;
-							//gwTJSSC.resetData();
-							//gwTJSSC.setRemainTime(0);
+							gwTJSSC.resetData();
+							gwTJSSC.setRemainTime(0);
 							DsnProxyGrab.disableTJSSCData();
 							inTJSSCgrabTime = false;
 							break;
@@ -96,13 +97,13 @@ class GrabTJSSCthread extends Thread{
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
-							//gwTJSSC.setOnlineStatus(false);
+							gwTJSSC.setOnlineStatus(false);
 							DsnProxyGrab.disableTJSSCData();
 							DsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
 							DsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
-							//gwTJSSC.setOnlineStatus(true);
+							gwTJSSC.setOnlineStatus(true);
 						}
 						
 						DsnProxyGrab.setisNeedChangeLine(false);
@@ -114,8 +115,8 @@ class GrabTJSSCthread extends Thread{
 					
 					if(TJSSCremainTime > 0) {
 						if(isTJSSCclose) {
-							//gwTJSSC.setCloseText(false);
-							//gwTJSSC.resetData();
+							gwTJSSC.setCloseText(false);
+							gwTJSSC.resetData();
 							isTJSSCclose = false;
 						}
 						if(!requestTime) {
@@ -128,7 +129,7 @@ class GrabTJSSCthread extends Thread{
 						
 					} else if(TJSSCremainTime <= 0){
 						if(!isTJSSCclose) {
-							//gwTJSSC.setCloseText(true);
+							gwTJSSC.setCloseText(true);
 							isTJSSCclose = true;
 							requestTime = true;
 							sleepTime = 8*1000;
@@ -137,7 +138,7 @@ class GrabTJSSCthread extends Thread{
 						}
 					}
 					
-					//gwTJSSC.setDrawNumber(TJSSCTime[1]);
+					gwTJSSC.setDrawNumber(TJSSCTime[1]);
 				}
 				
 				
@@ -157,7 +158,7 @@ class GrabTJSSCthread extends Thread{
 						DsnProxyGrab.setTJSSCdata(TJSSCTime[1], data, Long.toString(TJSSCremainTime/1000));
 					}
 					String [] datas = {data};
-					//gwTJSSC.setData(datas);
+					gwTJSSC.setData(datas);
 					//System.out.println("TJSSC data:" + data);
 				}
 			    	
@@ -172,13 +173,13 @@ class GrabTJSSCthread extends Thread{
     
     public  void startGrabTJSSC() {
     	grabTJSSC = true;
-    	//gwTJSSC.setVisible(true);
+    	gwTJSSC.setVisible(true);
     }
     
     public  void stopGrabTJSSC() {
     	grabTJSSC = false;
-    	//gwTJSSC.resetData();
-    	//gwTJSSC.setVisible(false);
+    	gwTJSSC.resetData();
+    	gwTJSSC.setVisible(false);
     }
     
 }
