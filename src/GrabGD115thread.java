@@ -7,8 +7,9 @@ class GrabGD115thread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inGD115grabTime = true;
-   // GrabGD115window gwGD115;
+    GrabGD115window gwGD115;
     public GrabGD115thread() {
+    	gwGD115 = new GrabGD115window();
 	}
     
     @Override
@@ -27,13 +28,13 @@ class GrabGD115thread extends Thread{
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
-						//gwGD115.setOnlineStatus(false);
+						gwGD115.setOnlineStatus(false);
 						DsnProxyGrab.disableGD115Data();
 						DsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
 						DsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
-						//gwGD115.setOnlineStatus(true);
+						gwGD115.setOnlineStatus(true);
 					}
 					
 					DsnProxyGrab.setisNeedChangeLine(false);
@@ -49,8 +50,8 @@ class GrabGD115thread extends Thread{
 					if(inGD115grabTime) {
 						GD115remainTime = -1;
 						isGD115close = true;
-						//gwGD115.resetData();
-						//gwGD115.setRemainTime(0);
+						gwGD115.resetData();
+						gwGD115.setRemainTime(0);
 						DsnProxyGrab.disableGD115Data();
 						inGD115grabTime = false;
 					}
@@ -67,11 +68,11 @@ class GrabGD115thread extends Thread{
 						GD115remainTime = Long.parseLong(GD115Time[0]);
 						if(GD115remainTime > 0) {
 							System.out.println("[代理]距离广东11选5封盘:" + GD115remainTime/1000);
-							//gwGD115.setRemainTime(GD115remainTime);
+							gwGD115.setRemainTime(GD115remainTime);
 						}
 						else {
 							System.out.println("[代理]距离广东11选5开盘:" + Long.parseLong(GD115Time[2])/1000);
-							//gwGD115.setRemainTime(Long.parseLong(GD115Time[2]));
+							gwGD115.setRemainTime(Long.parseLong(GD115Time[2]));
 						}
 						
 					}
@@ -79,8 +80,8 @@ class GrabGD115thread extends Thread{
 						if(!DsnProxyGrab.isInGD115grabTime()) {
 							GD115remainTime = -1;
 							isGD115close = true;
-							//gwGD115.resetData();
-							//gwGD115.setRemainTime(0);
+							gwGD115.resetData();
+							gwGD115.setRemainTime(0);
 							DsnProxyGrab.disableGD115Data();
 							inGD115grabTime = false;
 							break;
@@ -95,13 +96,13 @@ class GrabGD115thread extends Thread{
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
-							//gwGD115.setOnlineStatus(false);
+							gwGD115.setOnlineStatus(false);
 							DsnProxyGrab.disableGD115Data();
 							DsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
 							DsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
-							//gwGD115.setOnlineStatus(true);
+							gwGD115.setOnlineStatus(true);
 						}
 						
 						DsnProxyGrab.setisNeedChangeLine(false);
@@ -113,8 +114,8 @@ class GrabGD115thread extends Thread{
 					
 					if(GD115remainTime > 0) {
 						if(isGD115close) {
-							//gwGD115.setCloseText(false);
-							//gwGD115.resetData();
+							gwGD115.setCloseText(false);
+							gwGD115.resetData();
 							isGD115close = false;
 						}
 						if(!requestTime) {
@@ -127,7 +128,7 @@ class GrabGD115thread extends Thread{
 						
 					} else if(GD115remainTime <= 0){
 						if(!isGD115close) {
-							//gwGD115.setCloseText(true);
+							gwGD115.setCloseText(true);
 							isGD115close = true;
 							requestTime = true;
 							sleepTime = 8*1000;
@@ -136,7 +137,7 @@ class GrabGD115thread extends Thread{
 						}
 					}
 					
-					//gwGD115.setDrawNumber(GD115Time[1]);
+					gwGD115.setDrawNumber(GD115Time[1]);
 				}
 				
 				
@@ -156,8 +157,8 @@ class GrabGD115thread extends Thread{
 						DsnProxyGrab.setGD115data(GD115Time[1], data, Long.toString(GD115remainTime/1000));
 					}
 					String [] datas = {data};
-					//gwGD115.setData(datas);
-					//System.out.println("GD115 data:" + data);
+					gwGD115.setData(datas);
+					System.out.println("GD115 data:" + data);
 				}
 			    	
 				Thread.currentThread().sleep(sleepTime);
@@ -171,13 +172,13 @@ class GrabGD115thread extends Thread{
     
     public  void startGrabGD115() {
     	grabGD115 = true;
-    	//gwGD115.setVisible(true);
+    	gwGD115.setVisible(true);
     }
     
     public  void stopGrabGD115() {
     	grabGD115 = false;
-    	//gwGD115.resetData();
-    	//gwGD115.setVisible(false);
+    	gwGD115.resetData();
+    	gwGD115.setVisible(false);
     }
     
 }

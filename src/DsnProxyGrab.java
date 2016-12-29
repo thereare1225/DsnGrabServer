@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.json.JSONArray;
+
 public class DsnProxyGrab {
 	static CloseableHttpClient httpclient = null;
     static RequestConfig requestConfig = null;
@@ -50,7 +52,7 @@ public class DsnProxyGrab {
     static String [] dataXJSSC = {"", "", ""};
     static String [] dataGD115 = {"", "", ""};
     static String [] dataBJKL8 = {"", "", ""};
-    static String [] dataBJSC = {"", "", "", "", ""};
+    static String [] dataBJSC = {"", "", "", "", "", "", ""};
     static String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
     static String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
     static boolean isCQSSCdataOk = false;
@@ -644,8 +646,9 @@ public class DsnProxyGrab {
                //System.out.println("--------------------------------------"); 
                
                String statusLine = response.getStatusLine().toString();
+               System.out.println(statusLine);
                if(statusLine.indexOf("200 OK") == -1) {
-            	   System.out.println(statusLine); 
+            	   //System.out.println(statusLine); 
                }
                if(statusLine.indexOf("302 Found") > 0) {
             	   return response.getFirstHeader("Location").getValue();
@@ -1181,13 +1184,15 @@ public class DsnProxyGrab {
 	    	  System.out.println("set  CQSSCdata   ok");
       }
       
-      public static void setBJSCdata(String drawNumber, String [] data, String remainTime) {
+      public static void setBJSCdata(String drawNumber, String [] data, String remainTime, String percent, String positive) {
     	  	  lockBJSC.writeLock().lock();
 	    	  dataBJSC[0] = drawNumber;
 	    	  dataBJSC[1] = data[0];
 	    	  dataBJSC[2] = data[1];
 	    	  dataBJSC[3] = data[2];
 	    	  dataBJSC[4] = remainTime;
+	    	  dataBJSC[5] = percent;
+	    	  dataBJSC[6] = positive;
 	    	  isBJSCdataOk = true;
 	    	  lockBJSC.writeLock().unlock();
 	    	  System.out.println("set  BJSCdata   ok");
@@ -1285,7 +1290,7 @@ public class DsnProxyGrab {
       }
       
       //! @brief     读取取BJSC下单数据
-      //! @return    数据可用(String[0]:期数, String[1]:冠亚, String[2]:三四五六, String[3]:七八九十, String[4]:数据时间); 数据不可用(null)
+      //! @return    数据可用(String[0]:期数, String[1]:冠亚, String[2]:三四五六, String[3]:七八九十, String[4]:数据时间, String[5] percent, String[6]正反); 数据不可用(null)
       public static String[] getBJSCdata() {
     	  String [] data = null;
     	  lockBJSC.readLock().lock();
@@ -2063,6 +2068,73 @@ public class DsnProxyGrab {
           }
            
           return false;
+      }
+      
+      public static long getEndDrawNumber(String date){
+     	 // http://94500151.365.qq168.ws/agent/report/period?lottery=BJPK10&beginTime=2016-12-02&endTime=2016-12-01
+     	
+     	  long endDrawNumber = 0;
+     	  String result = null;
+     	  result = doGet(ADDRESS + "/agent/report/period?lottery=BJPK10&beginTime=" + date + "&&endTime=" + date
+     	  ,"");
+     	  
+     	  if(result != null){
+     		  try{
+     			  JSONArray drawNumbers = new JSONArray(result);
+
+     			  
+     			  JSONObject drawNumber = drawNumbers.getJSONObject(0); 
+     			  
+     			  endDrawNumber = Long.parseLong(drawNumber.getString("drawNumber"));
+     			  
+     		  }catch(Exception e){
+     			  e.printStackTrace();
+     		  }
+     	  }
+     	  
+     	  return endDrawNumber;	  
+     		  
+       }
+      
+      public static long getStartDrawNumber(String date){
+     	 // http://94500151.365.qq168.ws/agent/report/period?lottery=BJPK10&beginTime=2016-12-02&endTime=2016-12-01
+     	
+     	  long startDrawNumber = 0;
+     	  String result = null;
+     	  result = doGet(ADDRESS + "/agent/report/period?lottery=BJPK10&beginTime=" + date + "&&endTime=" + date
+     	  ,"");
+     	  
+     	  if(result != null){
+     		  try{
+     			  JSONArray drawNumbers = new JSONArray(result);
+     			  
+     			  int len = drawNumbers.length();
+     			  
+     			  JSONObject drawNumber = drawNumbers.getJSONObject(len - 1); 
+     			  
+     			  startDrawNumber = Long.parseLong(drawNumber.getString("drawNumber"));
+     			  
+     		  }catch(Exception e){
+     			  e.printStackTrace();
+     		  }
+     	  }
+     	  
+     	  return startDrawNumber;	  
+     		  
+       }
+      
+      public static String getBJSCresult(long period) {
+    	  String result = null;
+    	  result = doGet(ADDRESS + "/agent/report/list_game?lottery=BJPK10&begin=&end=&settle=true&period=" 
+    	  + period + "&amount=&dividend=", "");
+    	  return result;
+      }
+      
+      public static String getCQSSCresult(String period) {
+    	  String result = null;
+    	  result = doGet(ADDRESS + "/agent/report/list_game?lottery=CQSSC&begin=&end=&settle=true&period=" 
+    	  + period + "&amount=&dividend=", "");
+    	  return result;
       }
       
  

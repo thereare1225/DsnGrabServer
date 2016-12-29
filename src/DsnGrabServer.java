@@ -169,6 +169,8 @@ public class DsnGrabServer {
 			                map.put("dataGY", datas[1]);
 			                map.put("dataSSWL", datas[2]);
 			                map.put("dataQBJS", datas[3]);
+			                map.put("percent", datas[5]);
+			                map.put("positive", datas[6]);
 			                
 			                //将json转化为String类型    
 			                JSONObject jsonReturn = new JSONObject(map);  

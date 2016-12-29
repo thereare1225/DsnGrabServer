@@ -7,10 +7,12 @@ class GrabBJSCthread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inBJSCgrabTime = true;
+    InitBetData initBetData = null;
 
     GrabBJSCwindow gwBJSC;
     public GrabBJSCthread(GrabBJSCwindow gwBJSC) {
     	this.gwBJSC = gwBJSC;
+    	initBetData = new InitBetData();
 	}
     
     @Override
@@ -61,7 +63,7 @@ class GrabBJSCthread extends Thread{
 				
 				if(!grabBJSC) {
 					DsnProxyGrab.disableBJSCData();
-				}
+				}		
 				
 				if(grabBJSC && inBJSCgrabTime) {
 					BJSCremainTime = gwBJSC.getRemainTime();
@@ -75,6 +77,10 @@ class GrabBJSCthread extends Thread{
 						else {
 							System.out.println("[代理]距离北京赛车开盘:" + Long.parseLong(BJSCTime[2])/1000);
 							gwBJSC.setRemainTime(Long.parseLong(BJSCTime[2]));
+						}
+						
+						if(BJSCremainTime < 10*60*1000 && BJSCremainTime > 15 * 1000) {
+							initBetData.saveBetResToFile(Long.parseLong(BJSCTime[1]) - 1);
 						}
 					}
 					while(BJSCremainTime > 10*60*1000) {//获取时间失败
@@ -168,11 +174,12 @@ class GrabBJSCthread extends Thread{
 					}
 					
 					String [] data = {dataGY, dataSSWL, dataQBJS};
-					if(BJSCremainTime > 2) {
-						DsnProxyGrab.setBJSCdata(BJSCTime[1], data, Long.toString(gwBJSC.getRemainTime()/1000));
+					String [] method = initBetData.getMethod();
+					if(BJSCremainTime > 2 * 1000) {
+						DsnProxyGrab.setBJSCdata(BJSCTime[1], data, Long.toString(gwBJSC.getRemainTime()/1000), method[0], method[1]);
 					}
 					else {
-						DsnProxyGrab.setBJSCdata(BJSCTime[1], data, Long.toString(BJSCremainTime/1000));
+						DsnProxyGrab.setBJSCdata(BJSCTime[1], data, Long.toString(BJSCremainTime/1000), method[0], method[1]);
 					}
 					gwBJSC.setData(data);
 				}
@@ -188,6 +195,7 @@ class GrabBJSCthread extends Thread{
     
     
     public  void startGrabBJSC() {
+    	initBetData.initBetResDataFile();
     	grabBJSC = true;
     	gwBJSC.setVisible(true);
     }
