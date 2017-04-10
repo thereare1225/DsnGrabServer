@@ -24,14 +24,18 @@ public class InitBetData {
 	
 	int count = 0;
 	double sum = 0;
+	double allSum = 0;
+	int allCount = 0;
 	long lastPeriod = 0;
 	
 	boolean positive = true;
 	double percent = 1;
-	
 	double profit = 0;
 	
-	InitBetData() {
+	GrabBJSCwindow wd = null;
+	
+	InitBetData(GrabBJSCwindow wd) {
+		this.wd = wd;
 	}
 	
 	
@@ -249,11 +253,18 @@ public class InitBetData {
 	public void putMethod(double number) {
 		if(number > 0) {
 			count++;
+			allCount++;
 		} else {
 			count--;
+			allCount--;
 		}
 		
 		sum += number;
+		allSum += number;
+		if(positive)
+			profit += number * percent;
+		else
+			profit -= number * percent;
 		if(count >= 30 && sum > 800000) {
 			if(!positive) {
 				percent *= 2;
@@ -281,6 +292,12 @@ public class InitBetData {
 			sum = 0;
 			count = 0;
 		}
+		
+		wd.setTextFieldPercent(String.valueOf(percent));
+		wd.setTextFieldPositive(String.valueOf(positive));
+		wd.setTextFieldProfit(String.valueOf(allSum));
+		wd.setTextFieldTimes(String.valueOf(allCount));
+		wd.setTextFieldOurProfit(String.valueOf(profit));
 	}
 	
 	public String [] getMethod() {
@@ -365,9 +382,4 @@ public class InitBetData {
 		return saveRes;
 	}
 	
-	
-	
-
-	
-
 }

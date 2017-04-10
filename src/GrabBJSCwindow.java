@@ -43,6 +43,11 @@ public class GrabBJSCwindow extends JFrame {
     final private JTextField textFieldB = new JTextField(15);
     final private JTextField textFieldC = new JTextField(15);
     final private JTextField textFieldD = new JTextField(15);
+    final private JTextField textFieldProfit = new JTextField(15);
+    final private JTextField textFieldTimes = new JTextField(15);
+    final private JTextField textFieldPercent = new JTextField(15);
+    final private JTextField textFieldPositive = new JTextField(15);
+    final private JTextField textFieldOurProfit = new JTextField(15);
     private AtomicLong remainTime = new AtomicLong(0);
 
   //  private long remainTime = 0;
@@ -507,9 +512,35 @@ public class GrabBJSCwindow extends JFrame {
         panel.add(labelD);
         panel.add(textFieldD); 
         
+        JPanel panel1 = new JPanel();
+        panel1.setSize(1100, 50);
+        panel1.setLocation(0, 89 + 32 + 100 + 89 + 32 + 89 + 50 + 100);
+        container.add(panel1);  
+        JLabel label1 = new JLabel("总盈亏: ");   
+        textFieldProfit.setEditable(false);
+        JLabel label2 = new JLabel("次数: "); 
+        textFieldTimes.setEditable(false);
+        JLabel label3 = new JLabel("方向: ");
+        textFieldPositive.setEditable(false);
+        JLabel label4 = new JLabel("比例: ");
+        textFieldPercent.setEditable(false);
+        JLabel label5 = new JLabel("策略盈亏: ");   
+        textFieldOurProfit.setEditable(false);
+        
+        panel1.add(label1);  
+        panel1.add(textFieldProfit);  
+        panel1.add(label2);
+        panel1.add(textFieldTimes); 
+        panel1.add(label3);
+        panel1.add(textFieldPositive);
+        panel1.add(label4);
+        panel1.add(textFieldPercent); 
+        panel1.add(label5);
+        panel1.add(textFieldOurProfit); 
+        
         setTitle("北京赛车");  
        //pack(); //Realize the components.  
-        setBounds(100, 100, 1220, 630);  
+        setBounds(100, 100, 1220, 680);  
 //      textFieldA.requestFocus();  
         setLayout(null);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
@@ -529,7 +560,27 @@ public class GrabBJSCwindow extends JFrame {
         setTimer(textFieldA);
     }  
     
-    private void setTimer(JTextField time){   
+    public void setTextFieldProfit(String profit) {
+		textFieldProfit.setText(profit);
+	}
+
+	public void setTextFieldTimes(String times) {
+		textFieldTimes.setText(times);
+	}
+
+	public void setTextFieldPercent(String Percent) {
+		textFieldPercent.setText(Percent);
+	}
+
+	public void setTextFieldPositive(String Positive) {
+		textFieldPositive.setText(Positive);
+	}
+	
+	public void setTextFieldOurProfit(String profit) {
+		textFieldOurProfit.setText(profit);
+	}
+
+	private void setTimer(JTextField time){   
         final JTextField varTime = time;   
         Timer timeAction = new Timer(1000, new ActionListener() {          
             public void actionPerformed(ActionEvent e) {       

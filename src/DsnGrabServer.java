@@ -132,10 +132,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -148,10 +148,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -178,10 +178,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -194,10 +194,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -228,10 +228,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -244,10 +244,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -279,10 +279,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -295,10 +295,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -322,10 +322,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -338,10 +338,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -364,10 +364,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -380,10 +380,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -406,10 +406,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -422,10 +422,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -448,10 +448,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -464,10 +464,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;
@@ -490,10 +490,10 @@ public class DsnGrabServer {
 						
 							ByteBuffer buff = charse.encode(strReturn);
 							try {
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 									}
 							} catch (IOException e) {
 								return false;
@@ -506,10 +506,10 @@ public class DsnGrabServer {
 				                String strReturn = jsonReturn.toString();
 							
 								ByteBuffer buff = charse.encode(strReturn);
-								System.out.println("包大小" + buff.limit());
+								//System.out.println("包大小" + buff.limit());
 								while(buff.position() < buff.limit()) {
 									sc.write(buff);		
-									System.out.println("位置" + buff.position());
+									//System.out.println("位置" + buff.position());
 								}
 							} catch (IOException e) {
 								return false;

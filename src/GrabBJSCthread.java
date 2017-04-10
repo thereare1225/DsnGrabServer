@@ -12,7 +12,7 @@ class GrabBJSCthread extends Thread{
     GrabBJSCwindow gwBJSC;
     public GrabBJSCthread(GrabBJSCwindow gwBJSC) {
     	this.gwBJSC = gwBJSC;
-    	initBetData = new InitBetData();
+    	initBetData = new InitBetData(gwBJSC);
 	}
     
     @Override
