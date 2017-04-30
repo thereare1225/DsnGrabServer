@@ -1,9 +1,11 @@
+package dsn;
 import java.awt.Container;  
  
 import java.awt.event.ActionEvent;  
 import java.awt.event.ActionListener;  
 import java.util.Vector;  
   
+
 
 import javax.swing.JFrame;  
 import javax.swing.JLabel;  
@@ -23,11 +25,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.atomic.AtomicLong;
    
-public class GrabBJSCwindow extends JFrame {  
-  
-
-    private static final long serialVersionUID = -8581492063632813033L;
-    //final private JTable table1;
+public class GrabXYNCwindow extends JFrame {  
+	private static final long serialVersionUID = -8581492063632813033L;
+    final private JTable table1;
     final private JTable table2;
     final private JTable table3;
     final private JTable table4;
@@ -36,74 +36,75 @@ public class GrabBJSCwindow extends JFrame {
     final private JTable table7;
     final private JTable table8;
     final private JTable table9;
-    final private JTable table10;
-    final private JTable table11;
+    
     private JLabel labelA;
     final private JTextField textFieldA = new JTextField(15);  
     final private JTextField textFieldB = new JTextField(15);
     final private JTextField textFieldC = new JTextField(15);
     final private JTextField textFieldD = new JTextField(15);
-    final private JTextField textFieldProfit = new JTextField(15);
-    final private JTextField textFieldTimes = new JTextField(15);
-    final private JTextField textFieldPercent = new JTextField(15);
-    final private JTextField textFieldPositive = new JTextField(15);
-    final private JTextField textFieldOurProfit = new JTextField(15);
     private AtomicLong remainTime = new AtomicLong(0);
 
   //  private long remainTime = 0;
   
-    public GrabBJSCwindow() {  
+    public GrabXYNCwindow() {  
         // TODO Auto-generated constructor stub  
         final Container container = getContentPane();
+              
+        //第一球
+        Vector<String> ball1 = new Vector<String>();
+        ball1.add("第一球");
+        final DefaultTableModel ball1Model = new DefaultTableModel(  
+        		null, ball1);  
+        final JTable tableBall1 = new JTable(ball1Model);
+        JScrollPane paneBall1 = new JScrollPane();  
+        paneBall1.setViewportView(tableBall1);  
+        paneBall1.setSize(400, 25);
+        paneBall1.setLocation(0, 50);
+        container.add(paneBall1);
         
-        //冠，亚军和两面
-//        Vector<String> ball1 = new Vector<String>();
-//        ball1.add("冠，亚军和两面");
-//        final DefaultTableModel ball1Model = new DefaultTableModel(  
-//        		null, ball1);  
-//        final JTable tableBall1 = new JTable(ball1Model);
-//        JScrollPane paneBall1 = new JScrollPane();  
-//        paneBall1.setViewportView(tableBall1);  
-//        paneBall1.setSize(400, 25);
-//        paneBall1.setLocation(0, 50);
-//        container.add(paneBall1);
-//        
-//        Vector<String> tableColumnNames1 = new Vector<String>();  
-//        tableColumnNames1.add("种类");  
-//        tableColumnNames1.add("赔率");
-//        tableColumnNames1.add("金额");
-//        tableColumnNames1.add("差值");
-//        Vector<Vector<String>> tableValues1 = new Vector<Vector<String>>();
-//        tableValues1.add(new Vector<String>());
-//        tableValues1.add(new Vector<String>());
-//        tableValues1.add(new Vector<String>());
-//        tableValues1.add(new Vector<String>());
-//        tableValues1.get(0).add("大");
-//        tableValues1.get(1).add("小");
-//        tableValues1.get(2).add("单");
-//        tableValues1.get(3).add("双");
-//        
-//        final DefaultTableModel defaultTableModel1 = new DefaultTableModel(  
-//                tableValues1, tableColumnNames1);  
-//        table1 = new JTable(defaultTableModel1);  
-//        table1.setRowHeight(24);
-//        JScrollPane scrollPane1 = new JScrollPane();  
-//        scrollPane1.setViewportView(table1);  
-//        scrollPane1.setSize(400, 89 + 32);
-//        scrollPane1.setLocation(0, 75);
-//        container.add(scrollPane1);  
+        Vector<String> tableColumnNames1 = new Vector<String>();  
+        tableColumnNames1.add("种类");  
+        tableColumnNames1.add("赔率");
+        tableColumnNames1.add("金额");
+        tableColumnNames1.add("差值");
+        Vector<Vector<String>> tableValues1 = new Vector<Vector<String>>();
+        for(int i = 0; i < 10; i++) {
+        	tableValues1.add(new Vector<String>());
+        }
+        
+        tableValues1.get(0).add("大");
+        tableValues1.get(1).add("小");
+        tableValues1.get(2).add("单");
+        tableValues1.get(3).add("双");
+        tableValues1.get(4).add("尾大");
+        tableValues1.get(5).add("尾小");
+        tableValues1.get(6).add("合单");
+        tableValues1.get(7).add("合双");
+        tableValues1.get(8).add("龙");
+        tableValues1.get(9).add("虎");
+        
+        final DefaultTableModel defaultTableModel1 = new DefaultTableModel(  
+                tableValues1, tableColumnNames1);  
+        table1 = new JTable(defaultTableModel1);  
+        JScrollPane scrollPane1 = new JScrollPane();  
+        scrollPane1.setViewportView(table1);  
+        //scrollPane1.setLocation(600, 75);
+        scrollPane1.setSize(400, 89 + 32 + 64);
+        scrollPane1.setLocation(0, 75);
+        container.add(scrollPane1);            
         
         
-        //冠军
+        //第二球
         Vector<String> ball2 = new Vector<String>();
-        ball2.add("冠军");
+        ball2.add("第二球");
         final DefaultTableModel ball2Model = new DefaultTableModel(  
         		null, ball2);  
         final JTable tableBall2 = new JTable(ball2Model);
         JScrollPane paneBall2 = new JScrollPane();  
         paneBall2.setViewportView(tableBall2);  
+        //paneBall2.setLocation(0, 75 + 89);
         paneBall2.setSize(400, 25);
-        paneBall2.setLocation(0, 50);
+        paneBall2.setLocation(400, 50);
         container.add(paneBall2);
         
         Vector<String> tableColumnNames2 = new Vector<String>();  
@@ -112,41 +113,45 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames2.add("金额");
         tableColumnNames2.add("差值");
         Vector<Vector<String>> tableValues2 = new Vector<Vector<String>>();
-        tableValues2.add(new Vector<String>());
-        tableValues2.add(new Vector<String>());
-        tableValues2.add(new Vector<String>());
-        tableValues2.add(new Vector<String>());
-        tableValues2.add(new Vector<String>());
-        tableValues2.add(new Vector<String>());
+        for(int i = 0; i < 10; i++) {
+        	tableValues2.add(new Vector<String>());
+        }
+        
         tableValues2.get(0).add("大");
         tableValues2.get(1).add("小");
         tableValues2.get(2).add("单");
         tableValues2.get(3).add("双");
-        tableValues2.get(4).add("龙");
-        tableValues2.get(5).add("虎");
+        tableValues2.get(4).add("尾大");
+        tableValues2.get(5).add("尾小");
+        tableValues2.get(6).add("合单");
+        tableValues2.get(7).add("合双");
+        tableValues2.get(8).add("龙");
+        tableValues2.get(9).add("虎");
+        
         
         final DefaultTableModel defaultTableModel2 = new DefaultTableModel(  
                 tableValues2, tableColumnNames2);  
         table2 = new JTable(defaultTableModel2);  
+        //table2.setRowHeight(24);
         JScrollPane scrollPane2 = new JScrollPane();  
         scrollPane2.setViewportView(table2);  
-        //scrollPane2.setLocation(600, 75);
-        scrollPane2.setSize(400, 89 + 32);
-        scrollPane2.setLocation(0, 75);
+        scrollPane2.setSize(400, 89 + 32 + 64);
+        scrollPane2.setLocation(400, 75);
+        
         container.add(scrollPane2);  
         
         
-        //亚军
+        //第三球
         Vector<String> ball3 = new Vector<String>();
-        ball3.add("亚军");
+        ball3.add("第三球");
         final DefaultTableModel ball3Model = new DefaultTableModel(  
         		null, ball3);  
         final JTable tableBall3 = new JTable(ball3Model);
         JScrollPane paneBall3 = new JScrollPane();  
         paneBall3.setViewportView(tableBall3);  
-        //paneBall3.setLocation(0, 75 + 89);
         paneBall3.setSize(400, 25);
-        paneBall3.setLocation(400, 50);
+        //paneBall3.setLocation(600, 75 + 89);
+        paneBall3.setLocation(800, 50);
         container.add(paneBall3);
         
         Vector<String> tableColumnNames3 = new Vector<String>();  
@@ -155,42 +160,43 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames3.add("金额");
         tableColumnNames3.add("差值");
         Vector<Vector<String>> tableValues3 = new Vector<Vector<String>>();
-        tableValues3.add(new Vector<String>());
-        tableValues3.add(new Vector<String>());
-        tableValues3.add(new Vector<String>());
-        tableValues3.add(new Vector<String>());
-        tableValues3.add(new Vector<String>());
-        tableValues3.add(new Vector<String>());
+        for(int i = 0; i < 10; i++) {
+        	tableValues3.add(new Vector<String>());
+        }
+
         tableValues3.get(0).add("大");
         tableValues3.get(1).add("小");
         tableValues3.get(2).add("单");
         tableValues3.get(3).add("双");
-        tableValues3.get(4).add("龙");
-        tableValues3.get(5).add("虎");
+        tableValues3.get(4).add("尾大");
+        tableValues3.get(5).add("尾小");
+        tableValues3.get(6).add("合单");
+        tableValues3.get(7).add("合双");
+        tableValues3.get(8).add("龙");
+        tableValues3.get(9).add("虎");
         
         final DefaultTableModel defaultTableModel3 = new DefaultTableModel(  
                 tableValues3, tableColumnNames3);  
         table3 = new JTable(defaultTableModel3);  
-        //table3.setRowHeight(24);
         JScrollPane scrollPane3 = new JScrollPane();  
         scrollPane3.setViewportView(table3);  
-        scrollPane3.setSize(400, 89+32);
-        scrollPane3.setLocation(400, 75);
-        
+        scrollPane3.setSize(400, 89 + 32 + 64);
+        //scrollPane3.setLocation(600, 75 + 89 + 25);
+        scrollPane3.setLocation(800, 75);
         container.add(scrollPane3);  
         
         
-        //第三名
+        //第四球
         Vector<String> ball4 = new Vector<String>();
-        ball4.add("第三名");
+        ball4.add("第四球");
         final DefaultTableModel ball4Model = new DefaultTableModel(  
         		null, ball4);  
         final JTable tableBall4 = new JTable(ball4Model);
         JScrollPane paneBall4 = new JScrollPane();  
         paneBall4.setViewportView(tableBall4);  
         paneBall4.setSize(400, 25);
-        //paneBall4.setLocation(600, 75 + 89);
-        paneBall4.setLocation(800, 50);
+        //paneBall4.setLocation(0, 75 + 89 + 25 + 89);
+        paneBall4.setLocation(0, 89 + 32 + 75 + 64);
         container.add(paneBall4);
         
         Vector<String> tableColumnNames4 = new Vector<String>();  
@@ -199,41 +205,42 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames4.add("金额");
         tableColumnNames4.add("差值");
         Vector<Vector<String>> tableValues4 = new Vector<Vector<String>>();
-        tableValues4.add(new Vector<String>());
-        tableValues4.add(new Vector<String>());
-        tableValues4.add(new Vector<String>());
-        tableValues4.add(new Vector<String>());
-        tableValues4.add(new Vector<String>());
-        tableValues4.add(new Vector<String>());
+        for(int i = 0; i < 10; i++) {
+        	tableValues4.add(new Vector<String>());
+        }
+
         tableValues4.get(0).add("大");
         tableValues4.get(1).add("小");
         tableValues4.get(2).add("单");
         tableValues4.get(3).add("双");
-        tableValues4.get(4).add("龙");
-        tableValues4.get(5).add("虎");
+        tableValues4.get(4).add("尾大");
+        tableValues4.get(5).add("尾小");
+        tableValues4.get(6).add("合单");
+        tableValues4.get(7).add("合双");
+        tableValues4.get(8).add("龙");
+        tableValues4.get(9).add("虎");
         
         final DefaultTableModel defaultTableModel4 = new DefaultTableModel(  
-                tableValues4, tableColumnNames4);  
-        table4 = new JTable(defaultTableModel4);  
+                tableValues4, tableColumnNames4);
+        table4 = new JTable(defaultTableModel4);
         JScrollPane scrollPane4 = new JScrollPane();  
         scrollPane4.setViewportView(table4);  
-        scrollPane4.setSize(400, 89 + 32);
-        //scrollPane4.setLocation(600, 75 + 89 + 25);
-        scrollPane4.setLocation(800, 75);
+        scrollPane4.setSize(400, 89 + 32 + 64);
+        //scrollPane4.setLocation(0, 75 + 89 + 25 + 89 + 25);
+        scrollPane4.setLocation(0, 89 + 32 + 100 + 64);
         container.add(scrollPane4);  
         
         
-        //第四名
+        //第五球
         Vector<String> ball5 = new Vector<String>();
-        ball5.add("第四名");
+        ball5.add("第五球");
         final DefaultTableModel ball5Model = new DefaultTableModel(  
         		null, ball5);  
         final JTable tableBall5 = new JTable(ball5Model);
         JScrollPane paneBall5 = new JScrollPane();  
         paneBall5.setViewportView(tableBall5);  
         paneBall5.setSize(400, 25);
-        //paneBall5.setLocation(0, 75 + 89 + 25 + 89);
-        paneBall5.setLocation(0, 89 + 32 + 75);
+        paneBall5.setLocation(400, 89 + 32 + 75 + 64);
         container.add(paneBall5);
         
         Vector<String> tableColumnNames5 = new Vector<String>();  
@@ -242,40 +249,39 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames5.add("金额");
         tableColumnNames5.add("差值");
         Vector<Vector<String>> tableValues5 = new Vector<Vector<String>>();
-        tableValues5.add(new Vector<String>());
-        tableValues5.add(new Vector<String>());
-        tableValues5.add(new Vector<String>());
-        tableValues5.add(new Vector<String>());
-        tableValues5.add(new Vector<String>());
-        tableValues5.add(new Vector<String>());
+        for(int i = 0; i < 8; i++) {
+        	tableValues5.add(new Vector<String>());
+        }
+
         tableValues5.get(0).add("大");
         tableValues5.get(1).add("小");
         tableValues5.get(2).add("单");
         tableValues5.get(3).add("双");
-        tableValues5.get(4).add("龙");
-        tableValues5.get(5).add("虎");
+        tableValues5.get(4).add("尾大");
+        tableValues5.get(5).add("尾小");
+        tableValues5.get(6).add("合单");
+        tableValues5.get(7).add("合双");
         
         final DefaultTableModel defaultTableModel5 = new DefaultTableModel(  
-                tableValues5, tableColumnNames5);
-        table5 = new JTable(defaultTableModel5);
+                tableValues5, tableColumnNames5);  
+        table5 = new JTable(defaultTableModel5);  
+        table5.setRowHeight(20);
         JScrollPane scrollPane5 = new JScrollPane();  
         scrollPane5.setViewportView(table5);  
-        scrollPane5.setSize(400, 89 + 32);
-        //scrollPane5.setLocation(0, 75 + 89 + 25 + 89 + 25);
-        scrollPane5.setLocation(0, 89 + 32 + 100);
+        scrollPane5.setSize(400, 89 + 32 + 64);
+        scrollPane5.setLocation(400, 89 + 32 + 100 + 64);
         container.add(scrollPane5);  
         
-        
-        //第五名
+        //第六球
         Vector<String> ball6 = new Vector<String>();
-        ball6.add("第五名");
+        ball6.add("第六球");
         final DefaultTableModel ball6Model = new DefaultTableModel(  
         		null, ball6);  
         final JTable tableBall6 = new JTable(ball6Model);
         JScrollPane paneBall6 = new JScrollPane();  
         paneBall6.setViewportView(tableBall6);  
         paneBall6.setSize(400, 25);
-        paneBall6.setLocation(400, 89 + 32 + 75);
+        paneBall6.setLocation(800, 89 + 32 + 75 + 64);
         container.add(paneBall6);
         
         Vector<String> tableColumnNames6 = new Vector<String>();  
@@ -284,38 +290,39 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames6.add("金额");
         tableColumnNames6.add("差值");
         Vector<Vector<String>> tableValues6 = new Vector<Vector<String>>();
-        tableValues6.add(new Vector<String>());
-        tableValues6.add(new Vector<String>());
-        tableValues6.add(new Vector<String>());
-        tableValues6.add(new Vector<String>());
-        tableValues6.add(new Vector<String>());
-        tableValues6.add(new Vector<String>());
+        for(int i = 0; i < 8; i++) {
+        	tableValues6.add(new Vector<String>());
+        }
+        
         tableValues6.get(0).add("大");
         tableValues6.get(1).add("小");
         tableValues6.get(2).add("单");
         tableValues6.get(3).add("双");
-        tableValues6.get(4).add("龙");
-        tableValues6.get(5).add("虎");
+        tableValues6.get(4).add("尾大");
+        tableValues6.get(5).add("尾小");
+        tableValues6.get(6).add("合单");
+        tableValues6.get(7).add("合双");
         
         final DefaultTableModel defaultTableModel6 = new DefaultTableModel(  
                 tableValues6, tableColumnNames6);  
-        table6 = new JTable(defaultTableModel6);  
+        table6 = new JTable(defaultTableModel6);
+        table6.setRowHeight(20);
         JScrollPane scrollPane6 = new JScrollPane();  
-        scrollPane6.setViewportView(table6);  
-        scrollPane6.setSize(400, 89 + 32);
-        scrollPane6.setLocation(400, 89 + 32 + 100);
-        container.add(scrollPane6);  
+        scrollPane6.setViewportView(table6);
+        scrollPane6.setSize(400, 89 + 32 + 64);
+        scrollPane6.setLocation(800, 89 + 32 + 100 + 64);
+        container.add(scrollPane6); 
         
-        //第六名
+        //第七球
         Vector<String> ball7 = new Vector<String>();
-        ball7.add("第六名");
+        ball7.add("第七球");
         final DefaultTableModel ball7Model = new DefaultTableModel(  
         		null, ball7);  
         final JTable tableBall7 = new JTable(ball7Model);
         JScrollPane paneBall7 = new JScrollPane();  
         paneBall7.setViewportView(tableBall7);  
         paneBall7.setSize(400, 25);
-        paneBall7.setLocation(800, 89 + 32 + 75);
+        paneBall7.setLocation(0, 89 + 32 + 100 + 89 + 32 + 128);
         container.add(paneBall7);
         
         Vector<String> tableColumnNames7 = new Vector<String>();  
@@ -324,35 +331,39 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames7.add("金额");
         tableColumnNames7.add("差值");
         Vector<Vector<String>> tableValues7 = new Vector<Vector<String>>();
-        tableValues7.add(new Vector<String>());
-        tableValues7.add(new Vector<String>());
-        tableValues7.add(new Vector<String>());
-        tableValues7.add(new Vector<String>());
+        for(int i = 0; i < 8; i++) {
+        	tableValues7.add(new Vector<String>());
+        }
+        
         tableValues7.get(0).add("大");
         tableValues7.get(1).add("小");
         tableValues7.get(2).add("单");
-        tableValues7.get(3).add("双");;
+        tableValues7.get(3).add("双");
+        tableValues7.get(4).add("尾大");
+        tableValues7.get(5).add("尾小");
+        tableValues7.get(6).add("合单");
+        tableValues7.get(7).add("合双");
+
         
         final DefaultTableModel defaultTableModel7 = new DefaultTableModel(  
                 tableValues7, tableColumnNames7);  
-        table7 = new JTable(defaultTableModel7);
-        table7.setRowHeight(24);
+        table7 = new JTable(defaultTableModel7);  
         JScrollPane scrollPane7 = new JScrollPane();  
-        scrollPane7.setViewportView(table7);
-        scrollPane7.setSize(400, 89 + 32);
-        scrollPane7.setLocation(800, 89 + 32 + 100);
-        container.add(scrollPane7); 
+        scrollPane7.setViewportView(table7);  
+        scrollPane7.setSize(400, 89 + 64);
+        scrollPane7.setLocation(0, 89 + 32 + 100 + 89 + 32 + 25 + 128);
+        container.add(scrollPane7);  
         
-        //第七名
+        //第八球
         Vector<String> ball8 = new Vector<String>();
-        ball8.add("第七名");
+        ball8.add("第八球");
         final DefaultTableModel ball8Model = new DefaultTableModel(  
         		null, ball8);  
         final JTable tableBall8 = new JTable(ball8Model);
         JScrollPane paneBall8 = new JScrollPane();  
         paneBall8.setViewportView(tableBall8);  
         paneBall8.setSize(400, 25);
-        paneBall8.setLocation(0, 89 + 32 + 100 + 89 + 32);
+        paneBall8.setLocation(400, 89 + 32 + 100 + 89 + 32 + 128);
         container.add(paneBall8);
         
         Vector<String> tableColumnNames8 = new Vector<String>();  
@@ -361,35 +372,38 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames8.add("金额");
         tableColumnNames8.add("差值");
         Vector<Vector<String>> tableValues8 = new Vector<Vector<String>>();
-        tableValues8.add(new Vector<String>());
-        tableValues8.add(new Vector<String>());
-        tableValues8.add(new Vector<String>());
-        tableValues8.add(new Vector<String>());
+        for(int i = 0; i < 8; i++) {
+        	tableValues8.add(new Vector<String>());
+        }
+
         tableValues8.get(0).add("大");
         tableValues8.get(1).add("小");
         tableValues8.get(2).add("单");
         tableValues8.get(3).add("双");
-
+        tableValues8.get(4).add("尾大");
+        tableValues8.get(5).add("尾小");
+        tableValues8.get(6).add("合单");
+        tableValues8.get(7).add("合双");
         
         final DefaultTableModel defaultTableModel8 = new DefaultTableModel(  
                 tableValues8, tableColumnNames8);  
         table8 = new JTable(defaultTableModel8);  
         JScrollPane scrollPane8 = new JScrollPane();  
         scrollPane8.setViewportView(table8);  
-        scrollPane8.setSize(400, 89);
-        scrollPane8.setLocation(0, 89 + 32 + 100 + 89 + 32 + 25);
+        scrollPane8.setSize(400, 89 + 64);
+        scrollPane8.setLocation(400, 89 + 32 + 100 + 89 + 32 + 25 + 128);
         container.add(scrollPane8);  
         
-        //第八名
+        //总和、正码
         Vector<String> ball9 = new Vector<String>();
-        ball9.add("第八名");
+        ball9.add("总和、正码");
         final DefaultTableModel ball9Model = new DefaultTableModel(  
         		null, ball9);  
         final JTable tableBall9 = new JTable(ball9Model);
         JScrollPane paneBall9 = new JScrollPane();  
         paneBall9.setViewportView(tableBall9);  
         paneBall9.setSize(400, 25);
-        paneBall9.setLocation(400, 89 + 32 + 100 + 89 + 32);
+        paneBall9.setLocation(800, 89 + 32 + 100 + 89 + 32 + 128);
         container.add(paneBall9);
         
         Vector<String> tableColumnNames9 = new Vector<String>();  
@@ -398,95 +412,25 @@ public class GrabBJSCwindow extends JFrame {
         tableColumnNames9.add("金额");
         tableColumnNames9.add("差值");
         Vector<Vector<String>> tableValues9 = new Vector<Vector<String>>();
-        tableValues9.add(new Vector<String>());
-        tableValues9.add(new Vector<String>());
-        tableValues9.add(new Vector<String>());
-        tableValues9.add(new Vector<String>());
+        for(int i = 0; i < 6; i++) {
+        	tableValues9.add(new Vector<String>());
+        }
+
         tableValues9.get(0).add("大");
         tableValues9.get(1).add("小");
         tableValues9.get(2).add("单");
         tableValues9.get(3).add("双");
-        
+        tableValues9.get(4).add("尾大");
+        tableValues9.get(5).add("尾小");
+
         final DefaultTableModel defaultTableModel9 = new DefaultTableModel(  
                 tableValues9, tableColumnNames9);  
         table9 = new JTable(defaultTableModel9);  
         JScrollPane scrollPane9 = new JScrollPane();  
         scrollPane9.setViewportView(table9);  
-        scrollPane9.setSize(400, 89);
-        scrollPane9.setLocation(400, 89 + 32 + 100 + 89 + 32 + 25);
+        scrollPane9.setSize(400, 89 + 64);
+        scrollPane9.setLocation(800, 89 + 32 + 100 + 89 + 32 + 25 + 128);
         container.add(scrollPane9);  
-        
-      //第九名
-        Vector<String> ball10 = new Vector<String>();
-        ball10.add("第九名");
-        final DefaultTableModel ball10Model = new DefaultTableModel(  
-        		null, ball10);  
-        final JTable tableBall10 = new JTable(ball10Model);
-        JScrollPane paneBall10 = new JScrollPane();  
-        paneBall10.setViewportView(tableBall10);  
-        paneBall10.setSize(400, 25);
-        paneBall10.setLocation(800, 89 + 32 + 100 + 89 + 32);
-        container.add(paneBall10);
-        
-        Vector<String> tableColumnNames10 = new Vector<String>();  
-        tableColumnNames10.add("种类");  
-        tableColumnNames10.add("赔率");
-        tableColumnNames10.add("金额");
-        tableColumnNames10.add("差值");
-        Vector<Vector<String>> tableValues10 = new Vector<Vector<String>>();
-        tableValues10.add(new Vector<String>());
-        tableValues10.add(new Vector<String>());
-        tableValues10.add(new Vector<String>());
-        tableValues10.add(new Vector<String>());
-        tableValues10.get(0).add("大");
-        tableValues10.get(1).add("小");
-        tableValues10.get(2).add("单");
-        tableValues10.get(3).add("双");
-
-        final DefaultTableModel defaultTableModel10 = new DefaultTableModel(  
-                tableValues10, tableColumnNames10);  
-        table10 = new JTable(defaultTableModel10);  
-        JScrollPane scrollPane10 = new JScrollPane();  
-        scrollPane10.setViewportView(table10);  
-        scrollPane10.setSize(400, 89);
-        scrollPane10.setLocation(800, 89 + 32 + 100 + 89 + 32 + 25);
-        container.add(scrollPane10);  
-        
-        //第十名
-        Vector<String> ball11 = new Vector<String>();
-        ball11.add("第十名");
-        final DefaultTableModel ball11Model = new DefaultTableModel(  
-        		null, ball11);  
-        final JTable tableBall11 = new JTable(ball11Model);
-        JScrollPane paneBall11 = new JScrollPane();  
-        paneBall11.setViewportView(tableBall11);  
-        paneBall11.setSize(400, 25);
-        paneBall11.setLocation(0, 89 + 32 + 100 + 89 + 32 + 89 + 25);
-        container.add(paneBall11);
-        
-        Vector<String> tableColumnNames11 = new Vector<String>();  
-        tableColumnNames11.add("种类");  
-        tableColumnNames11.add("赔率");
-        tableColumnNames11.add("金额");
-        tableColumnNames11.add("差值");
-        Vector<Vector<String>> tableValues11 = new Vector<Vector<String>>();
-        tableValues11.add(new Vector<String>());
-        tableValues11.add(new Vector<String>());
-        tableValues11.add(new Vector<String>());
-        tableValues11.add(new Vector<String>());
-        tableValues11.get(0).add("总大");
-        tableValues11.get(1).add("总小");
-        tableValues11.get(2).add("总单");
-        tableValues11.get(3).add("总双");
-
-        final DefaultTableModel defaultTableModel11 = new DefaultTableModel(  
-                tableValues11, tableColumnNames11);  
-        table11 = new JTable(defaultTableModel11);  
-        JScrollPane scrollPane11 = new JScrollPane();  
-        scrollPane11.setViewportView(table11);  
-        scrollPane11.setSize(400, 89);
-        scrollPane11.setLocation(0, 89 + 32 + 100 + 89 + 32 + 89 + 50);
-        container.add(scrollPane11); 
         
         ////////////////////////////////////////
         
@@ -512,35 +456,9 @@ public class GrabBJSCwindow extends JFrame {
         panel.add(labelD);
         panel.add(textFieldD); 
         
-        JPanel panel1 = new JPanel();
-        panel1.setSize(1100, 50);
-        panel1.setLocation(0, 89 + 32 + 100 + 89 + 32 + 89 + 50 + 100);
-        container.add(panel1);  
-        JLabel label1 = new JLabel("总盈亏: ");   
-        textFieldProfit.setEditable(false);
-        JLabel label2 = new JLabel("次数: "); 
-        textFieldTimes.setEditable(false);
-        JLabel label3 = new JLabel("方向: ");
-        textFieldPositive.setEditable(false);
-        JLabel label4 = new JLabel("比例: ");
-        textFieldPercent.setEditable(false);
-        JLabel label5 = new JLabel("策略盈亏: ");   
-        textFieldOurProfit.setEditable(false);
-        
-        panel1.add(label1);  
-        panel1.add(textFieldProfit);  
-        panel1.add(label2);
-        panel1.add(textFieldTimes); 
-        panel1.add(label3);
-        panel1.add(textFieldPositive);
-        panel1.add(label4);
-        panel1.add(textFieldPercent); 
-        panel1.add(label5);
-        panel1.add(textFieldOurProfit); 
-        
-        setTitle("北京赛车");  
+        setTitle("幸运农场");  
        //pack(); //Realize the components.  
-        setBounds(100, 100, 1220, 680);  
+        setBounds(100, 100, 1220, 700);  
 //      textFieldA.requestFocus();  
         setLayout(null);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
@@ -554,33 +472,11 @@ public class GrabBJSCwindow extends JFrame {
         table7.setEnabled(false);
         table8.setEnabled(false);
         table9.setEnabled(false);
-        table10.setEnabled(false);
-        table11.setEnabled(false);
         resetData();
         setTimer(textFieldA);
     }  
     
-    public void setTextFieldProfit(String profit) {
-		textFieldProfit.setText(profit);
-	}
-
-	public void setTextFieldTimes(String times) {
-		textFieldTimes.setText(times);
-	}
-
-	public void setTextFieldPercent(String Percent) {
-		textFieldPercent.setText(Percent);
-	}
-
-	public void setTextFieldPositive(String Positive) {
-		textFieldPositive.setText(Positive);
-	}
-	
-	public void setTextFieldOurProfit(String profit) {
-		textFieldOurProfit.setText(profit);
-	}
-
-	private void setTimer(JTextField time){   
+    private void setTimer(JTextField time){   
         final JTextField varTime = time;   
         Timer timeAction = new Timer(1000, new ActionListener() {          
             public void actionPerformed(ActionEvent e) {       
@@ -647,233 +543,349 @@ public class GrabBJSCwindow extends JFrame {
 	    			double odds = oddsGrabData.getDouble(oddsKey);
 	    			
 	    			switch(oddsKey) {
-//	    				case "GDX_D":
-//	    					table1.setValueAt(odds, 0, 1);
-//	    					table1.setValueAt(amount, 0, 2);
-//	    					break;
-//	    				case "GDX_X":
-//	    					table1.setValueAt(odds, 1, 1);
-//	    					table1.setValueAt(amount, 1, 2);
-//	    					break;
-//	    				case "GDS_D":
-//	    					table1.setValueAt(odds, 2, 1);
-//	    					table1.setValueAt(amount, 2, 2);
-//	    					break;
-//	    				case "GDS_S":
-//	    					table1.setValueAt(odds, 3, 1);
-//	    					table1.setValueAt(amount, 3, 2);
-//	    					break;
 	    				case "DX1_D":
+	    					table1.setValueAt(odds, 0, 1);
+	    					table1.setValueAt(amount, 0, 2);
+	    					break;
+	    				case "DX1_X":
+	    					table1.setValueAt(odds, 1, 1);
+	    					table1.setValueAt(amount, 1, 2);
+	    					break;
+	    				case "DS1_D":
+	    					table1.setValueAt(odds, 2, 1);
+	    					table1.setValueAt(amount, 2, 2);
+	    					break;
+	    				case "DS1_S":
+	    					table1.setValueAt(odds, 3, 1);
+	    					table1.setValueAt(amount, 3, 2);
+	    					break;
+	    				case "WDX1_D":
+	    					table1.setValueAt(odds, 4, 1);
+	    					table1.setValueAt(amount,4, 2);
+	    					break;
+	    				case "WDX1_X":
+	    					table1.setValueAt(odds, 5, 1);
+	    					table1.setValueAt(amount, 5, 2);
+	    					break;
+	    				case "HDS1_D":
+	    					table1.setValueAt(odds, 6, 1);
+	    					table1.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS1_S":
+	    					table1.setValueAt(odds, 7, 1);
+	    					table1.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "LH1_L":
+	    					table1.setValueAt(odds, 8, 1);
+	    					table1.setValueAt(amount, 8, 2);
+	    					break;
+	    				case "LH1_H":
+	    					table1.setValueAt(odds, 9, 1);
+	    					table1.setValueAt(amount, 9, 2);
+	    					break;
+	    				case "DX2_D":
 	    					table2.setValueAt(odds, 0, 1);
 	    					table2.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX1_X":
+	    				case "DX2_X":
 	    					table2.setValueAt(odds, 1, 1);
 	    					table2.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS1_D":
+	    				case "DS2_D":
 	    					table2.setValueAt(odds, 2, 1);
 	    					table2.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS1_S":
+	    				case "DS2_S":
 	    					table2.setValueAt(odds, 3, 1);
 	    					table2.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "LH1_L":
+	    				case "WDX2_D":
 	    					table2.setValueAt(odds, 4, 1);
 	    					table2.setValueAt(amount, 4, 2);
 	    					break;
-	    				case "LH1_H":
+	    				case "WDX2_X":
 	    					table2.setValueAt(odds, 5, 1);
 	    					table2.setValueAt(amount, 5, 2);
 	    					break;
-	    				case "DX2_D":
+	    				case "HDS2_D":
+	    					table2.setValueAt(odds, 6, 1);
+	    					table2.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS2_S":
+	    					table2.setValueAt(odds, 7, 1);
+	    					table2.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "LH2_L":
+	    					table2.setValueAt(odds, 8, 1);
+	    					table2.setValueAt(amount, 8, 2);
+	    					break;
+	    				case "LH2_H":
+	    					table2.setValueAt(odds, 9, 1);
+	    					table2.setValueAt(amount, 9, 2);
+	    					break;
+	    				case "DX3_D":
 	    					table3.setValueAt(odds, 0, 1);
 	    					table3.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX2_X":
+	    				case "DX3_X":
 	    					table3.setValueAt(odds, 1, 1);
 	    					table3.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS2_D":
+	    				case "DS3_D":
 	    					table3.setValueAt(odds, 2, 1);
 	    					table3.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS2_S":
+	    				case "DS3_S":
 	    					table3.setValueAt(odds, 3, 1);
 	    					table3.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "LH2_L":
+	    				case "WDX3_D":
 	    					table3.setValueAt(odds, 4, 1);
 	    					table3.setValueAt(amount, 4, 2);
 	    					break;
-	    				case "LH2_H":
+	    				case "WDX3_X":
 	    					table3.setValueAt(odds, 5, 1);
 	    					table3.setValueAt(amount, 5, 2);
 	    					break;
-	    				case "DX3_D":
+	    				case "HDS3_D":
+	    					table3.setValueAt(odds, 6, 1);
+	    					table3.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS3_S":
+	    					table3.setValueAt(odds, 7, 1);
+	    					table3.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "LH3_L":
+	    					table3.setValueAt(odds, 8, 1);
+	    					table3.setValueAt(amount, 8, 2);
+	    					break;
+	    				case "LH3_H":
+	    					table3.setValueAt(odds, 9, 1);
+	    					table3.setValueAt(amount, 9, 2);
+	    					break;
+	    				case "DX4_D":
 	    					table4.setValueAt(odds, 0, 1);
 	    					table4.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX3_X":
+	    				case "DX4_X":
 	    					table4.setValueAt(odds, 1, 1);
 	    					table4.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS3_D":
+	    				case "DS4_D":
 	    					table4.setValueAt(odds, 2, 1);
 	    					table4.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS3_S":
+	    				case "DS4_S":
 	    					table4.setValueAt(odds, 3, 1);
 	    					table4.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "LH3_L":
+	    				case "WDX4_D":
 	    					table4.setValueAt(odds, 4, 1);
 	    					table4.setValueAt(amount, 4, 2);
 	    					break;
-	    				case "LH3_H":
+	    				case "WDX4_X":
 	    					table4.setValueAt(odds, 5, 1);
 	    					table4.setValueAt(amount, 5, 2);
 	    					break;
-	    				case "DX4_D":
+	    				case "HDS4_D":
+	    					table4.setValueAt(odds, 6, 1);
+	    					table4.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS4_S":
+	    					table4.setValueAt(odds, 7, 1);
+	    					table4.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "LH4_L":
+	    					table4.setValueAt(odds, 8, 1);
+	    					table4.setValueAt(amount, 8, 2);
+	    					break;
+	    				case "LH4_H":
+	    					table4.setValueAt(odds, 9, 1);
+	    					table4.setValueAt(amount, 9, 2);
+	    					break;
+	    				case "DX5_D":
 	    					table5.setValueAt(odds, 0, 1);
 	    					table5.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX4_X":
+	    				case "DX5_X":
 	    					table5.setValueAt(odds, 1, 1);
 	    					table5.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS4_D":
+	    				case "DS5_D":
 	    					table5.setValueAt(odds, 2, 1);
 	    					table5.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS4_S":
+	    				case "DS5_S":
 	    					table5.setValueAt(odds, 3, 1);
 	    					table5.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "LH4_L":
+	    				case "WDX5_D":
 	    					table5.setValueAt(odds, 4, 1);
 	    					table5.setValueAt(amount, 4, 2);
 	    					break;
-	    				case "LH4_H":
+	    				case "WDX5_X":
 	    					table5.setValueAt(odds, 5, 1);
 	    					table5.setValueAt(amount, 5, 2);
 	    					break;
-	    				case "DX5_D":
+	    				case "HDS5_D":
+	    					table5.setValueAt(odds, 6, 1);
+	    					table5.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS5_S":
+	    					table5.setValueAt(odds, 7, 1);
+	    					table5.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "DX6_D":
 	    					table6.setValueAt(odds, 0, 1);
 	    					table6.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX5_X":
+	    				case "DX6_X":
 	    					table6.setValueAt(odds, 1, 1);
 	    					table6.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS5_D":
+	    				case "DS6_D":
 	    					table6.setValueAt(odds, 2, 1);
 	    					table6.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS5_S":
+	    				case "DS6_S":
 	    					table6.setValueAt(odds, 3, 1);
 	    					table6.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "LH5_L":
+	    				case "WDX6_D":
 	    					table6.setValueAt(odds, 4, 1);
 	    					table6.setValueAt(amount, 4, 2);
 	    					break;
-	    				case "LH5_H":
+	    				case "WDX6_X":
 	    					table6.setValueAt(odds, 5, 1);
 	    					table6.setValueAt(amount, 5, 2);
 	    					break;
-	    				case "DX6_D":
+	    				case "HDS6_D":
+	    					table6.setValueAt(odds, 6, 1);
+	    					table6.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS6_S":
+	    					table6.setValueAt(odds, 7, 1);
+	    					table6.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "DX7_D":
 	    					table7.setValueAt(odds, 0, 1);
 	    					table7.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX6_X":
+	    				case "DX7_X":
 	    					table7.setValueAt(odds, 1, 1);
 	    					table7.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS6_D":
+	    				case "DS7_D":
 	    					table7.setValueAt(odds, 2, 1);
 	    					table7.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS6_S":
+	    				case "DS7_S":
 	    					table7.setValueAt(odds, 3, 1);
 	    					table7.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "DX7_D":
+	    				case "WDX7_D":
+	    					table7.setValueAt(odds, 4, 1);
+	    					table7.setValueAt(amount, 4, 2);
+	    					break;
+	    				case "WDX7_X":
+	    					table7.setValueAt(odds, 5, 1);
+	    					table7.setValueAt(amount, 5, 2);
+	    					break;
+	    				case "HDS7_D":
+	    					table7.setValueAt(odds, 6, 1);
+	    					table7.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS7_S":
+	    					table7.setValueAt(odds, 7, 1);
+	    					table7.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "DX8_D":
 	    					table8.setValueAt(odds, 0, 1);
 	    					table8.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX7_X":
+	    				case "DX8_X":
 	    					table8.setValueAt(odds, 1, 1);
 	    					table8.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS7_D":
+	    				case "DS8_D":
 	    					table8.setValueAt(odds, 2, 1);
 	    					table8.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS7_S":
+	    				case "DS8_S":
 	    					table8.setValueAt(odds, 3, 1);
 	    					table8.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "DX8_D":
+	    				case "WDX8_D":
+	    					table8.setValueAt(odds, 4, 1);
+	    					table8.setValueAt(amount, 4, 2);
+	    					break;
+	    				case "WDX8_X":
+	    					table8.setValueAt(odds, 5, 1);
+	    					table8.setValueAt(amount, 5, 2);
+	    					break;
+	    				case "HDS8_D":
+	    					table8.setValueAt(odds, 6, 1);
+	    					table8.setValueAt(amount, 6, 2);
+	    					break;
+	    				case "HDS8_S":
+	    					table8.setValueAt(odds, 7, 1);
+	    					table8.setValueAt(amount, 7, 2);
+	    					break;
+	    				case "ZDX_D":
 	    					table9.setValueAt(odds, 0, 1);
 	    					table9.setValueAt(amount, 0, 2);
 	    					break;
-	    				case "DX8_X":
+	    				case "ZDX_X":
 	    					table9.setValueAt(odds, 1, 1);
 	    					table9.setValueAt(amount, 1, 2);
 	    					break;
-	    				case "DS8_D":
+	    				case "ZDS_D":
 	    					table9.setValueAt(odds, 2, 1);
 	    					table9.setValueAt(amount, 2, 2);
 	    					break;
-	    				case "DS8_S":
+	    				case "ZDS_S":
 	    					table9.setValueAt(odds, 3, 1);
 	    					table9.setValueAt(amount, 3, 2);
 	    					break;
-	    				case "DX9_D":
-	    					table10.setValueAt(odds, 0, 1);
-	    					table10.setValueAt(amount, 0, 2);
+	    				case "ZWDX_D":
+	    					table9.setValueAt(odds, 4, 1);
+	    					table9.setValueAt(amount, 4, 2);
 	    					break;
-	    				case "DX9_X":
-	    					table10.setValueAt(odds, 1, 1);
-	    					table10.setValueAt(amount, 1, 2);
-	    					break;
-	    				case "DS9_D":
-	    					table10.setValueAt(odds, 2, 1);
-	    					table10.setValueAt(amount, 2, 2);
-	    					break;
-	    				case "DS9_S":
-	    					table10.setValueAt(odds, 3, 1);
-	    					table10.setValueAt(amount, 3, 2);
-	    					break;
-	    				case "DX10_D":
-	    					table11.setValueAt(odds, 0, 1);
-	    					table11.setValueAt(amount, 0, 2);
-	    					break;
-	    				case "DX10_X":
-	    					table11.setValueAt(odds, 1, 1);
-	    					table11.setValueAt(amount, 1, 2);
-	    					break;
-	    				case "DS10_D":
-	    					table11.setValueAt(odds, 2, 1);
-	    					table11.setValueAt(amount, 2, 2);
-	    					break;
-	    				case "DS10_S":
-	    					table11.setValueAt(odds, 3, 1);
-	    					table11.setValueAt(amount, 3, 2);
+	    				case "ZWDX_X":
+	    					table9.setValueAt(odds, 5, 1);
+	    					table9.setValueAt(amount, 5, 2);
 	    					break;
 	    			}	
 	        	}
 	    	}
     	}catch(Exception e) {
+    		System.out.println("重庆农场设置界面数据错误");
     	}
-//    	table1.setValueAt(Long.parseLong(table1.getValueAt(0, 2).toString()) - Long.parseLong(table1.getValueAt(1, 2).toString()), 0, 3);
-//    	table1.setValueAt(-Long.parseLong(table1.getValueAt(0, 3).toString()), 1, 3);
-//    	table1.setValueAt(Long.parseLong(table1.getValueAt(2, 2).toString()) - Long.parseLong(table1.getValueAt(3, 2).toString()), 2, 3);
-//    	table1.setValueAt(-Long.parseLong(table1.getValueAt(2, 3).toString()), 3, 3);
+    	
     	long totalValue = 0;
     	long tmpValue = 0;
+    	table1.setValueAt(Long.parseLong(table1.getValueAt(0, 2).toString()) - Long.parseLong(table1.getValueAt(1, 2).toString()), 0, 3);
+    	table1.setValueAt(-Long.parseLong(table1.getValueAt(0, 3).toString()), 1, 3);
+    	table1.setValueAt(Long.parseLong(table1.getValueAt(2, 2).toString()) - Long.parseLong(table1.getValueAt(3, 2).toString()), 2, 3);
+    	table1.setValueAt(-Long.parseLong(table1.getValueAt(2, 3).toString()), 3, 3);
+    	table1.setValueAt(Long.parseLong(table1.getValueAt(4, 2).toString()) - Long.parseLong(table1.getValueAt(5, 2).toString()), 4, 3);
+    	table1.setValueAt(-Long.parseLong(table1.getValueAt(4, 3).toString()), 5, 3);
+    	table1.setValueAt(Long.parseLong(table1.getValueAt(6, 2).toString()) - Long.parseLong(table1.getValueAt(7, 2).toString()), 6, 3);
+    	table1.setValueAt(-Long.parseLong(table1.getValueAt(6, 3).toString()), 7, 3);
+    	table1.setValueAt(Long.parseLong(table1.getValueAt(8, 2).toString()) - Long.parseLong(table1.getValueAt(9, 2).toString()), 8, 3);
+    	table1.setValueAt(-Long.parseLong(table1.getValueAt(8, 3).toString()), 9, 3);
+    	
+    	tmpValue = Long.parseLong(table1.getValueAt(0, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table1.getValueAt(2, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table1.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table1.getValueAt(6, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table1.getValueAt(8, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	
     	
     	table2.setValueAt(Long.parseLong(table2.getValueAt(0, 2).toString()) - Long.parseLong(table2.getValueAt(1, 2).toString()), 0, 3);
     	table2.setValueAt(-Long.parseLong(table2.getValueAt(0, 3).toString()), 1, 3);
@@ -881,12 +893,20 @@ public class GrabBJSCwindow extends JFrame {
     	table2.setValueAt(-Long.parseLong(table2.getValueAt(2, 3).toString()), 3, 3);
     	table2.setValueAt(Long.parseLong(table2.getValueAt(4, 2).toString()) - Long.parseLong(table2.getValueAt(5, 2).toString()), 4, 3);
     	table2.setValueAt(-Long.parseLong(table2.getValueAt(4, 3).toString()), 5, 3);
+    	table2.setValueAt(Long.parseLong(table2.getValueAt(6, 2).toString()) - Long.parseLong(table2.getValueAt(7, 2).toString()), 6, 3);
+    	table2.setValueAt(-Long.parseLong(table2.getValueAt(6, 3).toString()), 7, 3);
+    	table2.setValueAt(Long.parseLong(table2.getValueAt(8, 2).toString()) - Long.parseLong(table2.getValueAt(9, 2).toString()), 8, 3);
+    	table2.setValueAt(-Long.parseLong(table2.getValueAt(8, 3).toString()), 9, 3);
     	
     	tmpValue = Long.parseLong(table2.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table2.getValueAt(2, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table2.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table2.getValueAt(6, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table2.getValueAt(8, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	
@@ -896,12 +916,20 @@ public class GrabBJSCwindow extends JFrame {
     	table3.setValueAt(-Long.parseLong(table3.getValueAt(2, 3).toString()), 3, 3);
     	table3.setValueAt(Long.parseLong(table3.getValueAt(4, 2).toString()) - Long.parseLong(table3.getValueAt(5, 2).toString()), 4, 3);
     	table3.setValueAt(-Long.parseLong(table3.getValueAt(4, 3).toString()), 5, 3);
+    	table3.setValueAt(Long.parseLong(table3.getValueAt(6, 2).toString()) - Long.parseLong(table3.getValueAt(7, 2).toString()), 6, 3);
+    	table3.setValueAt(-Long.parseLong(table3.getValueAt(6, 3).toString()), 7, 3);
+    	table3.setValueAt(Long.parseLong(table3.getValueAt(8, 2).toString()) - Long.parseLong(table3.getValueAt(9, 2).toString()), 8, 3);
+    	table3.setValueAt(-Long.parseLong(table3.getValueAt(8, 3).toString()), 9, 3);
     	
     	tmpValue = Long.parseLong(table3.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table3.getValueAt(2, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table3.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table3.getValueAt(6, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table3.getValueAt(8, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	
@@ -911,12 +939,20 @@ public class GrabBJSCwindow extends JFrame {
     	table4.setValueAt(-Long.parseLong(table4.getValueAt(2, 3).toString()), 3, 3);
     	table4.setValueAt(Long.parseLong(table4.getValueAt(4, 2).toString()) - Long.parseLong(table4.getValueAt(5, 2).toString()), 4, 3);
     	table4.setValueAt(-Long.parseLong(table4.getValueAt(4, 3).toString()), 5, 3);
+    	table4.setValueAt(Long.parseLong(table4.getValueAt(6, 2).toString()) - Long.parseLong(table4.getValueAt(7, 2).toString()), 6, 3);
+    	table4.setValueAt(-Long.parseLong(table4.getValueAt(6, 3).toString()), 7, 3);
+    	table4.setValueAt(Long.parseLong(table4.getValueAt(8, 2).toString()) - Long.parseLong(table4.getValueAt(9, 2).toString()), 8, 3);
+    	table4.setValueAt(-Long.parseLong(table4.getValueAt(8, 3).toString()), 9, 3);
     	
     	tmpValue = Long.parseLong(table4.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table4.getValueAt(2, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table4.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table4.getValueAt(6, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table4.getValueAt(8, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	table5.setValueAt(Long.parseLong(table5.getValueAt(0, 2).toString()) - Long.parseLong(table5.getValueAt(1, 2).toString()), 0, 3);
@@ -925,12 +961,16 @@ public class GrabBJSCwindow extends JFrame {
     	table5.setValueAt(-Long.parseLong(table5.getValueAt(2, 3).toString()), 3, 3);
     	table5.setValueAt(Long.parseLong(table5.getValueAt(4, 2).toString()) - Long.parseLong(table5.getValueAt(5, 2).toString()), 4, 3);
     	table5.setValueAt(-Long.parseLong(table5.getValueAt(4, 3).toString()), 5, 3);
+    	table5.setValueAt(Long.parseLong(table5.getValueAt(6, 2).toString()) - Long.parseLong(table5.getValueAt(7, 2).toString()), 6, 3);
+    	table5.setValueAt(-Long.parseLong(table5.getValueAt(6, 3).toString()), 7, 3);
     	
     	tmpValue = Long.parseLong(table5.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table5.getValueAt(2, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table5.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table5.getValueAt(6, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	table6.setValueAt(Long.parseLong(table6.getValueAt(0, 2).toString()) - Long.parseLong(table6.getValueAt(1, 2).toString()), 0, 3);
@@ -939,6 +979,8 @@ public class GrabBJSCwindow extends JFrame {
     	table6.setValueAt(-Long.parseLong(table6.getValueAt(2, 3).toString()), 3, 3);
     	table6.setValueAt(Long.parseLong(table6.getValueAt(4, 2).toString()) - Long.parseLong(table6.getValueAt(5, 2).toString()), 4, 3);
     	table6.setValueAt(-Long.parseLong(table6.getValueAt(4, 3).toString()), 5, 3);
+    	table6.setValueAt(Long.parseLong(table6.getValueAt(6, 2).toString()) - Long.parseLong(table6.getValueAt(7, 2).toString()), 6, 3);
+    	table6.setValueAt(-Long.parseLong(table6.getValueAt(6, 3).toString()), 7, 3);
     	
     	tmpValue = Long.parseLong(table6.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
@@ -946,15 +988,25 @@ public class GrabBJSCwindow extends JFrame {
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table6.getValueAt(4, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table6.getValueAt(6, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	table7.setValueAt(Long.parseLong(table7.getValueAt(0, 2).toString()) - Long.parseLong(table7.getValueAt(1, 2).toString()), 0, 3);
     	table7.setValueAt(-Long.parseLong(table7.getValueAt(0, 3).toString()), 1, 3);
     	table7.setValueAt(Long.parseLong(table7.getValueAt(2, 2).toString()) - Long.parseLong(table7.getValueAt(3, 2).toString()), 2, 3);
     	table7.setValueAt(-Long.parseLong(table7.getValueAt(2, 3).toString()), 3, 3);
+    	table7.setValueAt(Long.parseLong(table7.getValueAt(4, 2).toString()) - Long.parseLong(table7.getValueAt(5, 2).toString()), 4, 3);
+    	table7.setValueAt(-Long.parseLong(table7.getValueAt(4, 3).toString()), 5, 3);
+    	table7.setValueAt(Long.parseLong(table7.getValueAt(6, 2).toString()) - Long.parseLong(table7.getValueAt(7, 2).toString()), 6, 3);
+    	table7.setValueAt(-Long.parseLong(table7.getValueAt(6, 3).toString()), 7, 3);
     	
     	tmpValue = Long.parseLong(table7.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table7.getValueAt(2, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table7.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table7.getValueAt(6, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	
@@ -962,10 +1014,18 @@ public class GrabBJSCwindow extends JFrame {
     	table8.setValueAt(-Long.parseLong(table8.getValueAt(0, 3).toString()), 1, 3);
     	table8.setValueAt(Long.parseLong(table8.getValueAt(2, 2).toString()) - Long.parseLong(table8.getValueAt(3, 2).toString()), 2, 3);
     	table8.setValueAt(-Long.parseLong(table8.getValueAt(2, 3).toString()), 3, 3);
+    	table8.setValueAt(Long.parseLong(table8.getValueAt(4, 2).toString()) - Long.parseLong(table8.getValueAt(5, 2).toString()), 4, 3);
+    	table8.setValueAt(-Long.parseLong(table8.getValueAt(4, 3).toString()), 5, 3);
+    	table8.setValueAt(Long.parseLong(table8.getValueAt(6, 2).toString()) - Long.parseLong(table8.getValueAt(7, 2).toString()), 6, 3);
+    	table8.setValueAt(-Long.parseLong(table8.getValueAt(6, 3).toString()), 7, 3);
     	
     	tmpValue = Long.parseLong(table8.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table8.getValueAt(2, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table8.getValueAt(4, 3).toString());
+    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
+    	tmpValue = Long.parseLong(table8.getValueAt(6, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	
@@ -973,40 +1033,24 @@ public class GrabBJSCwindow extends JFrame {
     	table9.setValueAt(-Long.parseLong(table9.getValueAt(0, 3).toString()), 1, 3);
     	table9.setValueAt(Long.parseLong(table9.getValueAt(2, 2).toString()) - Long.parseLong(table9.getValueAt(3, 2).toString()), 2, 3);
     	table9.setValueAt(-Long.parseLong(table9.getValueAt(2, 3).toString()), 3, 3);
+    	table9.setValueAt(Long.parseLong(table9.getValueAt(4, 2).toString()) - Long.parseLong(table9.getValueAt(5, 2).toString()), 4, 3);
+    	table9.setValueAt(-Long.parseLong(table9.getValueAt(4, 3).toString()), 5, 3);
     	
     	tmpValue = Long.parseLong(table9.getValueAt(0, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	tmpValue = Long.parseLong(table9.getValueAt(2, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
-    	
-    	table10.setValueAt(Long.parseLong(table10.getValueAt(0, 2).toString()) - Long.parseLong(table10.getValueAt(1, 2).toString()), 0, 3);
-    	table10.setValueAt(-Long.parseLong(table10.getValueAt(0, 3).toString()), 1, 3);
-    	table10.setValueAt(Long.parseLong(table10.getValueAt(2, 2).toString()) - Long.parseLong(table10.getValueAt(3, 2).toString()), 2, 3);
-    	table10.setValueAt(-Long.parseLong(table10.getValueAt(2, 3).toString()), 3, 3);
-    	
-    	tmpValue = Long.parseLong(table10.getValueAt(0, 3).toString());
-    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
-    	tmpValue = Long.parseLong(table10.getValueAt(2, 3).toString());
-    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
-    	
-    	table11.setValueAt(Long.parseLong(table11.getValueAt(0, 2).toString()) - Long.parseLong(table11.getValueAt(1, 2).toString()), 0, 3);
-    	table11.setValueAt(-Long.parseLong(table11.getValueAt(0, 3).toString()), 1, 3);
-    	table11.setValueAt(Long.parseLong(table11.getValueAt(2, 2).toString()) - Long.parseLong(table11.getValueAt(3, 2).toString()), 2, 3);
-    	table11.setValueAt(-Long.parseLong(table11.getValueAt(2, 3).toString()), 3, 3);
-    	
-    	tmpValue = Long.parseLong(table11.getValueAt(0, 3).toString());
-    	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
-    	tmpValue = Long.parseLong(table11.getValueAt(2, 3).toString());
+    	tmpValue = Long.parseLong(table9.getValueAt(4, 3).toString());
     	totalValue += tmpValue >= 0 ? tmpValue : -tmpValue;
     	
     	textFieldD.setText(Long.toString(totalValue));
     }
     
     public void resetData() {
-    	for(int i = 0; i < 6; i++) {
+    	for(int i = 0; i < 10; i++) {
     		for(int j = 2; j < 4; j++) {
-    			if( i < 4) {
-	    			//table1.setValueAt(0, i, j);
+    			if( i < 6) {
+	    			table1.setValueAt(0, i, j);
 	    			table2.setValueAt(0, i, j);
 	    			table3.setValueAt(0, i, j);
 	    			table4.setValueAt(0, i, j);
@@ -1015,15 +1059,20 @@ public class GrabBJSCwindow extends JFrame {
 	    			table7.setValueAt(0, i, j);
 	    			table8.setValueAt(0, i, j);
 	    			table9.setValueAt(0, i, j);
-	    			table10.setValueAt(0, i, j);
-	    			table11.setValueAt(0, i, j);
-    			}
-    			else {
-    				table2.setValueAt(0, i, j);
+    			} else if(i < 8) {
+    				table1.setValueAt(0, i, j);
+	    			table2.setValueAt(0, i, j);
 	    			table3.setValueAt(0, i, j);
 	    			table4.setValueAt(0, i, j);
 	    			table5.setValueAt(0, i, j);
 	    			table6.setValueAt(0, i, j);
+	    			table7.setValueAt(0, i, j);
+	    			table8.setValueAt(0, i, j);
+    			} else{
+    				table1.setValueAt(0, i, j);
+	    			table2.setValueAt(0, i, j);
+	    			table3.setValueAt(0, i, j);
+	    			table4.setValueAt(0, i, j);
     			}
     		}
     	}

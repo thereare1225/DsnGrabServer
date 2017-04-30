@@ -1,3 +1,4 @@
+package dsn;
 //import java.awt.BorderLayout;  
 import java.awt.Container;  
 //import java.awt.Point;  
@@ -44,7 +45,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.atomic.AtomicLong;
    
-public class GrabTJSSCwindow extends JFrame {  
+public class GrabXJSSCwindow extends JFrame {  
   
 
     private static final long serialVersionUID = -8581492063632813033L;
@@ -62,7 +63,7 @@ public class GrabTJSSCwindow extends JFrame {
     //private long remainTime = 0;
     private AtomicLong remainTime = new AtomicLong(0);
   
-    public GrabTJSSCwindow() {  
+    public GrabXJSSCwindow() {  
         // TODO Auto-generated constructor stub  
         final Container container = getContentPane();
         
@@ -343,7 +344,7 @@ public class GrabTJSSCwindow extends JFrame {
         // row selection mode  
         
         
-        setTitle("天津时时彩");  
+        setTitle("新疆时时彩");  
        //pack(); //Realize the components.  
         setBounds(100, 100, 1220, 480);  
 //      textFieldA.requestFocus();  
@@ -412,9 +413,9 @@ public class GrabTJSSCwindow extends JFrame {
     	
     	try{
 	    	for(int i = 0; i < data.length; i++) {	
-            	JSONArray TJSSCLMGrabData = new JSONArray(data[i]);        	
-            	JSONArray gamesGrabData = TJSSCLMGrabData.getJSONArray(0);        	
-            	JSONObject oddsGrabData = TJSSCLMGrabData.getJSONObject(1);
+            	JSONArray XJSSCLMGrabData = new JSONArray(data[i]);        	
+            	JSONArray gamesGrabData = XJSSCLMGrabData.getJSONArray(0);        	
+            	JSONObject oddsGrabData = XJSSCLMGrabData.getJSONObject(1);
   	       	
 	        	for(int j = 0; j < gamesGrabData.length(); j++) {
 	        		JSONObject gameGrabData = gamesGrabData.getJSONObject(j);

@@ -1,3 +1,4 @@
+package dsn;
 class GrabGD115thread extends Thread{
 	long almostTime = 35*1000;  //进入加速时间
 	long sleepTime = 10*1000;	//平时睡眠时间

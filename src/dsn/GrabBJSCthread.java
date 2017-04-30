@@ -1,3 +1,4 @@
+package dsn;
 class GrabBJSCthread extends Thread{
 	long almostTime = 40*1000;  //进入加速时间
 	long sleepTime = 8*1000;	//平时睡眠时间
@@ -7,6 +8,7 @@ class GrabBJSCthread extends Thread{
     boolean isNeedLogin = false;
     boolean requestTime = true;
     boolean inBJSCgrabTime = true;
+    boolean isInit = false;
     InitBetData initBetData = null;
 
     GrabBJSCwindow gwBJSC;
@@ -79,7 +81,7 @@ class GrabBJSCthread extends Thread{
 							gwBJSC.setRemainTime(Long.parseLong(BJSCTime[2]));
 						}
 						
-						if(BJSCremainTime < 10*60*1000 && BJSCremainTime > 15 * 1000) {
+						if(BJSCremainTime < 10*60*1000 && BJSCremainTime > 40 * 1000) {
 							initBetData.saveBetResToFile(Long.parseLong(BJSCTime[1]) - 1);
 						}
 					}
@@ -195,7 +197,11 @@ class GrabBJSCthread extends Thread{
     
     
     public  void startGrabBJSC() {
-    	initBetData.initBetResDataFile();
+    	if(!isInit) {
+    		initBetData.initBetResDataFile();
+    		isInit = true;
+    	}
+    	
     	grabBJSC = true;
     	gwBJSC.setVisible(true);
     }

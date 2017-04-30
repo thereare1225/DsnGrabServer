@@ -1,3 +1,4 @@
+package dsn;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,9 @@ public class DsnProxyGrab {
     static String [] dataBJSC = {"", "", "", "", "", "", ""};
     static String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
     static String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
-    static boolean isCQSSCdataOk = false;
+    static boolean betBJSCopen = false;
+
+	static boolean isCQSSCdataOk = false;
     static boolean isBJSCdataOk = false;
     static boolean isXYNCdataOk = false;
     static boolean isGXKLdataOk = false;
@@ -2136,6 +2139,14 @@ public class DsnProxyGrab {
     	  + period + "&amount=&dividend=", "");
     	  return result;
       }
+      
+      public static boolean isBetBJSCopen() {
+  		return betBJSCopen;
+  	  }
+
+  	  public static void setBetBJSCopen(boolean betBJSCopen) {
+  		DsnProxyGrab.betBJSCopen = betBJSCopen;
+  	  }
       
  
 }

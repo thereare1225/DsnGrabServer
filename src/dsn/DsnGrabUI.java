@@ -1,3 +1,4 @@
+package dsn;
 import java.awt.BorderLayout;
 import java.awt.Container;  
 import java.awt.GridLayout;
@@ -492,5 +493,4 @@ public class DsnGrabUI extends JFrame {
          DefaultTableModel defaultTableModel = new DefaultTableModel(conns, tableColumnNames);
          tableConns.setModel(defaultTableModel);
   	}
-   
 }

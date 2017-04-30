@@ -1,3 +1,4 @@
+package dsn;
 public class GrabGDKLthread extends Thread{
 	
 	long almostTime = 35*1000;  //进入加速时间

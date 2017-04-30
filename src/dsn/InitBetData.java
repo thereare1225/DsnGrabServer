@@ -1,3 +1,4 @@
+package dsn;
 import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -25,12 +26,18 @@ public class InitBetData {
 	int count = 0;
 	double sum = 0;
 	double allSum = 0;
+	double sum1 = 0;
 	int allCount = 0;
 	long lastPeriod = 0;
 	
 	boolean positive = true;
 	double percent = 1;
 	double profit = 0;
+	double profit1 = 0;
+	int todayCount = 0;
+	double todayProfit = 0;
+	
+	boolean open = true;
 	
 	GrabBJSCwindow wd = null;
 	
@@ -185,7 +192,6 @@ public class InitBetData {
 						String lastLine = null;
 						
 						while ((str = reader.readLine()) != null) {
-							//System.out.println(str);
 							
 							if(str.contains(",")){
 								lastLine = str;
@@ -193,9 +199,8 @@ public class InitBetData {
 								str = str.substring(str.indexOf(",") + 1);
 								
 								number = Double.valueOf(str);
-								//System.out.println("number:" + number);
 								
-								putMethod(number);
+								putMethod1(number);
 							}
 					
 						}  
@@ -250,6 +255,103 @@ public class InitBetData {
 		}	
 	}
 	
+	public void putMethod1(double number) {
+		if(number > 0) {
+			count++;
+			allCount++;
+		} else if(number < 0){
+			count--;
+			allCount--;
+		}
+		
+		if(todayCount == 179) {
+			todayCount = 1;
+			todayProfit = 0;
+		}
+		else {
+			todayCount++;
+		}
+			
+		todayProfit += number;
+		sum += number;
+		allSum += number;
+		sum1 += number;
+		
+		if(open) {
+			if(positive)
+				profit += number * percent;
+			else
+				profit -= number * percent;
+		}
+		
+		if(positive)
+			profit1 += number * percent;
+		else
+			profit1 -= number * percent;
+		
+		
+		
+		if(count >= 30 && sum > 800000) {
+			if(!positive) {
+				percent *= 2;
+			} else{
+				if (percent - 1 < 0.00001 && percent - 1 > - 0.00001) {
+					positive = false;
+				} else {
+					percent = 1;
+				}
+			}
+			sum = 0;
+			count = 0;
+			sum1 = 0;
+		}
+		
+		if(count <= -30 && sum < -800000) {
+			if(positive) {
+				percent *= 2;
+			} else{
+				if (percent - 1 < 0.00001 && percent - 1 > - 0.00001) {
+					positive = true;
+				} else {
+					percent = 1;
+				}
+			}
+			sum = 0;
+			count = 0;
+			sum1 = 0;
+		}
+		
+		open = true;
+		
+		if(positive && sum1 < -100000) {
+			open = false;
+		}
+		
+		if(!positive && sum1 > 100000) {
+			open = false;
+		}
+		
+		if(positive && (sum1 < -3500000 || count < -27)) {
+			open = true;
+			sum1 = 0;
+		}
+		
+		if(!positive && (sum1 > 3500000 || count > 27)) {
+			open = true;
+			sum1 = 0;
+		}
+		
+		DsnProxyGrab.setBetBJSCopen(open);
+		
+		wd.setTextFieldPercent(String.valueOf(percent));
+		wd.setTextFieldPositive(String.valueOf(positive));
+		wd.setTextFieldProfit(String.format("%.1f", allSum));
+		wd.setTextFieldTimes(String.valueOf(allCount));
+		wd.setTextFieldOurProfit(String.format("%.1f", profit1));
+		wd.setTextFieldZhiSunProfit(String.format("%.1f", profit));
+		wd.setTextFieldTodayProfit(String.format("%.1f", todayProfit));
+	}
+	
 	public void putMethod(double number) {
 		if(number > 0) {
 			count++;
@@ -297,17 +399,23 @@ public class InitBetData {
 		wd.setTextFieldPositive(String.valueOf(positive));
 		wd.setTextFieldProfit(String.valueOf(allSum));
 		wd.setTextFieldTimes(String.valueOf(allCount));
-		wd.setTextFieldOurProfit(String.valueOf(profit));
+		wd.setTextFieldOurProfit(String.valueOf(profit1));
 	}
 	
 	public String [] getMethod() {
 		String[] method = {"", ""};
+
 		method[0] = String.valueOf(percent);
+
 		if(positive)
 			method[1] = "true";
 		else
 			method[1] = "false";
 		return method;
+	}
+	
+	public boolean getOpen() {
+		return open;
 	}
 	
 	public  boolean saveBetResToFile(long period){
@@ -317,12 +425,17 @@ public class InitBetData {
 			return true;
 		}
 		
+		if(lastPeriod == 0) {
+			lastPeriod = period - 1;
+		}
+		
 		System.out.println("save to file:" + period);
 		
 		try{
-			for(long j = lastPeriod + 1; j <= period; j++) {
 			
-				for(int i = 0; i < 3; i++){
+			for(long j = lastPeriod + 1; j <= period; j++) {
+				boolean success = false;
+				for(int i = 0; i < 4; i++){
 					
 					String result = DsnProxyGrab.getBJSCresult(j);
 					
@@ -359,14 +472,18 @@ public class InitBetData {
 					if(value.equals("0.0")) {
 						continue;
 					}
-					putMethod(Double.valueOf(value));
+					putMethod1(Double.valueOf(value));
 					fw.append(j +"," + String.format("%.1f", d1 + d2));
 					fw.newLine();
 					fw.flush();
 
 					lastPeriod = j;
+					success = true;
 					
 					break;
+				}
+				if(!success) {
+					return false;
 				}
 			}
 			if(lastPeriod == period) {
