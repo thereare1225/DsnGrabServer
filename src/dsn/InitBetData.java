@@ -277,7 +277,7 @@ public class InitBetData {
 		allSum += number;
 		sum1 += number;
 		
-		if(open) {
+		if(open || profit1 > -1000000) {
 			if(positive)
 				profit += number * percent;
 			else
@@ -331,7 +331,7 @@ public class InitBetData {
 			open = false;
 		}
 		
-		if(positive && (sum1 < -3500000 || count < -27)) {
+		/*if(positive && (sum1 < -3500000 || count < -27)) {
 			open = true;
 			sum1 = 0;
 		}
@@ -339,6 +339,10 @@ public class InitBetData {
 		if(!positive && (sum1 > 3500000 || count > 27)) {
 			open = true;
 			sum1 = 0;
+		}*/
+		
+		if(profit1 > -1000000) {
+			open = true;
 		}
 		
 		DsnProxyGrab.setBetBJSCopen(open);
