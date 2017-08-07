@@ -9,8 +9,10 @@ class GrabTJSSCthread extends Thread{
     boolean requestTime = true;
     boolean inTJSSCgrabTime = true;
     GrabTJSSCwindow gwTJSSC;
-    public GrabTJSSCthread() {
+    DsnProxyGrab dsnProxyGrab;
+    public GrabTJSSCthread(DsnProxyGrab dsnProxyGrab) {
     	gwTJSSC = new GrabTJSSCwindow();
+    	this.dsnProxyGrab = dsnProxyGrab;
 	}
     
     @Override
@@ -21,32 +23,32 @@ class GrabTJSSCthread extends Thread{
 				
 				if(isNeedLogin) {
 					
-					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-						DsnProxyGrab.setLinePriority();
+					if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+						dsnProxyGrab.setLinePriority();
 					}
 					
-					int res = DsnProxyGrab.reLogin();
+					int res = dsnProxyGrab.reLogin();
 					if(res == -1) {
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
 						gwTJSSC.setOnlineStatus(false);
-						DsnProxyGrab.disableTJSSCData();
-						DsnProxyGrab.disableBJSCData();
+						dsnProxyGrab.disableTJSSCData();
+						dsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
-						DsnProxyGrab.connFailLogin();
+						dsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
 						gwTJSSC.setOnlineStatus(true);
 					}
 					
-					DsnProxyGrab.setisNeedChangeLine(false);
-					DsnProxyGrab.clearAvgRequest();
+					dsnProxyGrab.setisNeedChangeLine(false);
+					dsnProxyGrab.clearAvgRequest();
 					
 					isNeedLogin = false;
 				}
 				
 				long TJSSCremainTime = 0;
-				if(DsnProxyGrab.isInTJSSCgrabTime()) {
+				if(dsnProxyGrab.isInTJSSCgrabTime()) {
 						inTJSSCgrabTime = true;
 				} else {
 					if(inTJSSCgrabTime) {
@@ -54,19 +56,19 @@ class GrabTJSSCthread extends Thread{
 						isTJSSCclose = true;
 						gwTJSSC.resetData();
 						gwTJSSC.setRemainTime(0);
-						DsnProxyGrab.disableTJSSCData();
+						dsnProxyGrab.disableTJSSCData();
 						inTJSSCgrabTime = false;
 					}
 				}
 				
 				if(!grabTJSSC) {
-					DsnProxyGrab.disableTJSSCData();
+					dsnProxyGrab.disableTJSSCData();
 				}
 				
 				if(grabTJSSC && inTJSSCgrabTime) {
-					TJSSCremainTime = DsnProxyGrab.getTJSSClocalRemainTime();
+					TJSSCremainTime = dsnProxyGrab.getTJSSClocalRemainTime();
 					if(requestTime) {
-						TJSSCTime= DsnProxyGrab.getTJSSCtime();
+						TJSSCTime= dsnProxyGrab.getTJSSCtime();
 						TJSSCremainTime = Long.parseLong(TJSSCTime[0]);
 						if(TJSSCremainTime > 0) {
 							System.out.println("[代理]距离天津时时彩封盘:" + TJSSCremainTime/1000);
@@ -79,38 +81,38 @@ class GrabTJSSCthread extends Thread{
 						
 					}
 					while(TJSSCremainTime > 20*60*1000) {//获取时间失败
-						if(!DsnProxyGrab.isInTJSSCgrabTime()) {
+						if(!dsnProxyGrab.isInTJSSCgrabTime()) {
 							TJSSCremainTime = -1;
 							isTJSSCclose = true;
 							gwTJSSC.resetData();
 							gwTJSSC.setRemainTime(0);
-							DsnProxyGrab.disableTJSSCData();
+							dsnProxyGrab.disableTJSSCData();
 							inTJSSCgrabTime = false;
 							break;
 						}
 						
-						if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-							DsnProxyGrab.setLinePriority();
+						if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+							dsnProxyGrab.setLinePriority();
 						}
 						
-						int res = DsnProxyGrab.reLogin();
+						int res = dsnProxyGrab.reLogin();
 						if(res == -1) {
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
 							gwTJSSC.setOnlineStatus(false);
-							DsnProxyGrab.disableTJSSCData();
-							DsnProxyGrab.disableBJSCData();
+							dsnProxyGrab.disableTJSSCData();
+							dsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
-							DsnProxyGrab.connFailLogin();
+							dsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
 							gwTJSSC.setOnlineStatus(true);
 						}
 						
-						DsnProxyGrab.setisNeedChangeLine(false);
-						DsnProxyGrab.clearAvgRequest();
+						dsnProxyGrab.setisNeedChangeLine(false);
+						dsnProxyGrab.clearAvgRequest();
 						
-						TJSSCTime = DsnProxyGrab.getTJSSCtime();
+						TJSSCTime = dsnProxyGrab.getTJSSCtime();
 						TJSSCremainTime = Long.parseLong(TJSSCTime[0]);
 					}
 					
@@ -134,7 +136,7 @@ class GrabTJSSCthread extends Thread{
 							isTJSSCclose = true;
 							requestTime = true;
 							sleepTime = 8*1000;
-							//DsnProxyGrab.disableTJSSCData();
+							//dsnProxyGrab.disableTJSSCData();
 							continue;
 						}
 					}
@@ -144,7 +146,7 @@ class GrabTJSSCthread extends Thread{
 				
 				
 				if(grabTJSSC && inTJSSCgrabTime) {
-					String data = DsnProxyGrab.grabTJSSCdata();
+					String data = dsnProxyGrab.grabTJSSCdata();
 					if(data == "timeout") {
 						continue;
 					}else if(data == null) {
@@ -153,10 +155,10 @@ class GrabTJSSCthread extends Thread{
 					}
 					
 					if(TJSSCremainTime > 2) {
-						DsnProxyGrab.setTJSSCdata(TJSSCTime[1], data, Long.toString(DsnProxyGrab.getTJSSClocalRemainTime()/1000));
+						dsnProxyGrab.setTJSSCdata(TJSSCTime[1], data, Long.toString(dsnProxyGrab.getTJSSClocalRemainTime()/1000));
 					}
 					else {
-						DsnProxyGrab.setTJSSCdata(TJSSCTime[1], data, Long.toString(TJSSCremainTime/1000));
+						dsnProxyGrab.setTJSSCdata(TJSSCTime[1], data, Long.toString(TJSSCremainTime/1000));
 					}
 					String [] datas = {data};
 					gwTJSSC.setData(datas);

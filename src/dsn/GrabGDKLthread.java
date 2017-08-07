@@ -10,8 +10,10 @@ public class GrabGDKLthread extends Thread{
     boolean requestTime = true;
     boolean inGDKLgrabTime = true;
     GrabGDKLwindow gwGDKL= null;
-    public GrabGDKLthread() {
+    DsnProxyGrab dsnProxyGrab;
+    public GrabGDKLthread(DsnProxyGrab dsnProxyGrab) {
     	gwGDKL = new GrabGDKLwindow();
+    	this.dsnProxyGrab = dsnProxyGrab;
 	}
     
     @Override
@@ -20,32 +22,32 @@ public class GrabGDKLthread extends Thread{
     		String[] GDKLTime = {"0", "0", "0"};
 			while(true){
 				if(isNeedLogin) {		
-					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-						DsnProxyGrab.setLinePriority();
+					if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+						dsnProxyGrab.setLinePriority();
 					}
 					
-					int res = DsnProxyGrab.reLogin();
+					int res = dsnProxyGrab.reLogin();
 					if(res == -1) {
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
 						gwGDKL.setOnlineStatus(false);
-						DsnProxyGrab.disableGDKLData();
-						DsnProxyGrab.disableBJSCData();
+						dsnProxyGrab.disableGDKLData();
+						dsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
-						DsnProxyGrab.connFailLogin();
+						dsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
 						gwGDKL.setOnlineStatus(true);
 					}
 					
-					DsnProxyGrab.setisNeedChangeLine(false);
-					DsnProxyGrab.clearAvgRequest();
+					dsnProxyGrab.setisNeedChangeLine(false);
+					dsnProxyGrab.clearAvgRequest();
 					
 					isNeedLogin = false;
 				}
 				
 				long GDKLremainTime = 0;
-				if(DsnProxyGrab.isInGDKLgrabTime()) {
+				if(dsnProxyGrab.isInGDKLgrabTime()) {
 						inGDKLgrabTime = true;
 				} else {
 					if(inGDKLgrabTime) {
@@ -53,19 +55,19 @@ public class GrabGDKLthread extends Thread{
 						isGDKLclose = true;
 						gwGDKL.resetData();
 						gwGDKL.setRemainTime(0);
-						DsnProxyGrab.disableGDKLData();
+						dsnProxyGrab.disableGDKLData();
 						inGDKLgrabTime = false;
 					}
 				}
 				
 				if(!grabGDKL) {
-					DsnProxyGrab.disableGDKLData();
+					dsnProxyGrab.disableGDKLData();
 				}
 				
 				if(grabGDKL && inGDKLgrabTime) {
-					GDKLremainTime = DsnProxyGrab.getGDKLlocalRemainTime();
+					GDKLremainTime = dsnProxyGrab.getGDKLlocalRemainTime();
 					if(requestTime) {
-						GDKLTime= DsnProxyGrab.getGDKLtime();
+						GDKLTime= dsnProxyGrab.getGDKLtime();
 						GDKLremainTime = Long.parseLong(GDKLTime[0]);
 						if(GDKLremainTime > 0) {
 							System.out.println("[代理]距离幸运农场封盘:" + GDKLremainTime/1000);
@@ -79,38 +81,38 @@ public class GrabGDKLthread extends Thread{
 					}
 					
 					while(GDKLremainTime > 10*60*1000) {//获取时间失败
-						if(!DsnProxyGrab.isInGDKLgrabTime()) {
+						if(!dsnProxyGrab.isInGDKLgrabTime()) {
 							GDKLremainTime = -1;
 							isGDKLclose = true;
 							gwGDKL.resetData();
 							gwGDKL.setRemainTime(0);
-							DsnProxyGrab.disableGDKLData();
+							dsnProxyGrab.disableGDKLData();
 							inGDKLgrabTime = false;
 							break;
 						}
 						
-						if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-							DsnProxyGrab.setLinePriority();
+						if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+							dsnProxyGrab.setLinePriority();
 						}
 						
-						int res = DsnProxyGrab.reLogin();
+						int res = dsnProxyGrab.reLogin();
 						if(res == -1) {
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
 							gwGDKL.setOnlineStatus(false);
-							DsnProxyGrab.disableGDKLData();
-							DsnProxyGrab.disableBJSCData();
+							dsnProxyGrab.disableGDKLData();
+							dsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
-							DsnProxyGrab.connFailLogin();
+							dsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
 							gwGDKL.setOnlineStatus(true);
 						}
 						
-						DsnProxyGrab.setisNeedChangeLine(false);
-						DsnProxyGrab.clearAvgRequest();
+						dsnProxyGrab.setisNeedChangeLine(false);
+						dsnProxyGrab.clearAvgRequest();
 						
-						GDKLTime = DsnProxyGrab.getGDKLtime();
+						GDKLTime = dsnProxyGrab.getGDKLtime();
 						GDKLremainTime = Long.parseLong(GDKLTime[0]);
 					}
 					
@@ -134,7 +136,7 @@ public class GrabGDKLthread extends Thread{
 							isGDKLclose = true;
 							requestTime = true;
 							sleepTime = 10*1000;
-							//DsnProxyGrab.disableGDKLData();
+							//dsnProxyGrab.disableGDKLData();
 							continue;
 						}
 					}
@@ -144,21 +146,21 @@ public class GrabGDKLthread extends Thread{
 				
 				
 				if(grabGDKL && inGDKLgrabTime) {
-					String [] data = DsnProxyGrab.grabGDKLdata();
+					String [] data = dsnProxyGrab.grabGDKLdata();
 					if(data == null) {
-						data = DsnProxyGrab.grabGDKLdata();
+						data = dsnProxyGrab.grabGDKLdata();
 					}
 					
 					if(data == null) {
-						data = DsnProxyGrab.grabGDKLdata();
+						data = dsnProxyGrab.grabGDKLdata();
 					}
 					
 					if(data != null) {
 						if(GDKLremainTime > 2) {
-							DsnProxyGrab.setGDKLdata(GDKLTime[1], data, Long.toString(DsnProxyGrab.getGDKLlocalRemainTime()/1000));
+							dsnProxyGrab.setGDKLdata(GDKLTime[1], data, Long.toString(dsnProxyGrab.getGDKLlocalRemainTime()/1000));
 						}
 						else {
-							DsnProxyGrab.setGDKLdata(GDKLTime[1], data, Long.toString(GDKLremainTime/1000));
+							dsnProxyGrab.setGDKLdata(GDKLTime[1], data, Long.toString(GDKLremainTime/1000));
 						}
 						
 						gwGDKL.setData(data);

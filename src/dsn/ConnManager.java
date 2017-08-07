@@ -17,6 +17,10 @@ public class ConnManager extends Thread {
 		lock = new ReentrantReadWriteLock();
 	}
 	
+	public DsnProxyGrab getDsnProxyGrab() {
+		return ui.getDsnProxyGrab();
+	}
+	
 	public void registerConn(String ip, String account, String website) {
 		Connection conn = (Connection)connections.get(ip);
 		conn.setProperty(account, website);

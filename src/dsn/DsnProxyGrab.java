@@ -39,58 +39,58 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.json.JSONArray;
 
 public class DsnProxyGrab {
-	static CloseableHttpClient httpclient = null;
-    static RequestConfig requestConfig = null;
-    static HttpClientContext clientContext = null;
+	 CloseableHttpClient httpclient = null;
+     RequestConfig requestConfig = null;
+     HttpClientContext clientContext = null;
     
-    //static Map<String,String> cookieMap = new HashMap<String, String>(64);
-    static String strCookies = "";
-    static String cookieuid = "";
-    static String cookiedae = "";
-    static String [] dataCQSSC = {"", "", ""};
-    static String [] dataGXKL = {"", "", ""};
-    static String [] dataTJSSC = {"", "", ""};
-    static String [] dataXJSSC = {"", "", ""};
-    static String [] dataGD115 = {"", "", ""};
-    static String [] dataBJKL8 = {"", "", ""};
-    static String [] dataBJSC = {"", "", "", "", "", "", ""};
-    static String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
-    static String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
-    static boolean betBJSCopen = false;
+    // Map<String,String> cookieMap = new HashMap<String, String>(64);
+     String strCookies = "";
+     String cookieuid = "";
+     String cookiedae = "";
+     String [] dataCQSSC = {"", "", ""};
+     String [] dataGXKL = {"", "", ""};
+     String [] dataTJSSC = {"", "", ""};
+     String [] dataXJSSC = {"", "", ""};
+     String [] dataGD115 = {"", "", ""};
+     String [] dataBJKL8 = {"", "", ""};
+     String [] dataBJSC = {"", "", "", "", "", "", ""};
+     String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
+     String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
+     boolean betBJSCopen = false;
 
-	static boolean isCQSSCdataOk = false;
-    static boolean isBJSCdataOk = false;
-    static boolean isXYNCdataOk = false;
-    static boolean isGXKLdataOk = false;
-    static boolean isGDKLdataOk = false;
-    static boolean isTJSSCdataOk = false;
-    static boolean isXJSSCdataOk = false;
-    static boolean isGD115dataOk = false;
-    static boolean isBJKL8dataOk = false;
-    static boolean isInReLogin = false;
+	 boolean isCQSSCdataOk = false;
+     boolean isBJSCdataOk = false;
+     boolean isXYNCdataOk = false;
+     boolean isGXKLdataOk = false;
+     boolean isGDKLdataOk = false;
+     boolean isTJSSCdataOk = false;
+     boolean isXJSSCdataOk = false;
+     boolean isGD115dataOk = false;
+     boolean isBJKL8dataOk = false;
+     boolean isInReLogin = false;
     
     
-    private static String ADDRESS = "";
-    private static String ACCOUNT = "";
-    private static String PASSWORD = "";
-    private static long timeDValue = 0;  //网站时间和电脑时间的差值  网页时间 - 当前时间
-    private static long closeTimeGXKL = 0;
-    private static long closeTimeGDKL = 0;
-    private static long closeTimeTJSSC = 0;
-    private static long closeTimeXJSSC = 0;
-    private static long closeTimeGD115 = 0;
-    private static long closeTimeBJKL8 = 0;
-    private static ReadWriteLock lockCQSSC = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockBJSC = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockXYNC = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockGXKL = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockGDKL = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockTJSSC = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockXJSSC = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockGD115 = new ReentrantReadWriteLock();
-    private static ReadWriteLock lockBJKL8 = new ReentrantReadWriteLock();
+    private  String ADDRESS = "";
+    private  String ACCOUNT = "";
+    private  String PASSWORD = "";
+    private  long timeDValue = 0;  //网站时间和电脑时间的差值  网页时间 - 当前时间
+    private  long closeTimeGXKL = 0;
+    private  long closeTimeGDKL = 0;
+    private  long closeTimeTJSSC = 0;
+    private  long closeTimeXJSSC = 0;
+    private  long closeTimeGD115 = 0;
+    private  long closeTimeBJKL8 = 0;
+    private  ReadWriteLock lockCQSSC = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockBJSC = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockXYNC = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockGXKL = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockGDKL = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockTJSSC = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockXJSSC = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockGD115 = new ReentrantReadWriteLock();
+    private  ReadWriteLock lockBJKL8 = new ReentrantReadWriteLock();
     
-    static {
+     {
          requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build();
          requestConfig = RequestConfig.copy(requestConfig).setRedirectsEnabled(false).build();//禁止重定向 ， 以便获取cookiedae
          requestConfig = RequestConfig.copy(requestConfig).setConnectTimeout(15*1000).setConnectionRequestTimeout(15*1000).setSocketTimeout(15*1000).build();//设置超时
@@ -99,18 +99,18 @@ public class DsnProxyGrab {
     
     
     //优化线路选择
-    static Vector<Object[]> lines;
+     Vector<Object[]> lines;
     
-    static Vector<Long> lastTenRequestTime = new Vector<Long>();
-    static long avgRequestTime = 0;    
-    static boolean bcalcRequestTime = true;
-    static boolean bneedChangeLine = false;
+     Vector<Long> lastTenRequestTime = new Vector<Long>();
+     long avgRequestTime = 0;    
+     boolean bcalcRequestTime = true;
+     boolean bneedChangeLine = false;
     
     
     
     
 
-	public static String setCookie(CloseableHttpResponse httpResponse) {
+	public  String setCookie(CloseableHttpResponse httpResponse) {
 		//System.out.println("----setCookieStore");
 		Header headers[] = httpResponse.getHeaders("Set-Cookie");
 		if (headers == null || headers.length==0)
@@ -149,7 +149,7 @@ public class DsnProxyGrab {
 		return strCookies;
 	}
     
-	private static void loginInit() {
+	private  void loginInit() {
 		strCookies = "";
         cookieuid = "";
         cookiedae = "";
@@ -157,7 +157,7 @@ public class DsnProxyGrab {
         clientContext.setRequestConfig(requestConfig);
 	}
 
-    public static boolean doLogin() { 	
+    public  boolean doLogin() { 	
         loginInit();
         String loginPage = doGet(ADDRESS + "/login", ""); //get 登录页面
         
@@ -210,18 +210,18 @@ public class DsnProxyGrab {
         return false;
     }
     
-    public static void setLoginParams(String address, String account, String password){
+    public void setLoginParams(String address, String account, String password){
     	ADDRESS = address;
     	ACCOUNT = account;
     	PASSWORD = password;
     }
     
-    public static void setLoginAddress(String address){
+    public  void setLoginAddress(String address){
     	ADDRESS = address;
     }
     
     
-    public static void initLines(){
+    public  void initLines(){
     	String[] addressArray = ConfigReader.getProxyAddressArray();
     	
 
@@ -239,7 +239,7 @@ public class DsnProxyGrab {
     
     
     @SuppressWarnings("unchecked")
-	public static void setLinePriority(){
+	public  void setLinePriority(){
     	
     	boolean res = false;
 
@@ -321,7 +321,7 @@ public class DsnProxyGrab {
     }
     
     
-    public static void calcRequestAveTime(long requestTime){
+    public  void calcRequestAveTime(long requestTime){
         
     	if(bcalcRequestTime == true){
     		
@@ -356,19 +356,19 @@ public class DsnProxyGrab {
     	
     }
     
-    public static void setIscalcRequestTime(boolean flag){
+    public  void setIscalcRequestTime(boolean flag){
     	bcalcRequestTime = flag;
     }
     
-    public static void setisNeedChangeLine(boolean flag){
+    public  void setisNeedChangeLine(boolean flag){
     	bneedChangeLine = flag;
     }
     
-    public static boolean getIsisNeedChangeLine(){
+    public  boolean getIsisNeedChangeLine(){
     	return bneedChangeLine;
     }
     
-    public static void clearAvgRequest(){
+    public  void clearAvgRequest(){
     	
     	if(lastTenRequestTime.size() >0){
     		lastTenRequestTime.clear();
@@ -378,7 +378,7 @@ public class DsnProxyGrab {
     }
     
     
-    public static boolean login() {  
+    public  boolean login() {  
     	
     	
     	boolean res = false;
@@ -435,7 +435,7 @@ public class DsnProxyGrab {
 
     }
     
-    public static int reLogin() {  
+    public  int reLogin() {  
     	
     	if(isInReLogin) {
     		return -1;
@@ -483,7 +483,7 @@ public class DsnProxyGrab {
     
     
     
-    public static void connFailLogin() {
+    public  void connFailLogin() {
     	
     	
     	boolean res = false;
@@ -531,11 +531,11 @@ public class DsnProxyGrab {
 
 
     /**以utf-8形式读取*/
-    public static String doPost(String url, List<NameValuePair> formparams, String cookies, String referUrl) {
+    public  String doPost(String url, List<NameValuePair> formparams, String cookies, String referUrl) {
         return doPost(url, formparams, cookies, "UTF-8", referUrl);
     }
 
-    public static String doPost(String url,List<NameValuePair> formparams, String cookies, String charset, String referUrl) {  
+    public  String doPost(String url,List<NameValuePair> formparams, String cookies, String charset, String referUrl) {  
         
     	try {
     	HttpPost httppost = new HttpPost(url); 
@@ -591,7 +591,7 @@ public class DsnProxyGrab {
     }
     
     
-    public static CloseableHttpResponse  execute(HttpUriRequest request) throws IOException, ClientProtocolException{
+    public  CloseableHttpResponse  execute(HttpUriRequest request) throws IOException, ClientProtocolException{
     	
     	long time1 = System.currentTimeMillis();
     	long time2 = System.currentTimeMillis();
@@ -618,7 +618,7 @@ public class DsnProxyGrab {
     }
     
     
-    public static String doGet(String url, String cookies) { 
+    public  String doGet(String url, String cookies) { 
         try {  
            // 创建httpget.    
            //System.out.println(cookies); 
@@ -686,7 +686,7 @@ public class DsnProxyGrab {
         return "";
     }
     
-    public static String getPicNum(String picUri) {
+    public  String getPicNum(String picUri) {
     	try {
     	 HttpGet httpget = new HttpGet(picUri);
          httpget.addHeader("Connection","keep-alive");
@@ -763,7 +763,7 @@ public class DsnProxyGrab {
   //! @param all        虚注:"XZ" 实占:"SZ" 补货:"BH"
   //! @param range      全部:"", A盘:"A", B盘:"B", C盘:"C", D盘:"D",
   //! @return           成功:String 连接失败:null 超时:"timeout" 
-    public static String grabCQSSCdata(String game, String all, String range){
+    public  String grabCQSSCdata(String game, String all, String range){
     	if((game == "LM" || game == "DH" || game == "QZHS") && (range == "" || range == "A" ||
     			range == "B" || range == "C" || range == "D") && (all == "XZ" || all == "SZ" || all == "BH")) {
     		switch (game) {
@@ -795,7 +795,7 @@ public class DsnProxyGrab {
     //! @param all        虚注:"XZ" 实占:"SZ" 补货:"BH"
     //! @param range      全部:"", A盘:"A", B盘:"B", C盘:"C", D盘:"D",
     //! @return           成功:String 连接失败:null 超时:"timeout" 
-      public static String grabBJSCdata(String game, String all, String range){
+      public  String grabBJSCdata(String game, String all, String range){
       	if((game == "GY" || game == "SSWL" || game == "QBJS") && (range == "" || range == "A" ||
       			range == "B" || range == "C" || range == "D") && (all == "XZ" || all == "SZ" || all == "BH")) {
       		switch (game) {
@@ -821,7 +821,7 @@ public class DsnProxyGrab {
       	return null;
       }
       
-      public static String grabGXKLdata() {
+      public  String grabGXKLdata() {
     	  long time =  System.currentTimeMillis();
     		String strTime = Long.toString(time);
     		String data = doGet(ADDRESS + "/agent/control/risk?lottery=GXKLSF&games=YDX1%2CYDS1%2CYWDX1%2CYHDS1%2CYDX2%2"
@@ -833,7 +833,7 @@ public class DsnProxyGrab {
     	return null;
       }
       
-      public static String grabTJSSCdata() {
+      public  String grabTJSSCdata() {
     	  long time =  System.currentTimeMillis();
   		String strTime = Long.toString(time);
   		String data = doGet(ADDRESS + "/agent/control/risk?lottery=TJSSC&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
@@ -844,7 +844,7 @@ public class DsnProxyGrab {
   		return null;
       }
       
-      public static String grabXJSSCdata() {
+      public  String grabXJSSCdata() {
     	  long time =  System.currentTimeMillis();
     	  String strTime = Long.toString(time);
     	  String data = doGet(ADDRESS + "/agent/control/risk?lottery=XJSSC&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
@@ -855,7 +855,7 @@ public class DsnProxyGrab {
     	  return null;
       }
       
-      public static String grabGD115data() {
+      public  String grabGD115data() {
     	  long time =  System.currentTimeMillis();
     	  String strTime = Long.toString(time);
     	  String data = doGet(ADDRESS + "/agent/control/risk?lottery=GD11X5&games=DX1%2CDS1%2CDX2%2CDS2%2CDX3%2CDS3%2CDX4%"
@@ -866,7 +866,7 @@ public class DsnProxyGrab {
     	  return null;
       }
       
-      public static String grabBJKL8data() {
+      public  String grabBJKL8data() {
     	  long time =  System.currentTimeMillis();
     	  String strTime = Long.toString(time);
     	  String data = doGet(ADDRESS + "/agent/control/risk?lottery=KL8&games=ZDX%2CZDS%2CDXDS%2CQHH%2CDSH%2CWX%2CZHT&all=XZ&"
@@ -877,7 +877,7 @@ public class DsnProxyGrab {
     	  return null;
       }
       
-      public static boolean grabXYNCdata() {
+      public  boolean grabXYNCdata() {
     	  String data1 = "";
     	  String data2 = "";
     	  String data3 = "";
@@ -1037,7 +1037,7 @@ public class DsnProxyGrab {
     	  return true;
       }
       
-      public static String[] grabGDKLdata() {
+      public  String[] grabGDKLdata() {
     	  String [] data = {"", "", "", "", "", "", "", "", ""};
     	  
     	  long time =  System.currentTimeMillis();
@@ -1177,7 +1177,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static void setCQSSCdata(String drawNumber, String data, String remainTime) {
+      public  void setCQSSCdata(String drawNumber, String data, String remainTime) {
     	      lockCQSSC.writeLock().lock();
 	    	  dataCQSSC[0] = drawNumber;
 	    	  dataCQSSC[1] = data;
@@ -1187,7 +1187,7 @@ public class DsnProxyGrab {
 	    	  System.out.println("set  CQSSCdata   ok");
       }
       
-      public static void setBJSCdata(String drawNumber, String [] data, String remainTime, String percent, String positive) {
+      public  void setBJSCdata(String drawNumber, String [] data, String remainTime, String percent, String positive) {
     	  	  lockBJSC.writeLock().lock();
 	    	  dataBJSC[0] = drawNumber;
 	    	  dataBJSC[1] = data[0];
@@ -1201,7 +1201,7 @@ public class DsnProxyGrab {
 	    	  System.out.println("set  BJSCdata   ok");
       }
       
-      public static void setXYNCdata(String drawNumber, String remainTime) {
+      public  void setXYNCdata(String drawNumber, String remainTime) {
     	      lockXYNC.writeLock().lock();
 	    	  dataXYNC[0] = drawNumber;
 	    	  dataXYNC[10] = remainTime;
@@ -1210,7 +1210,7 @@ public class DsnProxyGrab {
 	    	  System.out.println("set  XYNCdata   ok");
       }
       
-      public static void setGXKLdata(String drawNumber, String data, String remainTime) {
+      public  void setGXKLdata(String drawNumber, String data, String remainTime) {
 	  	  lockGXKL.writeLock().lock();
     	  dataGXKL[0] = drawNumber;
     	  dataGXKL[1] = data;
@@ -1220,7 +1220,7 @@ public class DsnProxyGrab {
     	  System.out.println("set  GXKLdata   ok");
       }
       
-      public static void setGD115data(String drawNumber, String data, String remainTime) {
+      public  void setGD115data(String drawNumber, String data, String remainTime) {
 	  	  lockGD115.writeLock().lock();
     	  dataGD115[0] = drawNumber;
     	  dataGD115[1] = data;
@@ -1230,7 +1230,7 @@ public class DsnProxyGrab {
     	  System.out.println("set  GD115data   ok");
       }
       
-      public static void setTJSSCdata(String drawNumber, String data, String remainTime) {
+      public  void setTJSSCdata(String drawNumber, String data, String remainTime) {
     	  lockTJSSC.writeLock().lock();
     	  dataTJSSC[0] = drawNumber;
     	  dataTJSSC[1] = data;
@@ -1240,7 +1240,7 @@ public class DsnProxyGrab {
     	  System.out.println("set  TJSSCdata   ok");
       }
       
-      public static void setXJSSCdata(String drawNumber, String data, String remainTime) {
+      public  void setXJSSCdata(String drawNumber, String data, String remainTime) {
     	  lockXJSSC.writeLock().lock();
     	  dataXJSSC[0] = drawNumber;
     	  dataXJSSC[1] = data;
@@ -1250,7 +1250,7 @@ public class DsnProxyGrab {
     	  System.out.println("set  XJSSCdata   ok");
       }
       
-      public static void setBJKL8data(String drawNumber, String data, String remainTime) {
+      public  void setBJKL8data(String drawNumber, String data, String remainTime) {
     	  lockBJKL8.writeLock().lock();
     	  dataBJKL8[0] = drawNumber;
     	  dataBJKL8[1] = data;
@@ -1260,7 +1260,7 @@ public class DsnProxyGrab {
     	  System.out.println("set  BJKL8data   ok");
       }
       
-      public static void setGDKLdata(String drawNumber, String [] data, String remainTime) {
+      public  void setGDKLdata(String drawNumber, String [] data, String remainTime) {
 	  	  lockGDKL.writeLock().lock();
     	  dataGDKL[0] = drawNumber;
     	  dataGDKL[1] = data[0];
@@ -1281,7 +1281,7 @@ public class DsnProxyGrab {
       
       //! @brief    读取cqssc下单数据
       //! @return   数据可用(String[0]:期数， String[1]:data, String[2]:数据时间);  数据不可用(null)
-      public static String[] getCQSSCdata() {
+      public  String[] getCQSSCdata() {
     	  String [] data = null;
     	  lockCQSSC.readLock().lock();
     	  if(isCQSSCdataOk) {
@@ -1294,7 +1294,7 @@ public class DsnProxyGrab {
       
       //! @brief     读取取BJSC下单数据
       //! @return    数据可用(String[0]:期数, String[1]:冠亚, String[2]:三四五六, String[3]:七八九十, String[4]:数据时间, String[5] percent, String[6]正反); 数据不可用(null)
-      public static String[] getBJSCdata() {
+      public  String[] getBJSCdata() {
     	  String [] data = null;
     	  lockBJSC.readLock().lock();
     	  if(isBJSCdataOk) {
@@ -1305,7 +1305,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String[] getGXKLdata() {
+      public  String[] getGXKLdata() {
     	  String [] data = null;
     	  lockGXKL.readLock().lock();
     	  if(isGXKLdataOk) {
@@ -1316,7 +1316,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String[] getGDKLdata() {
+      public  String[] getGDKLdata() {
     	  String [] data = null;
     	  lockGDKL.readLock().lock();
     	  if(isGDKLdataOk) {
@@ -1327,7 +1327,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String[] getGD115data() {
+      public  String[] getGD115data() {
     	  String [] data = null;
     	  lockGD115.readLock().lock();
     	  if(isGD115dataOk) {
@@ -1338,7 +1338,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String[] getTJSSCdata() {
+      public  String[] getTJSSCdata() {
     	  String [] data = null;
     	  lockTJSSC.readLock().lock();
     	  if(isTJSSCdataOk) {
@@ -1349,7 +1349,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String[] getXJSSCdata() {
+      public  String[] getXJSSCdata() {
     	  String [] data = null;
     	  lockXJSSC.readLock().lock();
     	  if(isXJSSCdataOk) {
@@ -1360,7 +1360,7 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String[] getBJKL8data() {
+      public  String[] getBJKL8data() {
     	  String [] data = null;
     	  lockBJKL8.readLock().lock();
     	  if(isBJKL8dataOk) {
@@ -1373,7 +1373,7 @@ public class DsnProxyGrab {
       
       //! @brief     读取取XYNC下单数据
       //! @return    数据可用(String[0]:期数, String[1~9]:下单数据, String[10]:数据时间); 数据不可用(null)
-      public static String[] getXYNCdata() {
+      public  String[] getXYNCdata() {
     	  String [] data = null;
     	  lockXYNC.readLock().lock();
     	  if(isXYNCdataOk) {
@@ -1383,68 +1383,68 @@ public class DsnProxyGrab {
     	  return data;
       }
       
-      public static String [] getXYNCshowData() {
+      public  String [] getXYNCshowData() {
     	  lockXYNC.readLock().lock();
     	  String [] data = {dataXYNC[1], dataXYNC[2], dataXYNC[3], dataXYNC[4], dataXYNC[5], dataXYNC[6], dataXYNC[7], dataXYNC[8], dataXYNC[9]};
     	  lockXYNC.readLock().unlock();
     	  return data;
       }
       
-      public static void disableCQSSCData() {
+      public  void disableCQSSCData() {
     	  lockCQSSC.writeLock().lock();
     	  isCQSSCdataOk = false;
     	  lockCQSSC.writeLock().unlock();
       }
       
-      public static void disableBJSCData() {
+      public  void disableBJSCData() {
     	  lockBJSC.writeLock().lock();
     	  isBJSCdataOk = false;
     	  lockBJSC.writeLock().unlock();
       }
       
-      public static void disableXYNCData() {
+      public  void disableXYNCData() {
     	  lockXYNC.writeLock().lock();
     	  isXYNCdataOk = false;
     	  lockXYNC.writeLock().unlock();
       }
       
-      public static void disableGXKLData() {
+      public  void disableGXKLData() {
     	  lockGXKL.writeLock().lock();
     	  isGXKLdataOk = false;
     	  lockGXKL.writeLock().unlock();
       }
       
-      public static void disableGDKLData() {
+      public  void disableGDKLData() {
     	  lockGDKL.writeLock().lock();
     	  isGDKLdataOk = false;
     	  lockGDKL.writeLock().unlock();
       }
       
-      public static void disableGD115Data() {
+      public  void disableGD115Data() {
     	  lockGD115.writeLock().lock();
     	  isGD115dataOk = false;
     	  lockGD115.writeLock().unlock();
       }
       
-      public static void disableTJSSCData() {
+      public  void disableTJSSCData() {
     	  lockTJSSC.writeLock().lock();
     	  isTJSSCdataOk = false;
     	  lockTJSSC.writeLock().unlock();
       }
       
-      public static void disableXJSSCData() {
+      public  void disableXJSSCData() {
     	  lockXJSSC.writeLock().lock();
     	  isXJSSCdataOk = false;
     	  lockXJSSC.writeLock().unlock();
       }
       
-      public static void disableBJKL8Data() {
+      public  void disableBJKL8Data() {
     	  lockBJKL8.writeLock().lock();
     	  isBJKL8dataOk = false;
     	  lockBJKL8.writeLock().unlock();
       }
       
-      public static boolean setDsnTime() {
+      public  boolean setDsnTime() {
     	  String host = ADDRESS;
     	  String getTimeUrl = host + "/time?&_=";
     	  getTimeUrl += Long.toString(System.currentTimeMillis());
@@ -1463,7 +1463,7 @@ public class DsnProxyGrab {
     	  return false;
       }
       
-      public static String [] getCQSSCTime(){
+      public  String [] getCQSSCTime(){
           //get period
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
@@ -1513,7 +1513,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getBJSCTime(){
+      public  String [] getBJSCTime(){
           //get period
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
@@ -1563,7 +1563,7 @@ public class DsnProxyGrab {
     	  return time;
       }    
       
-      public static String [] getXYNCTime(){  
+      public  String [] getXYNCTime(){  
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1612,7 +1612,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getGXKLtime() {
+      public  String [] getGXKLtime() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1660,7 +1660,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getGD115time() {
+      public  String [] getGD115time() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1708,7 +1708,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getGDKLtime() {
+      public  String [] getGDKLtime() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1756,7 +1756,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getTJSSCtime() {
+      public  String [] getTJSSCtime() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1804,7 +1804,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getXJSSCtime() {
+      public  String [] getXJSSCtime() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1852,7 +1852,7 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static String [] getBJKL8time() {
+      public  String [] getBJKL8time() {
     	  String [] time = {"0", "0", "0"};
     	  String response = "";
     	  String host = ADDRESS;	 
@@ -1900,31 +1900,31 @@ public class DsnProxyGrab {
     	  return time;
       }
       
-      public static long getGXKLlocalRemainTime() {
+      public  long getGXKLlocalRemainTime() {
     	  return closeTimeGXKL - (timeDValue + System.currentTimeMillis());
       }
       
-      public static long getGDKLlocalRemainTime() {
+      public  long getGDKLlocalRemainTime() {
     	  return closeTimeGDKL - (timeDValue + System.currentTimeMillis());
       }
       
-      public static long getTJSSClocalRemainTime() {
+      public  long getTJSSClocalRemainTime() {
     	  return closeTimeTJSSC - (timeDValue + System.currentTimeMillis());
       }
       
-      public static long getXJSSClocalRemainTime() {
+      public  long getXJSSClocalRemainTime() {
     	  return closeTimeXJSSC - (timeDValue + System.currentTimeMillis());
       }
       
-      public static long getGD115localRemainTime() {
+      public  long getGD115localRemainTime() {
     	  return closeTimeGD115 - (timeDValue + System.currentTimeMillis());
       }
       
-      public static long getBJKL8localRemainTime() {
+      public  long getBJKL8localRemainTime() {
     	  return closeTimeBJKL8 - (timeDValue + System.currentTimeMillis());
       }
       
-      public static String grabCQSSCdataByCookie(String game, String all, String range, String uid, String dae){
+      public  String grabCQSSCdataByCookie(String game, String all, String range, String uid, String dae){
       	if((game == "LM" || game == "DH" || game == "QZHS") && (range == "" || range == "A" ||
       			range == "B" || range == "C" || range == "D") && (all == "XZ" || all == "SZ" || all == "BH")) {
       		switch (game) {
@@ -1950,7 +1950,7 @@ public class DsnProxyGrab {
       	return null;
       }
       
-      public static boolean isInCQSSCgrabTime() {
+      public  boolean isInCQSSCgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -1963,7 +1963,7 @@ public class DsnProxyGrab {
            return true;
       }
       
-      public static boolean isInBJSCgrabTime() {
+      public  boolean isInBJSCgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -1977,7 +1977,7 @@ public class DsnProxyGrab {
            return false;
       }
       
-      public static boolean isInXYNCgrabTime() {
+      public  boolean isInXYNCgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -1990,7 +1990,7 @@ public class DsnProxyGrab {
            return true;
       }
       
-      public static boolean isInTJSSCgrabTime() {
+      public  boolean isInTJSSCgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -2004,7 +2004,7 @@ public class DsnProxyGrab {
           return false;
       }
       
-      public static boolean isInXJSSCgrabTime() {
+      public  boolean isInXJSSCgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -2017,7 +2017,7 @@ public class DsnProxyGrab {
            return true;
       }
       
-      public static boolean isInGD115grabTime() {
+      public  boolean isInGD115grabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -2031,7 +2031,7 @@ public class DsnProxyGrab {
           return false;
       }
       
-      public static boolean isInGXKLgrabTime() {
+      public  boolean isInGXKLgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -2045,7 +2045,7 @@ public class DsnProxyGrab {
           return false;
       }
       
-      public static boolean isInGDKLgrabTime() {
+      public  boolean isInGDKLgrabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -2059,7 +2059,7 @@ public class DsnProxyGrab {
           return false;
       }
       
-      public static boolean isInBJKL8grabTime() {
+      public  boolean isInBJKL8grabTime() {
     	  long time = System.currentTimeMillis() + timeDValue;
     	  Date date = new Date(time);
           int currentHour = date.getHours();
@@ -2073,7 +2073,7 @@ public class DsnProxyGrab {
           return false;
       }
       
-      public static long getEndDrawNumber(String date){
+      public  long getEndDrawNumber(String date){
      	 // http://94500151.365.qq168.ws/agent/report/period?lottery=BJPK10&beginTime=2016-12-02&endTime=2016-12-01
      	
      	  long endDrawNumber = 0;
@@ -2099,7 +2099,7 @@ public class DsnProxyGrab {
      		  
        }
       
-      public static long getStartDrawNumber(String date){
+      public  long getStartDrawNumber(String date){
      	 // http://94500151.365.qq168.ws/agent/report/period?lottery=BJPK10&beginTime=2016-12-02&endTime=2016-12-01
      	
      	  long startDrawNumber = 0;
@@ -2126,26 +2126,26 @@ public class DsnProxyGrab {
      		  
        }
       
-      public static String getBJSCresult(long period) {
+      public  String getBJSCresult(long period) {
     	  String result = null;
     	  result = doGet(ADDRESS + "/agent/report/list_game?lottery=BJPK10&begin=&end=&settle=true&period=" 
     	  + period + "&amount=&dividend=", "");
     	  return result;
       }
       
-      public static String getCQSSCresult(String period) {
+      public  String getCQSSCresult(String period) {
     	  String result = null;
     	  result = doGet(ADDRESS + "/agent/report/list_game?lottery=CQSSC&begin=&end=&settle=true&period=" 
     	  + period + "&amount=&dividend=", "");
     	  return result;
       }
       
-      public static boolean isBetBJSCopen() {
+      public  boolean isBetBJSCopen() {
   		return betBJSCopen;
   	  }
 
-  	  public static void setBetBJSCopen(boolean betBJSCopen) {
-  		DsnProxyGrab.betBJSCopen = betBJSCopen;
+  	  public  void setBetBJSCopen(boolean betBJSCopen) {
+  		betBJSCopen = betBJSCopen;
   	  }
       
  

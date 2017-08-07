@@ -18,9 +18,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 	 // ÐÄÌø¶ªÊ§¼ÆÊýÆ÷
     private int counter = 0;
     ConnManager connManager;
+    DsnProxyGrab dsnProxyGrab;
     
     NettyServerHandler(ConnManager connManager) {
     	this.connManager = connManager;
+    	this.dsnProxyGrab = connManager.getDsnProxyGrab();
     }
     
     @Override
@@ -80,7 +82,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 				String lottery = json.getString("lottery").toString();
 				switch(lottery) {
 					case "CQSSC": {
-						String [] datas = DsnProxyGrab.getCQSSCdata();
+						String [] datas = dsnProxyGrab.getCQSSCdata();
 						if(datas != null) {
 							Map<String, String> map = new HashMap<String, String>();  
 			                map.put("result", "true");
@@ -104,12 +106,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 					}
 					break;
 					case "BJSC": {
-						String [] datas = DsnProxyGrab.getBJSCdata();
+						String [] datas = dsnProxyGrab.getBJSCdata();
 						if(datas != null) {
 							Map<String, String> map = new HashMap<String, String>();  
 			                map.put("result", "true");
 			                map.put("lottery", "BJSC");
-			                if(DsnProxyGrab.isBetBJSCopen()) {
+			                if(dsnProxyGrab.isBetBJSCopen()) {
 			                	map.put("open", "y");
 			                } else {
 			                	map.put("open", "n");

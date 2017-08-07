@@ -9,8 +9,10 @@ class GrabGXKLthread extends Thread{
     boolean requestTime = true;
     boolean inGXKLgrabTime = true;
     GrabGXKLwindow gwGXKL;
-    public GrabGXKLthread() {
+    DsnProxyGrab dsnProxyGrab;
+    public GrabGXKLthread(DsnProxyGrab dsnProxyGrab) {
     	gwGXKL = new GrabGXKLwindow();
+    	this.dsnProxyGrab = dsnProxyGrab;
 	}
     
     @Override
@@ -21,32 +23,32 @@ class GrabGXKLthread extends Thread{
 				
 				if(isNeedLogin) {
 					
-					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-						DsnProxyGrab.setLinePriority();
+					if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+						dsnProxyGrab.setLinePriority();
 					}
 					
-					int res = DsnProxyGrab.reLogin();
+					int res = dsnProxyGrab.reLogin();
 					if(res == -1) {
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
 						gwGXKL.setOnlineStatus(false);
-						DsnProxyGrab.disableGXKLData();
-						DsnProxyGrab.disableBJSCData();
+						dsnProxyGrab.disableGXKLData();
+						dsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
-						DsnProxyGrab.connFailLogin();
+						dsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
 						gwGXKL.setOnlineStatus(true);
 					}
 					
-					DsnProxyGrab.setisNeedChangeLine(false);
-					DsnProxyGrab.clearAvgRequest();
+					dsnProxyGrab.setisNeedChangeLine(false);
+					dsnProxyGrab.clearAvgRequest();
 					
 					isNeedLogin = false;
 				}
 				
 				long GXKLremainTime = 0;
-				if(DsnProxyGrab.isInGXKLgrabTime()) {
+				if(dsnProxyGrab.isInGXKLgrabTime()) {
 						inGXKLgrabTime = true;
 				} else {
 					if(inGXKLgrabTime) {
@@ -54,19 +56,19 @@ class GrabGXKLthread extends Thread{
 						isGXKLclose = true;
 						gwGXKL.resetData();
 						gwGXKL.setRemainTime(0);
-						DsnProxyGrab.disableGXKLData();
+						dsnProxyGrab.disableGXKLData();
 						inGXKLgrabTime = false;
 					}
 				}
 				
 				if(!grabGXKL) {
-					DsnProxyGrab.disableGXKLData();
+					dsnProxyGrab.disableGXKLData();
 				}
 				
 				if(grabGXKL && inGXKLgrabTime) {
-					GXKLremainTime = DsnProxyGrab.getGXKLlocalRemainTime();
+					GXKLremainTime = dsnProxyGrab.getGXKLlocalRemainTime();
 					if(requestTime) {
-						GXKLTime= DsnProxyGrab.getGXKLtime();
+						GXKLTime= dsnProxyGrab.getGXKLtime();
 						GXKLremainTime = Long.parseLong(GXKLTime[0]);
 						if(GXKLremainTime > 0) {
 							System.out.println("[代理]距离广西快乐十分封盘:" + GXKLremainTime/1000);
@@ -79,38 +81,38 @@ class GrabGXKLthread extends Thread{
 						
 					}
 					while(GXKLremainTime > 20*60*1000) {//获取时间失败
-						if(!DsnProxyGrab.isInGXKLgrabTime()) {
+						if(!dsnProxyGrab.isInGXKLgrabTime()) {
 							GXKLremainTime = -1;
 							isGXKLclose = true;
 							gwGXKL.resetData();
 							gwGXKL.setRemainTime(0);
-							DsnProxyGrab.disableGXKLData();
+							dsnProxyGrab.disableGXKLData();
 							inGXKLgrabTime = false;
 							break;
 						}
 						
-						if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-							DsnProxyGrab.setLinePriority();
+						if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+							dsnProxyGrab.setLinePriority();
 						}
 						
-						int res = DsnProxyGrab.reLogin();
+						int res = dsnProxyGrab.reLogin();
 						if(res == -1) {
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
 							gwGXKL.setOnlineStatus(false);
-							DsnProxyGrab.disableGXKLData();
-							DsnProxyGrab.disableBJSCData();
+							dsnProxyGrab.disableGXKLData();
+							dsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
-							DsnProxyGrab.connFailLogin();
+							dsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
 							gwGXKL.setOnlineStatus(true);
 						}
 						
-						DsnProxyGrab.setisNeedChangeLine(false);
-						DsnProxyGrab.clearAvgRequest();
+						dsnProxyGrab.setisNeedChangeLine(false);
+						dsnProxyGrab.clearAvgRequest();
 						
-						GXKLTime = DsnProxyGrab.getGXKLtime();
+						GXKLTime = dsnProxyGrab.getGXKLtime();
 						GXKLremainTime = Long.parseLong(GXKLTime[0]);
 					}
 					
@@ -134,7 +136,7 @@ class GrabGXKLthread extends Thread{
 							isGXKLclose = true;
 							requestTime = true;
 							sleepTime = 8*1000;
-							//DsnProxyGrab.disableGXKLData();
+							//dsnProxyGrab.disableGXKLData();
 							continue;
 						}
 					}
@@ -144,7 +146,7 @@ class GrabGXKLthread extends Thread{
 				
 				
 				if(grabGXKL && inGXKLgrabTime) {
-					String data = DsnProxyGrab.grabGXKLdata();
+					String data = dsnProxyGrab.grabGXKLdata();
 					if(data == "timeout") {
 						continue;
 					}else if(data == null) {
@@ -153,10 +155,10 @@ class GrabGXKLthread extends Thread{
 					}
 					
 					if(GXKLremainTime > 2) {
-						DsnProxyGrab.setGXKLdata(GXKLTime[1], data, Long.toString(DsnProxyGrab.getGXKLlocalRemainTime()/1000));
+						dsnProxyGrab.setGXKLdata(GXKLTime[1], data, Long.toString(dsnProxyGrab.getGXKLlocalRemainTime()/1000));
 					}
 					else {
-						DsnProxyGrab.setGXKLdata(GXKLTime[1], data, Long.toString(GXKLremainTime/1000));
+						dsnProxyGrab.setGXKLdata(GXKLTime[1], data, Long.toString(GXKLremainTime/1000));
 					}
 					String [] datas = {data};
 					gwGXKL.setData(datas);

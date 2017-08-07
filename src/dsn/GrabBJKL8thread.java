@@ -9,7 +9,9 @@ class GrabBJKL8thread extends Thread{
     boolean requestTime = true;
     boolean inBJKL8grabTime = true;
    // GrabBJKL8window gwBJKL8;
-    public GrabBJKL8thread() {
+    DsnProxyGrab dsnProxyGrab;
+    public GrabBJKL8thread(DsnProxyGrab dsnProxyGrab) {
+    	this.dsnProxyGrab = dsnProxyGrab;
 	}
     
     @Override
@@ -19,32 +21,32 @@ class GrabBJKL8thread extends Thread{
 			while(true){				
 				if(isNeedLogin) {
 					
-					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-						DsnProxyGrab.setLinePriority();
+					if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+						dsnProxyGrab.setLinePriority();
 					}
 					
-					int res = DsnProxyGrab.reLogin();
+					int res = dsnProxyGrab.reLogin();
 					if(res == -1) {
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
 						//gwBJKL8.setOnlineStatus(false);
-						DsnProxyGrab.disableBJKL8Data();
-						DsnProxyGrab.disableBJSCData();
+						dsnProxyGrab.disableBJKL8Data();
+						dsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
-						DsnProxyGrab.connFailLogin();
+						dsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
 						//gwBJKL8.setOnlineStatus(true);
 					}
 					
-					DsnProxyGrab.setisNeedChangeLine(false);
-					DsnProxyGrab.clearAvgRequest();
+					dsnProxyGrab.setisNeedChangeLine(false);
+					dsnProxyGrab.clearAvgRequest();
 					
 					isNeedLogin = false;
 				}
 				
 				long BJKL8remainTime = 0;
-				if(DsnProxyGrab.isInBJKL8grabTime()) {
+				if(dsnProxyGrab.isInBJKL8grabTime()) {
 						inBJKL8grabTime = true;
 				} else {
 					if(inBJKL8grabTime) {
@@ -52,19 +54,19 @@ class GrabBJKL8thread extends Thread{
 						isBJKL8close = true;
 						//gwBJKL8.resetData();
 						//gwBJKL8.setRemainTime(0);
-						DsnProxyGrab.disableBJKL8Data();
+						dsnProxyGrab.disableBJKL8Data();
 						inBJKL8grabTime = false;
 					}
 				}
 				
 				if(!grabBJKL8) {
-					DsnProxyGrab.disableBJKL8Data();
+					dsnProxyGrab.disableBJKL8Data();
 				}
 				
 				if(grabBJKL8 && inBJKL8grabTime) {
-					BJKL8remainTime = DsnProxyGrab.getBJKL8localRemainTime();
+					BJKL8remainTime = dsnProxyGrab.getBJKL8localRemainTime();
 					if(requestTime) {
-						BJKL8Time= DsnProxyGrab.getBJKL8time();
+						BJKL8Time= dsnProxyGrab.getBJKL8time();
 						BJKL8remainTime = Long.parseLong(BJKL8Time[0]);
 						if(BJKL8remainTime > 0) {
 							System.out.println("[代理]距离北京快乐8封盘:" + BJKL8remainTime/1000);
@@ -77,38 +79,38 @@ class GrabBJKL8thread extends Thread{
 						
 					}
 					while(BJKL8remainTime > 20*60*1000) {//获取时间失败
-						if(!DsnProxyGrab.isInBJKL8grabTime()) {
+						if(!dsnProxyGrab.isInBJKL8grabTime()) {
 							BJKL8remainTime = -1;
 							isBJKL8close = true;
 							//gwBJKL8.resetData();
 							//gwBJKL8.setRemainTime(0);
-							DsnProxyGrab.disableBJKL8Data();
+							dsnProxyGrab.disableBJKL8Data();
 							inBJKL8grabTime = false;
 							break;
 						}
 						
-						if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-							DsnProxyGrab.setLinePriority();
+						if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+							dsnProxyGrab.setLinePriority();
 						}
 						
-						int res = DsnProxyGrab.reLogin();
+						int res = dsnProxyGrab.reLogin();
 						if(res == -1) {
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
 							//gwBJKL8.setOnlineStatus(false);
-							DsnProxyGrab.disableBJKL8Data();
-							DsnProxyGrab.disableBJSCData();
+							dsnProxyGrab.disableBJKL8Data();
+							dsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
-							DsnProxyGrab.connFailLogin();
+							dsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
 							//gwBJKL8.setOnlineStatus(true);
 						}
 						
-						DsnProxyGrab.setisNeedChangeLine(false);
-						DsnProxyGrab.clearAvgRequest();
+						dsnProxyGrab.setisNeedChangeLine(false);
+						dsnProxyGrab.clearAvgRequest();
 						
-						BJKL8Time = DsnProxyGrab.getBJKL8time();
+						BJKL8Time = dsnProxyGrab.getBJKL8time();
 						BJKL8remainTime = Long.parseLong(BJKL8Time[0]);
 					}
 					
@@ -132,7 +134,7 @@ class GrabBJKL8thread extends Thread{
 							isBJKL8close = true;
 							requestTime = true;
 							sleepTime = 8*1000;
-							//DsnProxyGrab.disableBJKL8Data();
+							//dsnProxyGrab.disableBJKL8Data();
 							continue;
 						}
 					}
@@ -142,7 +144,7 @@ class GrabBJKL8thread extends Thread{
 				
 				
 				if(grabBJKL8 && inBJKL8grabTime) {
-					String data = DsnProxyGrab.grabBJKL8data();
+					String data = dsnProxyGrab.grabBJKL8data();
 					if(data == "timeout") {
 						continue;
 					}else if(data == null) {
@@ -151,10 +153,10 @@ class GrabBJKL8thread extends Thread{
 					}
 					
 					if(BJKL8remainTime > 2) {
-						DsnProxyGrab.setBJKL8data(BJKL8Time[1], data, Long.toString(DsnProxyGrab.getBJKL8localRemainTime()/1000));
+						dsnProxyGrab.setBJKL8data(BJKL8Time[1], data, Long.toString(dsnProxyGrab.getBJKL8localRemainTime()/1000));
 					}
 					else {
-						DsnProxyGrab.setBJKL8data(BJKL8Time[1], data, Long.toString(BJKL8remainTime/1000));
+						dsnProxyGrab.setBJKL8data(BJKL8Time[1], data, Long.toString(BJKL8remainTime/1000));
 					}
 					String [] datas = {data};
 					//gwBJKL8.setData(datas);

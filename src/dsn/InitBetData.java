@@ -1,11 +1,4 @@
 package dsn;
-import java.io.IOException;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.io.PrintStream;
-import java.util.Date;
-import java.io.FileNotFoundException;
-import java.math.BigDecimal;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class InitBetData {
@@ -40,9 +35,11 @@ public class InitBetData {
 	boolean open = true;
 	
 	GrabBJSCwindow wd = null;
+	DsnProxyGrab dsnProxyGrab;
 	
-	InitBetData(GrabBJSCwindow wd) {
+	InitBetData(GrabBJSCwindow wd, DsnProxyGrab dsnProxyGrab) {
 		this.wd = wd;
+		this.dsnProxyGrab = dsnProxyGrab;
 	}
 	
 	
@@ -84,12 +81,12 @@ public class InitBetData {
 				dir.mkdirs();
 			}
 			
-			if(!DsnProxyGrab.isInBJSCgrabTime()){
+			if(!dsnProxyGrab.isInBJSCgrabTime()){
 				
 				if(day > 1){
 					day = day -1;
 					
-					long endNumber = DsnProxyGrab.getEndDrawNumber(df.format(date) + "-" + String.format("%02d",day));
+					long endNumber = dsnProxyGrab.getEndDrawNumber(df.format(date) + "-" + String.format("%02d",day));
 					
 					currentDrawNumber = Long.toString(endNumber);
 					
@@ -109,10 +106,10 @@ public class InitBetData {
 				
 				
 			}else{
-				currentDrawNumber = DsnProxyGrab.getBJSCTime()[1];
+				currentDrawNumber = dsnProxyGrab.getBJSCTime()[1];
 				
 				if (currentDrawNumber.equals("0")){
-					currentDrawNumber = DsnProxyGrab.getBJSCTime()[1];
+					currentDrawNumber = dsnProxyGrab.getBJSCTime()[1];
 				}
 			}
 			
@@ -123,7 +120,7 @@ public class InitBetData {
 				
 				long drawNumber = 0;
 				
-				if(!DsnProxyGrab.isInBJSCgrabTime()){
+				if(!dsnProxyGrab.isInBJSCgrabTime()){
 					drawNumber = Long.parseLong(currentDrawNumber);
 				}else{
 					drawNumber = Long.parseLong(currentDrawNumber) - 1;
@@ -146,7 +143,7 @@ public class InitBetData {
 					        
 					        fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "UTF-8"));
 					        
-					        long startNumber = DsnProxyGrab.getStartDrawNumber(df.format(new Date()) + "-01");
+					        long startNumber = dsnProxyGrab.getStartDrawNumber(df.format(new Date()) + "-01");
 					        
 					        System.out.println(startNumber);
 					        
@@ -163,7 +160,7 @@ public class InitBetData {
 								if(saveBetResToFile(i)){
 									i++;
 								}else{
-									while(!DsnProxyGrab.doLogin()){
+									while(!dsnProxyGrab.doLogin()){
 										
 									}
 								}
@@ -229,7 +226,7 @@ public class InitBetData {
 							if(saveBetResToFile(i)){
 								i++;
 							}else{
-								while(!DsnProxyGrab.doLogin()){
+								while(!dsnProxyGrab.doLogin()){
 									
 								}
 							}
@@ -345,7 +342,7 @@ public class InitBetData {
 			open = true;
 		}
 		
-		DsnProxyGrab.setBetBJSCopen(open);
+		dsnProxyGrab.setBetBJSCopen(open);
 		
 		wd.setTextFieldPercent(String.valueOf(percent));
 		wd.setTextFieldPositive(String.valueOf(positive));
@@ -441,7 +438,7 @@ public class InitBetData {
 				boolean success = false;
 				for(int i = 0; i < 4; i++){
 					
-					String result = DsnProxyGrab.getBJSCresult(j);
+					String result = dsnProxyGrab.getBJSCresult(j);
 					
 					//System.out.println(result);
 					

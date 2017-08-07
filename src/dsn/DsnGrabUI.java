@@ -1,35 +1,23 @@
 package dsn;
-import java.awt.BorderLayout;
-import java.awt.Container;  
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;  
-import java.awt.event.ActionListener;  
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Color;
-
-import javax.swing.JFrame;  
-import javax.swing.JLabel;  
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;  
-import javax.swing.JScrollPane;  
-import javax.swing.JTable;  
-import javax.swing.JTextField;  
-import javax.swing.JPasswordField;
-import javax.swing.JButton;  
-import javax.swing.table.DefaultTableModel;  
-
-import java.util.Date;      
 import java.util.Vector;
 
-import javax.swing.Timer;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.concurrent.atomic.AtomicLong;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
    
 public class DsnGrabUI extends JFrame {  
   
@@ -68,6 +56,7 @@ public class DsnGrabUI extends JFrame {
   	GrabTJSSCthread grabTJSSCthread;
   	GrabGD115thread grabGD115thread;
   	GrabBJKL8thread grabBJKL8thread;
+  	DsnProxyGrab dsnProxyGrab;
   	
   	public JTable tableConns;
   	boolean loginToProxySuccess = false;
@@ -76,7 +65,8 @@ public class DsnGrabUI extends JFrame {
   		final Container container = getContentPane();; 
   		ConfigReader.read("common.config");		
 		ConfigWriter.open("common.config");
-		DsnProxyGrab.initLines();
+		dsnProxyGrab = new DsnProxyGrab();
+		dsnProxyGrab.initLines();
         
 		
 		JPanel panel = new JPanel(new GridLayout(3, 1, 1, 1));
@@ -119,9 +109,9 @@ public class DsnGrabUI extends JFrame {
 				String account = textFieldProxyAccount.getText();
 				String password = textFieldProxyPassword.getText();
 				
-				DsnProxyGrab.setLoginParams(address, account, password);
+				dsnProxyGrab.setLoginParams(address, account, password);
 				
-				if(!DsnProxyGrab.login()) {
+				if(!dsnProxyGrab.login()) {
 					System.out.println("µÇÂ¼Ê§°Ü");
 					return;
 				}
@@ -145,34 +135,33 @@ public class DsnGrabUI extends JFrame {
 				btnStartGrabGD115.setEnabled(true);
 				btnStopGrabGD115.setEnabled(true);
 				btnStartGrabBJKL8.setEnabled(true);
-				btnStopGrabBJKL8.setEnabled(true);
+				btnStopGrabBJKL8.setEnabled(true);				
 				
-				
-				grabBJSCthread = new GrabBJSCthread(new GrabBJSCwindow());
+				grabBJSCthread = new GrabBJSCthread(new GrabBJSCwindow(), dsnProxyGrab);
 				grabBJSCthread.start();
 				
-				grabCQSSCthread = new GrabCQSSCthread(new GrabCQSSCwindow());
+				grabCQSSCthread = new GrabCQSSCthread(new GrabCQSSCwindow(), dsnProxyGrab);
 				grabCQSSCthread.start();
 				
-				grabXYNCthread = new GrabXYNCthread();
+				grabXYNCthread = new GrabXYNCthread(dsnProxyGrab);
 				grabXYNCthread.start();
 				
-				grabGXKLthread = new GrabGXKLthread();
+				grabGXKLthread = new GrabGXKLthread(dsnProxyGrab);
 				grabGXKLthread.start();
 				
-				grabGDKLthread = new GrabGDKLthread();
+				grabGDKLthread = new GrabGDKLthread(dsnProxyGrab);
 				grabGDKLthread.start();
 				
-				grabXJSSCthread = new GrabXJSSCthread();
+				grabXJSSCthread = new GrabXJSSCthread(dsnProxyGrab);
 				grabXJSSCthread.start();
 				
-				grabTJSSCthread = new GrabTJSSCthread();
+				grabTJSSCthread = new GrabTJSSCthread(dsnProxyGrab);
 				grabTJSSCthread.start();
 				
-				grabGD115thread = new GrabGD115thread();
+				grabGD115thread = new GrabGD115thread(dsnProxyGrab);
 				grabGD115thread.start();
 				
-				grabBJKL8thread = new GrabBJKL8thread();
+				grabBJKL8thread = new GrabBJKL8thread(dsnProxyGrab);
 				grabBJKL8thread.start();
 				
 			  	btnStopGrabCQSSC.setBackground(Color.red);
@@ -482,7 +471,11 @@ public class DsnGrabUI extends JFrame {
         );
   	}
   	
-  	public void updateTable(Vector<Vector<String>> conns) {
+  	public DsnProxyGrab getDsnProxyGrab() {
+		return dsnProxyGrab;
+	}
+
+	public void updateTable(Vector<Vector<String>> conns) {
   		 ((DefaultTableModel)tableConns.getModel()).getDataVector().clear();
   		 
   		 Vector<String> tableColumnNames = new Vector<String>();  

@@ -10,8 +10,10 @@ public class GrabXYNCthread extends Thread{
     boolean requestTime = true;
     boolean inXYNCgrabTime = true;
     GrabXYNCwindow gwXYNC;
-    public GrabXYNCthread() {
+    DsnProxyGrab dsnProxyGrab;
+    public GrabXYNCthread(DsnProxyGrab dsnProxyGrab) {
 		gwXYNC = new GrabXYNCwindow();
+		this.dsnProxyGrab =  dsnProxyGrab;
 	}
     
     @Override
@@ -20,32 +22,32 @@ public class GrabXYNCthread extends Thread{
     		String[] XYNCTime = {"0", "0", "0"};
 			while(true){
 				if(isNeedLogin) {		
-					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-						DsnProxyGrab.setLinePriority();
+					if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+						dsnProxyGrab.setLinePriority();
 					}
 					
-					int res = DsnProxyGrab.reLogin();
+					int res = dsnProxyGrab.reLogin();
 					if(res == -1) {
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
 						gwXYNC.setOnlineStatus(false);
-						DsnProxyGrab.disableXYNCData();
-						DsnProxyGrab.disableBJSCData();
+						dsnProxyGrab.disableXYNCData();
+						dsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
-						DsnProxyGrab.connFailLogin();
+						dsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
 						gwXYNC.setOnlineStatus(true);
 					}
 					
-					DsnProxyGrab.setisNeedChangeLine(false);
-					DsnProxyGrab.clearAvgRequest();
+					dsnProxyGrab.setisNeedChangeLine(false);
+					dsnProxyGrab.clearAvgRequest();
 					
 					isNeedLogin = false;
 				}
 				
 				long XYNCremainTime = 0;
-				if(DsnProxyGrab.isInXYNCgrabTime()) {
+				if(dsnProxyGrab.isInXYNCgrabTime()) {
 						inXYNCgrabTime = true;
 				} else {
 					if(inXYNCgrabTime) {
@@ -53,19 +55,19 @@ public class GrabXYNCthread extends Thread{
 						isXYNCclose = true;
 						gwXYNC.resetData();
 						gwXYNC.setRemainTime(0);
-						DsnProxyGrab.disableXYNCData();
+						dsnProxyGrab.disableXYNCData();
 						inXYNCgrabTime = false;
 					}
 				}
 				
 				if(!grabXYNC) {
-					DsnProxyGrab.disableXYNCData();
+					dsnProxyGrab.disableXYNCData();
 				}
 				
 				if(grabXYNC && inXYNCgrabTime) {
 					XYNCremainTime = gwXYNC.getRemainTime();
 					if(requestTime) {
-						XYNCTime= DsnProxyGrab.getXYNCTime();
+						XYNCTime= dsnProxyGrab.getXYNCTime();
 						XYNCremainTime = Long.parseLong(XYNCTime[0]);
 						if(XYNCremainTime > 0) {
 							System.out.println("[代理]距离幸运农场封盘:" + XYNCremainTime/1000);
@@ -79,38 +81,38 @@ public class GrabXYNCthread extends Thread{
 					}
 					
 					while(XYNCremainTime > 10*60*1000) {//获取时间失败
-						if(!DsnProxyGrab.isInXYNCgrabTime()) {
+						if(!dsnProxyGrab.isInXYNCgrabTime()) {
 							XYNCremainTime = -1;
 							isXYNCclose = true;
 							gwXYNC.resetData();
 							gwXYNC.setRemainTime(0);
-							DsnProxyGrab.disableXYNCData();
+							dsnProxyGrab.disableXYNCData();
 							inXYNCgrabTime = false;
 							break;
 						}
 						
-						if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-							DsnProxyGrab.setLinePriority();
+						if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+							dsnProxyGrab.setLinePriority();
 						}
 						
-						int res = DsnProxyGrab.reLogin();
+						int res = dsnProxyGrab.reLogin();
 						if(res == -1) {
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
 							gwXYNC.setOnlineStatus(false);
-							DsnProxyGrab.disableXYNCData();
-							DsnProxyGrab.disableBJSCData();
+							dsnProxyGrab.disableXYNCData();
+							dsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
-							DsnProxyGrab.connFailLogin();
+							dsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
 							gwXYNC.setOnlineStatus(true);
 						}
 						
-						DsnProxyGrab.setisNeedChangeLine(false);
-						DsnProxyGrab.clearAvgRequest();
+						dsnProxyGrab.setisNeedChangeLine(false);
+						dsnProxyGrab.clearAvgRequest();
 						
-						XYNCTime = DsnProxyGrab.getXYNCTime();
+						XYNCTime = dsnProxyGrab.getXYNCTime();
 						XYNCremainTime = Long.parseLong(XYNCTime[0]);
 					}
 					
@@ -134,7 +136,7 @@ public class GrabXYNCthread extends Thread{
 							isXYNCclose = true;
 							requestTime = true;
 							sleepTime = 10*1000;
-							//DsnProxyGrab.disableXYNCData();
+							//dsnProxyGrab.disableXYNCData();
 							continue;
 						}
 					}
@@ -144,24 +146,24 @@ public class GrabXYNCthread extends Thread{
 				
 				
 				if(grabXYNC && inXYNCgrabTime) {
-					boolean res = DsnProxyGrab.grabXYNCdata();
+					boolean res = dsnProxyGrab.grabXYNCdata();
 					if(!res) {
-						res = DsnProxyGrab.grabXYNCdata();
+						res = dsnProxyGrab.grabXYNCdata();
 					}
 					
 					if(!res) {
-						res = DsnProxyGrab.grabXYNCdata();
+						res = dsnProxyGrab.grabXYNCdata();
 					}
 					
 					if(res) {
 						if(XYNCremainTime > 2) {
-							DsnProxyGrab.setXYNCdata(XYNCTime[1], Long.toString(gwXYNC.getRemainTime()/1000));
+							dsnProxyGrab.setXYNCdata(XYNCTime[1], Long.toString(gwXYNC.getRemainTime()/1000));
 						}
 						else {
-							DsnProxyGrab.setXYNCdata(XYNCTime[1], Long.toString(XYNCremainTime/1000));
+							dsnProxyGrab.setXYNCdata(XYNCTime[1], Long.toString(XYNCremainTime/1000));
 						}
 						
-						gwXYNC.setData(DsnProxyGrab.getXYNCshowData());
+						gwXYNC.setData(dsnProxyGrab.getXYNCshowData());
 					} else {
 						isNeedLogin = true;
 					}

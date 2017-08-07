@@ -9,8 +9,10 @@ class GrabGD115thread extends Thread{
     boolean requestTime = true;
     boolean inGD115grabTime = true;
     GrabGD115window gwGD115;
-    public GrabGD115thread() {
+    DsnProxyGrab dsnProxyGrab;
+    public GrabGD115thread(DsnProxyGrab dsnProxyGrab) {
     	gwGD115 = new GrabGD115window();
+    	this.dsnProxyGrab = dsnProxyGrab;
 	}
     
     @Override
@@ -20,32 +22,32 @@ class GrabGD115thread extends Thread{
 			while(true){			
 				if(isNeedLogin) {
 					
-					if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-						DsnProxyGrab.setLinePriority();
+					if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+						dsnProxyGrab.setLinePriority();
 					}
 					
-					int res = DsnProxyGrab.reLogin();
+					int res = dsnProxyGrab.reLogin();
 					if(res == -1) {
 						Thread.currentThread().sleep(3000);
 					} else if(res == 1) {
 						//todo
 						gwGD115.setOnlineStatus(false);
-						DsnProxyGrab.disableGD115Data();
-						DsnProxyGrab.disableBJSCData();
+						dsnProxyGrab.disableGD115Data();
+						dsnProxyGrab.disableBJSCData();
 						System.out.println("代理端网络连接失败,正在重新登录....\n");
-						DsnProxyGrab.connFailLogin();
+						dsnProxyGrab.connFailLogin();
 						System.out.println("代理重新登录成功\n");
 						gwGD115.setOnlineStatus(true);
 					}
 					
-					DsnProxyGrab.setisNeedChangeLine(false);
-					DsnProxyGrab.clearAvgRequest();
+					dsnProxyGrab.setisNeedChangeLine(false);
+					dsnProxyGrab.clearAvgRequest();
 					
 					isNeedLogin = false;
 				}
 				
 				long GD115remainTime = 0;
-				if(DsnProxyGrab.isInGD115grabTime()) {
+				if(dsnProxyGrab.isInGD115grabTime()) {
 						inGD115grabTime = true;
 				} else {
 					if(inGD115grabTime) {
@@ -53,19 +55,19 @@ class GrabGD115thread extends Thread{
 						isGD115close = true;
 						gwGD115.resetData();
 						gwGD115.setRemainTime(0);
-						DsnProxyGrab.disableGD115Data();
+						dsnProxyGrab.disableGD115Data();
 						inGD115grabTime = false;
 					}
 				}
 				
 				if(!grabGD115) {
-					DsnProxyGrab.disableGD115Data();
+					dsnProxyGrab.disableGD115Data();
 				}
 				
 				if(grabGD115 && inGD115grabTime) {
-					GD115remainTime = DsnProxyGrab.getGD115localRemainTime();
+					GD115remainTime = dsnProxyGrab.getGD115localRemainTime();
 					if(requestTime) {
-						GD115Time= DsnProxyGrab.getGD115time();
+						GD115Time= dsnProxyGrab.getGD115time();
 						GD115remainTime = Long.parseLong(GD115Time[0]);
 						if(GD115remainTime > 0) {
 							System.out.println("[代理]距离广东11选5封盘:" + GD115remainTime/1000);
@@ -78,38 +80,38 @@ class GrabGD115thread extends Thread{
 						
 					}
 					while(GD115remainTime > 20*60*1000) {//获取时间失败
-						if(!DsnProxyGrab.isInGD115grabTime()) {
+						if(!dsnProxyGrab.isInGD115grabTime()) {
 							GD115remainTime = -1;
 							isGD115close = true;
 							gwGD115.resetData();
 							gwGD115.setRemainTime(0);
-							DsnProxyGrab.disableGD115Data();
+							dsnProxyGrab.disableGD115Data();
 							inGD115grabTime = false;
 							break;
 						}
 						
-						if(DsnProxyGrab.getIsisNeedChangeLine() == true){
-							DsnProxyGrab.setLinePriority();
+						if(dsnProxyGrab.getIsisNeedChangeLine() == true){
+							dsnProxyGrab.setLinePriority();
 						}
 						
-						int res = DsnProxyGrab.reLogin();
+						int res = dsnProxyGrab.reLogin();
 						if(res == -1) {
 							Thread.currentThread().sleep(3000);
 						} else if(res == 1) {
 							//todo
 							gwGD115.setOnlineStatus(false);
-							DsnProxyGrab.disableGD115Data();
-							DsnProxyGrab.disableBJSCData();
+							dsnProxyGrab.disableGD115Data();
+							dsnProxyGrab.disableBJSCData();
 							System.out.println("代理端网络连接失败,正在重新登录....\n");
-							DsnProxyGrab.connFailLogin();
+							dsnProxyGrab.connFailLogin();
 							System.out.println("代理重新登录成功\n");
 							gwGD115.setOnlineStatus(true);
 						}
 						
-						DsnProxyGrab.setisNeedChangeLine(false);
-						DsnProxyGrab.clearAvgRequest();
+						dsnProxyGrab.setisNeedChangeLine(false);
+						dsnProxyGrab.clearAvgRequest();
 						
-						GD115Time = DsnProxyGrab.getGD115time();
+						GD115Time = dsnProxyGrab.getGD115time();
 						GD115remainTime = Long.parseLong(GD115Time[0]);
 					}
 					
@@ -133,7 +135,7 @@ class GrabGD115thread extends Thread{
 							isGD115close = true;
 							requestTime = true;
 							sleepTime = 8*1000;
-							//DsnProxyGrab.disableGD115Data();
+							//dsnProxyGrab.disableGD115Data();
 							continue;
 						}
 					}
@@ -143,7 +145,7 @@ class GrabGD115thread extends Thread{
 				
 				
 				if(grabGD115 && inGD115grabTime) {
-					String data = DsnProxyGrab.grabGD115data();
+					String data = dsnProxyGrab.grabGD115data();
 					if(data == "timeout") {
 						continue;
 					}else if(data == null) {
@@ -152,10 +154,10 @@ class GrabGD115thread extends Thread{
 					}
 					
 					if(GD115remainTime > 2) {
-						DsnProxyGrab.setGD115data(GD115Time[1], data, Long.toString(DsnProxyGrab.getGD115localRemainTime()/1000));
+						dsnProxyGrab.setGD115data(GD115Time[1], data, Long.toString(dsnProxyGrab.getGD115localRemainTime()/1000));
 					}
 					else {
-						DsnProxyGrab.setGD115data(GD115Time[1], data, Long.toString(GD115remainTime/1000));
+						dsnProxyGrab.setGD115data(GD115Time[1], data, Long.toString(GD115remainTime/1000));
 					}
 					String [] datas = {data};
 					gwGD115.setData(datas);
