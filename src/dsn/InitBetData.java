@@ -95,7 +95,7 @@ public class InitBetData {
 
 					
 					// 设置日期格式
-					File file = new File("BJSCresData/" + df.format(date)
+					File file = new File("BJSCresData/" + dsnProxyGrab.getACCOUNT() + df.format(date)
 							+ ".txt");
 					
 					fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "UTF-8")); // 指定编码格式，以免读取时中文字符异常
@@ -131,7 +131,7 @@ public class InitBetData {
 				try {
 					
 
-					File file = new File("BJSCresData/" + df.format(new Date())
+					File file = new File("BJSCresData/" + dsnProxyGrab.getACCOUNT()  + df.format(new Date())
 							+ ".txt");
 					
 					

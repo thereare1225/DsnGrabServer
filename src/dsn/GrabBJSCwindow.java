@@ -55,7 +55,7 @@ public class GrabBJSCwindow extends JFrame {
 
   //  private long remainTime = 0;
   
-    public GrabBJSCwindow() {  
+    public GrabBJSCwindow(String title) {  
         // TODO Auto-generated constructor stub  
         final Container container = getContentPane();
         
@@ -549,7 +549,7 @@ public class GrabBJSCwindow extends JFrame {
         panel1.add(label7);
         panel1.add(textFieldTodayProfit); 
         
-        setTitle("北京赛车");  
+        setTitle(title);  
        //pack(); //Realize the components.  
         setBounds(100, 100, 1220, 680);  
 //      textFieldA.requestFocus();  

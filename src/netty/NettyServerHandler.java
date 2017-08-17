@@ -11,18 +11,18 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import dsn.BetBJSCdataFactory;
 import dsn.ConnManager;
-import dsn.DsnProxyGrab;
 
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 	 // 心跳丢失计数器
     private int counter = 0;
     ConnManager connManager;
-    DsnProxyGrab dsnProxyGrab;
+    BetBJSCdataFactory betBJSCdataFactory;
     
     NettyServerHandler(ConnManager connManager) {
     	this.connManager = connManager;
-    	this.dsnProxyGrab = connManager.getDsnProxyGrab();
+    	this.betBJSCdataFactory = connManager.getBetBJSCdataFactory();
     }
     
     @Override
@@ -82,36 +82,36 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 				String lottery = json.getString("lottery").toString();
 				switch(lottery) {
 					case "CQSSC": {
-						String [] datas = dsnProxyGrab.getCQSSCdata();
-						if(datas != null) {
-							Map<String, String> map = new HashMap<String, String>();  
-			                map.put("result", "true");
-			                map.put("lottery", "CQSSC");
-			                map.put("drawNumber", datas[0]);
-			                map.put("remainTime", datas[2]);
-			                map.put("data", datas[1]);
-			                
-			                //将json转化为String类型    
-			                JSONObject jsonReturn = new JSONObject(map);
-			                String strReturn = jsonReturn.toString();
-			                ctx.channel().writeAndFlush(strReturn);
-						} else {
-							Map<String, String> map = new HashMap<String, String>();
-							map.put("result", "false");
-							map.put("lottery", "CQSSC");
-							JSONObject jsonReturn = new JSONObject(map);
-			                String strReturn = jsonReturn.toString();
-			                ctx.channel().writeAndFlush(strReturn);
-						}
+//						String [] datas = dsnProxyGrab.getCQSSCdata();
+//						if(datas != null) {
+//							Map<String, String> map = new HashMap<String, String>();  
+//			                map.put("result", "true");
+//			                map.put("lottery", "CQSSC");
+//			                map.put("drawNumber", datas[0]);
+//			                map.put("remainTime", datas[2]);
+//			                map.put("data", datas[1]);
+//			                
+//			                //将json转化为String类型    
+//			                JSONObject jsonReturn = new JSONObject(map);
+//			                String strReturn = jsonReturn.toString();
+//			                ctx.channel().writeAndFlush(strReturn);
+//						} else {
+//							Map<String, String> map = new HashMap<String, String>();
+//							map.put("result", "false");
+//							map.put("lottery", "CQSSC");
+//							JSONObject jsonReturn = new JSONObject(map);
+//			                String strReturn = jsonReturn.toString();
+//			                ctx.channel().writeAndFlush(strReturn);
+//						}
 					}
 					break;
 					case "BJSC": {
-						String [] datas = dsnProxyGrab.getBJSCdata();
+						String [] datas = betBJSCdataFactory.CombineData();
 						if(datas != null) {
 							Map<String, String> map = new HashMap<String, String>();  
 			                map.put("result", "true");
 			                map.put("lottery", "BJSC");
-			                if(dsnProxyGrab.isBetBJSCopen()) {
+			                if(betBJSCdataFactory.getOpen()) {
 			                	map.put("open", "y");
 			                } else {
 			                	map.put("open", "n");

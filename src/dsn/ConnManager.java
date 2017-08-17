@@ -17,8 +17,8 @@ public class ConnManager extends Thread {
 		lock = new ReentrantReadWriteLock();
 	}
 	
-	public DsnProxyGrab getDsnProxyGrab() {
-		return ui.getDsnProxyGrab();
+	public BetBJSCdataFactory getBetBJSCdataFactory() {
+		return ui.getBetBJSCdataFactory();
 	}
 	
 	public void registerConn(String ip, String account, String website) {

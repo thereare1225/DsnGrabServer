@@ -48,6 +48,7 @@ public class DsnGrabUI extends JFrame {
   	public JButton btnStopGrabBJKL8;
   	
   	GrabBJSCthread grabBJSCthread;
+  	GrabBJSCthread grabBJSCthread1;
   	GrabCQSSCthread grabCQSSCthread;
   	GrabXYNCthread grabXYNCthread;
   	GrabGXKLthread grabGXKLthread;
@@ -57,6 +58,9 @@ public class DsnGrabUI extends JFrame {
   	GrabGD115thread grabGD115thread;
   	GrabBJKL8thread grabBJKL8thread;
   	DsnProxyGrab dsnProxyGrab;
+  	DsnProxyGrab dsnProxyGrab1;
+  	BetBJSCdataFactory betBJSCdataFactory;
+  	StrategyBJSCThread strategyBJSCThread;
   	
   	public JTable tableConns;
   	boolean loginToProxySuccess = false;
@@ -67,6 +71,7 @@ public class DsnGrabUI extends JFrame {
 		ConfigWriter.open("common.config");
 		dsnProxyGrab = new DsnProxyGrab();
 		dsnProxyGrab.initLines();
+		dsnProxyGrab1 = new DsnProxyGrab();
         
 		
 		JPanel panel = new JPanel(new GridLayout(3, 1, 1, 1));
@@ -110,8 +115,9 @@ public class DsnGrabUI extends JFrame {
 				String password = textFieldProxyPassword.getText();
 				
 				dsnProxyGrab.setLoginParams(address, account, password);
+				dsnProxyGrab1.setLoginParams("http://f11.yh.789us.net", "pk68", "aaaa9999");
 				
-				if(!dsnProxyGrab.login()) {
+				if(!dsnProxyGrab.login() || !dsnProxyGrab1.login()) {
 					System.out.println("µÇÂ¼Ê§°Ü");
 					return;
 				}
@@ -137,32 +143,45 @@ public class DsnGrabUI extends JFrame {
 				btnStartGrabBJKL8.setEnabled(true);
 				btnStopGrabBJKL8.setEnabled(true);				
 				
-				grabBJSCthread = new GrabBJSCthread(new GrabBJSCwindow(), dsnProxyGrab);
+				grabBJSCthread = new GrabBJSCthread(new GrabBJSCwindow(dsnProxyGrab.getACCOUNT()), dsnProxyGrab);
 				grabBJSCthread.start();
 				
-				grabCQSSCthread = new GrabCQSSCthread(new GrabCQSSCwindow(), dsnProxyGrab);
+				grabBJSCthread1 = new GrabBJSCthread(new GrabBJSCwindow(dsnProxyGrab1.getACCOUNT()), dsnProxyGrab1);
+				grabBJSCthread1.start();			
+				
+				DsnProxyGrab [] proxys = new DsnProxyGrab[2];
+				proxys[0] = dsnProxyGrab;
+				proxys[1] = dsnProxyGrab1;
+				
+				grabCQSSCthread = new GrabCQSSCthread(new GrabCQSSCwindow(), proxys);
 				grabCQSSCthread.start();
 				
-				grabXYNCthread = new GrabXYNCthread(dsnProxyGrab);
-				grabXYNCthread.start();
+				GrabBJSCwindow grabBJSCwindow = new GrabBJSCwindow("×Ü");
+				betBJSCdataFactory = new BetBJSCdataFactory(grabBJSCwindow, proxys);
 				
-				grabGXKLthread = new GrabGXKLthread(dsnProxyGrab);
-				grabGXKLthread.start();
+				strategyBJSCThread = new StrategyBJSCThread(proxys, betBJSCdataFactory, grabBJSCwindow);
+				strategyBJSCThread.start();
 				
-				grabGDKLthread = new GrabGDKLthread(dsnProxyGrab);
-				grabGDKLthread.start();
-				
-				grabXJSSCthread = new GrabXJSSCthread(dsnProxyGrab);
-				grabXJSSCthread.start();
-				
-				grabTJSSCthread = new GrabTJSSCthread(dsnProxyGrab);
-				grabTJSSCthread.start();
-				
-				grabGD115thread = new GrabGD115thread(dsnProxyGrab);
-				grabGD115thread.start();
-				
-				grabBJKL8thread = new GrabBJKL8thread(dsnProxyGrab);
-				grabBJKL8thread.start();
+//				grabXYNCthread = new GrabXYNCthread(dsnProxyGrab);
+//				grabXYNCthread.start();
+//				
+//				grabGXKLthread = new GrabGXKLthread(dsnProxyGrab);
+//				grabGXKLthread.start();
+//				
+//				grabGDKLthread = new GrabGDKLthread(dsnProxyGrab);
+//				grabGDKLthread.start();
+//				
+//				grabXJSSCthread = new GrabXJSSCthread(dsnProxyGrab);
+//				grabXJSSCthread.start();
+//				
+//				grabTJSSCthread = new GrabTJSSCthread(dsnProxyGrab);
+//				grabTJSSCthread.start();
+//				
+//				grabGD115thread = new GrabGD115thread(dsnProxyGrab);
+//				grabGD115thread.start();
+//				
+//				grabBJKL8thread = new GrabBJKL8thread(dsnProxyGrab);
+//				grabBJKL8thread.start();
 				
 			  	btnStopGrabCQSSC.setBackground(Color.red);
 			  	btnStopGrabBJSC.setBackground(Color.red);
@@ -211,6 +230,8 @@ public class DsnGrabUI extends JFrame {
 		btnStartGrabBJSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabBJSCthread.startGrabBJSC();
+				grabBJSCthread1.startGrabBJSC();
+				strategyBJSCThread.startGrabBJSC();
 				btnStartGrabBJSC.setBackground(Color.green);
 				btnStopGrabBJSC.setBackground(null);
 			}
@@ -221,6 +242,8 @@ public class DsnGrabUI extends JFrame {
 		btnStopGrabBJSC.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				grabBJSCthread.stopGrabBJSC();
+				grabBJSCthread1.stopGrabBJSC();
+				strategyBJSCThread.stopGrabBJSC();
 				btnStartGrabBJSC.setBackground(null);
 				btnStopGrabBJSC.setBackground(Color.red);
 			}
@@ -474,6 +497,10 @@ public class DsnGrabUI extends JFrame {
   	public DsnProxyGrab getDsnProxyGrab() {
 		return dsnProxyGrab;
 	}
+  	
+  	public BetBJSCdataFactory getBetBJSCdataFactory() {
+  		return betBJSCdataFactory;
+  	}
 
 	public void updateTable(Vector<Vector<String>> conns) {
   		 ((DefaultTableModel)tableConns.getModel()).getDataVector().clear();

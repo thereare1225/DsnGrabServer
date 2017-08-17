@@ -38,6 +38,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.json.JSONArray;
 
+import com.sun.jna.platform.win32.WinDef.LONG;
+
 public class DsnProxyGrab {
 	 CloseableHttpClient httpclient = null;
      RequestConfig requestConfig = null;
@@ -57,8 +59,13 @@ public class DsnProxyGrab {
      String [] dataXYNC = {"", "", "", "", "", "", "", "", "", "", ""};
      String [] dataGDKL = {"", "", "", "", "", "", "", "", "", "", ""};
      boolean betBJSCopen = false;
+     long BJSCdrawNumber = 0;
 
-	 boolean isCQSSCdataOk = false;
+	 public long getBJSCdrawNumber() {
+		return BJSCdrawNumber;
+	}
+
+	boolean isCQSSCdataOk = false;
      boolean isBJSCdataOk = false;
      boolean isXYNCdataOk = false;
      boolean isGXKLdataOk = false;
@@ -71,7 +78,8 @@ public class DsnProxyGrab {
     
     
     private  String ADDRESS = "";
-    private  String ACCOUNT = "";
+
+	private  String ACCOUNT = "";
     private  String PASSWORD = "";
     private  long timeDValue = 0;  //网站时间和电脑时间的差值  网页时间 - 当前时间
     private  long closeTimeGXKL = 0;
@@ -80,6 +88,7 @@ public class DsnProxyGrab {
     private  long closeTimeXJSSC = 0;
     private  long closeTimeGD115 = 0;
     private  long closeTimeBJKL8 = 0;
+    private  long closeTimeBJSC = 0;
     private  ReadWriteLock lockCQSSC = new ReentrantReadWriteLock();
     private  ReadWriteLock lockBJSC = new ReentrantReadWriteLock();
     private  ReadWriteLock lockXYNC = new ReentrantReadWriteLock();
@@ -446,29 +455,10 @@ public class DsnProxyGrab {
 
     	setIscalcRequestTime(false);
 
-    	
-    	
-    	
-    	
-    	for(int k = 0; k < lines.size(); k++){
 
-    		
-    		setLoginAddress((String)lines.elementAt(k)[0]);
-    		
-    		for(int i = 0; i < 10; i++) {
-        		if(doLogin()) {
-        			res = 0;
-
-        			
-        			break;
-        		}
-        	}
-        	
-        	if(res == 0){
-        		break;
-        	}
-    	}
-
+        if(doLogin()) {
+        	res = 0;
+        }
     	
     	setIscalcRequestTime(true);
     	
@@ -490,36 +480,19 @@ public class DsnProxyGrab {
     	
     	setIscalcRequestTime(false);
 
-    	while(res == false){
-    		
+    	while(res == false){   	      	
         	
-        	
-        	
-        	
-        	for(int k = 0; k < lines.size(); k++){
-	
-        		setLoginAddress((String)lines.elementAt(k)[0]);
-        		
-        		for(int i = 0; i < 10; i++) {
-            		if(doLogin()) {
-            			res = true;
-		
-            			break;
-            		}
-            	}
+    		if(doLogin()) {
+    			res = true;
+
+    			break;
+    		}
             	
-            	if(res == true){
-            		break;
-            	}
-        	}
-        	
-        	if(res == false){
-            	try{
-            		Thread.currentThread().sleep(20*1000);
-            	}catch(Exception e){
+            try{
+            	Thread.currentThread().sleep(20*1000);
+            }catch(Exception e){
             		
-            	}
-        	}
+            }
         	
         	
     	}
@@ -1550,6 +1523,7 @@ public class DsnProxyGrab {
               JSONObject periodJson = new JSONObject(response);
               closeTime = periodJson.getLong("closeTime");
               time[1] = periodJson.getString("drawNumber");
+              BJSCdrawNumber = Long.valueOf(time[1]);
               drawTime = periodJson.getLong("drawTime");
           }
           catch(Exception e){
@@ -1558,6 +1532,7 @@ public class DsnProxyGrab {
       		  return time;
           }
           
+          closeTimeBJSC = closeTime;
           time[0] = Long.toString(closeTime - (System.currentTimeMillis() + timeDValue));
     	  time[2] = Long.toString(drawTime - (System.currentTimeMillis() + timeDValue));
     	  return time;
@@ -1904,6 +1879,10 @@ public class DsnProxyGrab {
     	  return closeTimeGXKL - (timeDValue + System.currentTimeMillis());
       }
       
+      public  long getBJSClocalRemainTime() {
+    	  return closeTimeBJSC - (timeDValue + System.currentTimeMillis());
+      }
+      
       public  long getGDKLlocalRemainTime() {
     	  return closeTimeGDKL - (timeDValue + System.currentTimeMillis());
       }
@@ -1970,7 +1949,7 @@ public class DsnProxyGrab {
           int currentMinutes = date.getMinutes();
           int currentSeconds = date.getSeconds();
           
-          if((currentHour *60 + currentMinutes > 9*60 + 1) && (currentHour * 60 + currentMinutes <= 23 * 60 + 57)){
+          if((currentHour *60 + currentMinutes > 9*60 + 3) && (currentHour * 60 + currentMinutes <= 23 * 60 + 56)){
           		return true;
           }
            
@@ -2145,8 +2124,16 @@ public class DsnProxyGrab {
   	  }
 
   	  public  void setBetBJSCopen(boolean betBJSCopen) {
-  		betBJSCopen = betBJSCopen;
+  		this.betBJSCopen = betBJSCopen;
   	  }
+  	  
+  	 public String getADDRESS() {
+ 		return ADDRESS;
+  	 }
+  	 
+  	 public String getACCOUNT() {
+ 		return ACCOUNT;
+  	 }
       
  
 }
