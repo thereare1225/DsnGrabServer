@@ -21,38 +21,41 @@ public class StrategyBJSCThread extends Thread{
 	@Override
     public void run() {
     	try {
-    		
 			while(true){
-				if(grabBJSC && dsnProxyGrabs[0].isInBJSCgrabTime()) {
-					for(int i = 0; i < dsnProxyGrabs.length; i++) {
-						if(!dsnProxyGrabs[i].isInReLogin) {
-							remainTime = dsnProxyGrabs[i].getBJSClocalRemainTime();
-							grabBJSCwindow.setDrawNumber(String.valueOf(dsnProxyGrabs[i].getBJSCdrawNumber()));
-						}
-					}
-					
-					betBJSCdataFactory.saveBetResToFile(dsnProxyGrabs[0].getBJSCdrawNumber() - 1);
-					if(close) {
-						if(remainTime > 0) {
-							close = false;
-							grabBJSCwindow.setCloseText(false);
-							grabBJSCwindow.resetData();
-						}
-					} else {
-						if(remainTime > 0) {
-							String [] data = betBJSCdataFactory.CombineData();
-							if(data == null) {
-								Thread.currentThread().sleep(5000);
-								continue;
+				try {
+					if(grabBJSC && dsnProxyGrabs[0].isInBJSCgrabTime()) {
+						for(int i = 0; i < dsnProxyGrabs.length; i++) {
+							if(!dsnProxyGrabs[i].isInReLogin) {
+								remainTime = dsnProxyGrabs[i].getBJSClocalRemainTime();
+								grabBJSCwindow.setDrawNumber(String.valueOf(dsnProxyGrabs[i].getBJSCdrawNumber()));
 							}
-							String [] show = {data[1], data[2], data[3]};
-							grabBJSCwindow.setData(show);	
-							grabBJSCwindow.setRemainTime(remainTime);
-						} else {
-							close = true;
 						}
+						
+						betBJSCdataFactory.saveBetResToFile(dsnProxyGrabs[0].getBJSCdrawNumber() - 1);
+						if(close) {
+							if(remainTime > 0) {
+								close = false;
+								grabBJSCwindow.setCloseText(false);
+								grabBJSCwindow.resetData();
+							}
+						} else {
+							if(remainTime > 0) {
+								String [] data = betBJSCdataFactory.CombineData();
+								if(data == null) {
+									Thread.currentThread().sleep(5000);
+									continue;
+								}
+								String [] show = {data[1], data[2], data[3]};
+								grabBJSCwindow.setData(show);	
+								grabBJSCwindow.setRemainTime(remainTime);
+							} else {
+								close = true;
+							}
+						}
+	
 					}
-
+				}catch(Exception e) {
+					e.printStackTrace();
 				}
 				Thread.currentThread().sleep(10000);
 

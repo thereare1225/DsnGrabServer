@@ -440,7 +440,12 @@ public class BetBJSCdataFactory {
 				} else {
 					String []data1 = {comData[1], comData[2], comData[3]};
 					String []data2 = {data[1], data[2], data[3]};
-					data1 = Common.combineBJSCdata(data1, data2);
+					try {
+						data1 = Common.combineBJSCdata(data1, data2);
+					}catch (Exception e){
+						e.printStackTrace();
+						return null;
+					}
 					comData[1] = data1[0];
 					comData[2] = data1[1];
 					comData[3] = data1[2];
